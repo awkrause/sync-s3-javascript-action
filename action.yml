@@ -1,0 +1,25 @@
+name: 'Sync S3'
+description: 'Action to sync a directory to an s3 bucket'
+branding:
+  icon: 'upload-cloud'
+  color: 'orange'
+inputs:
+  ACCESS_KEY:
+    description: 'AWS Access Key Id'
+    required: true
+  SECRET_KEY:
+    description: 'AWS Seceret Access Key'
+    required: true
+  BUCKET:
+    description: 'AWS Bucket'
+    required: true
+  SOURCE:
+    description: 'Source directory to be uploaded'
+    required: true
+  :
+    required: false
+    description: 'prefex to be appended to the key of each file'
+    default: /
+runs:
+  using: 'node12'
+  main: 'index.js'

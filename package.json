@@ -1,0 +1,27 @@
+{
+  "name": "sync-s3-javascript-action",
+  "version": "1.0.0",
+  "description": "Action to sync a directory to an s3 bucket",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awkrause/sync-s3-javascript-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/awkrause/sync-s3-javascript-action/issues"
+  },
+  "homepage": "https://github.com/awkrause/sync-s3-javascript-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "aws-sdk": "^2.765.0",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7",
+    "slash": "^3.0.0"
+  }
+}
