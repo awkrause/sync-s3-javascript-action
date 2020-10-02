@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const aws = require("aws-sdk");
+const S3 = require('aws-sdk/clients/s3');
 const fs = require("fs");
 const path = require("path");
 const slash = require('slash');
