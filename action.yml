@@ -20,6 +20,10 @@ inputs:
     required: false
     description: 'prefex to be appended to the key of each file'
     default: /
+  ACL:
+    required: false
+    description: 'access level'
+    default: 'private'
 runs: 
   using: 'node12'
   main: 'dist/index.js'

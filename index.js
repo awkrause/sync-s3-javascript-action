@@ -11,6 +11,7 @@ try {
     const bucket = core.getInput('BUCKET');
     const source = core.getInput('SOURCE');
     const prefix = core.getInput('KEY_PREFIX');
+    const acl = core.getInput('ACL');
 
     const s3 = new S3({
         accessKeyId: accessKey,
@@ -30,7 +31,7 @@ try {
             Bucket: bucket,
             Key:  slash(path.normalize(path.join(prefix, path.relative( path.join(process.cwd(), source), fileName)))),
             Body: file,
-            ACL: 'public-read'
+            ACL: acl
           };
       
           // Uploading files to the bucket
