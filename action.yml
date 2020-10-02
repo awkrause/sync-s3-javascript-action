@@ -16,7 +16,7 @@ inputs:
   SOURCE:
     description: 'Source directory to be uploaded'
     required: true
-  :
+  KEY_PREFIX:
     required: false
     description: 'prefex to be appended to the key of each file'
     default: /
