@@ -8,6 +8,7 @@ module.exports =
 const core = __webpack_require__(8021);
 const S3 = __webpack_require__(8039);
 const fs = __webpack_require__(5747);
+const { waitForDebugger } = __webpack_require__(7012);
 const path = __webpack_require__(5622);
 const slash = __webpack_require__(8741);
 
@@ -51,43 +52,37 @@ try {
         }
       };
 
-      const clearFiles = () => {
-
-        var dparams = {
-          Bucket: bucket,
-          Prefix: prefix
-        };
-      
-        console.log(`listing files. ${prefix}`);
-        s3.listObjects(dparams, function(err, data) {
+      var dparams = {
+        Bucket: bucket,
+        Prefix: prefix
+      };
+    
+      console.log(`listing files. ${prefix}`);
+      s3.listObjects(dparams, function(err, data) {
+        if (err){
+          console.log(err.message);
+            throw err;
+        }
+        console.log(`listed files successful.`);
+    
+        dparams = {Bucket: bucket};
+        dparams.Delete = {Objects:[]};
+    
+        data.Contents.forEach(function(content) {
+          console.log(`deleting file. ${content.Key}`);
+          dparams.Delete.Objects.push({Key: content.Key});
+        });
+    
+        s3.deleteObjects(dparams, function(err, data) {
           if (err){
             console.log(err.message);
-             throw err;
+              throw err;
           }
-          console.log(`listed files successful.`);
-      
-          dparams = {Bucket: bucket};
-          dparams.Delete = {Objects:[]};
-      
-          data.Contents.forEach(function(content) {
-            console.log(`deleting file. ${content.Key}`);
-            dparams.Delete.Objects.push({Key: content.Key});
-          });
-      
-          s3.deleteObjects(dparams, function(err, data) {
-            if (err){
-              console.log(err.message);
-               throw err;
-            }
-            console.log(`delete files successful.`);
-          });
+          console.log(`delete files successful.`);
+          
+          uploadFile(source);
         });
-      };
-
-      
-      clearFiles();
-      uploadFile(source);
-
+      });
 } 
 catch (error) {
     core.setFailed(error.message);
@@ -23139,6 +23134,14 @@ module.exports = require("http");
 
 "use strict";
 module.exports = require("https");
+
+/***/ }),
+
+/***/ 7012:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("inspector");
 
 /***/ }),
 

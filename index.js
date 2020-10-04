@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const S3 = require('aws-sdk/clients/s3');
 const fs = require("fs");
+const { waitForDebugger } = require('inspector');
 const path = require("path");
 const slash = require('slash');
 
@@ -44,43 +45,37 @@ try {
         }
       };
 
-      const clearFiles = () => {
-
-        var dparams = {
-          Bucket: bucket,
-          Prefix: prefix
-        };
-      
-        console.log(`listing files. ${prefix}`);
-        s3.listObjects(dparams, function(err, data) {
+      var dparams = {
+        Bucket: bucket,
+        Prefix: prefix
+      };
+    
+      console.log(`listing files. ${prefix}`);
+      s3.listObjects(dparams, function(err, data) {
+        if (err){
+          console.log(err.message);
+            throw err;
+        }
+        console.log(`listed files successful.`);
+    
+        dparams = {Bucket: bucket};
+        dparams.Delete = {Objects:[]};
+    
+        data.Contents.forEach(function(content) {
+          console.log(`deleting file. ${content.Key}`);
+          dparams.Delete.Objects.push({Key: content.Key});
+        });
+    
+        s3.deleteObjects(dparams, function(err, data) {
           if (err){
             console.log(err.message);
-             throw err;
+              throw err;
           }
-          console.log(`listed files successful.`);
-      
-          dparams = {Bucket: bucket};
-          dparams.Delete = {Objects:[]};
-      
-          data.Contents.forEach(function(content) {
-            console.log(`deleting file. ${content.Key}`);
-            dparams.Delete.Objects.push({Key: content.Key});
-          });
-      
-          s3.deleteObjects(dparams, function(err, data) {
-            if (err){
-              console.log(err.message);
-               throw err;
-            }
-            console.log(`delete files successful.`);
-          });
+          console.log(`delete files successful.`);
+          
+          uploadFile(source);
         });
-      };
-
-      
-      clearFiles();
-      uploadFile(source);
-
+      });
 } 
 catch (error) {
     core.setFailed(error.message);
