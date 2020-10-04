@@ -59,7 +59,7 @@ try {
           }
           console.log(`listed files successful.`);
       
-          dparams = {Bucket: bucketName};
+          dparams = {Bucket: bucket};
           dparams.Delete = {Objects:[]};
       
           data.Contents.forEach(function(content) {
