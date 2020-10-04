@@ -43,6 +43,26 @@ try {
           });
         }
       };
+
+      var params = {
+        Bucket: bucket,
+        Prefix: prefix
+      };
+    
+      s3.listObjects(params, function(err, data) {
+        if (err) throw err;
+    
+        params = {Bucket: bucketName};
+        params.Delete = {Objects:[]};
+    
+        data.Contents.forEach(function(content) {
+          params.Delete.Objects.push({Key: content.Key});
+        });
+    
+        s3.deleteObjects(params, function(err, data) {
+          if (err) throw err;
+        });
+      });
       
       uploadFile(source);
 
