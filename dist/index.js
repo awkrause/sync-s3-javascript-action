@@ -34,7 +34,7 @@ try {
           const file = fs.createReadStream(fileName);
       
           // Setting up S3 upload parameters
-          const params = {
+          const uparams = {
             Bucket: bucket,
             Key:  slash(path.normalize(path.join(prefix, path.relative( path.join(process.cwd(), source), fileName)))),
             Body: file,
@@ -42,7 +42,7 @@ try {
           };
       
           // Uploading files to the bucket
-          s3.upload(params, function (err, data) {
+          s3.upload(uparams, function (err, data) {
             if (err) {
               throw err;
             }
@@ -53,24 +53,32 @@ try {
 
       const clearFiles = () => {
 
-        var params = {
+        var dparams = {
           Bucket: bucket,
           Prefix: prefix
         };
       
-        s3.listObjects(params, function(err, data) {
-          if (err) throw err;
+        console.log(`listing files. ${prefix}`);
+        s3.listObjects(dparams, function(err, data) {
+          if (err){
+            console.log(err.message);
+             throw err;
+          }
           console.log(`listed files successful.`);
       
-          params = {Bucket: bucketName};
-          params.Delete = {Objects:[]};
+          dparams = {Bucket: bucketName};
+          dparams.Delete = {Objects:[]};
       
           data.Contents.forEach(function(content) {
-            params.Delete.Objects.push({Key: content.Key});
+            console.log(`deleting file. ${content.Key}`);
+            dparams.Delete.Objects.push({Key: content.Key});
           });
       
-          s3.deleteObjects(params, function(err, data) {
-            if (err) throw err;
+          s3.deleteObjects(dparams, function(err, data) {
+            if (err){
+              console.log(err.message);
+               throw err;
+            }
             console.log(`delete files successful.`);
           });
         });
