@@ -1,97 +1,8 @@
-module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 6583:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-const core = __webpack_require__(8021);
-const S3 = __webpack_require__(8039);
-const fs = __webpack_require__(5747);
-const { waitForDebugger } = __webpack_require__(7012);
-const path = __webpack_require__(5622);
-const slash = __webpack_require__(8741);
-
-try {
-
-    const accessKey = core.getInput('ACCESS_KEY');
-    const secereteKey = core.getInput('SECRET_KEY');
-    const bucket = core.getInput('BUCKET');
-    const source = core.getInput('SOURCE');
-    const prefix = core.getInput('KEY_PREFIX');
-    const acl = core.getInput('ACL');
-
-    const s3 = new S3({
-        accessKeyId: accessKey,
-        secretAccessKey: secereteKey
-    });
-
-    const uploadFile = (fileName) => {
-        if (fs.lstatSync(fileName).isDirectory()) {
-          fs.readdirSync(fileName).forEach((file) => {
-            uploadFile(`${fileName}/${file}`);
-          });
-        } else {
-          const file = fs.createReadStream(fileName);
-      
-          // Setting up S3 upload parameters
-          const uparams = {
-            Bucket: bucket,
-            Key:  slash(path.normalize(path.join(prefix, path.relative( path.join(process.cwd(), source), fileName)))),
-            Body: file,
-            ACL: acl
-          };
-      
-          // Uploading files to the bucket
-          s3.upload(uparams, function (err, data) {
-            if (err) {
-              throw err;
-            }
-            console.log(`File uploaded successful. ${data.Location}`);
-          });
-        }
-      };
-
-      var dparams = {
-        Bucket: bucket,
-        Prefix: prefix
-      };
-    
-      console.log(`listing files. ${prefix}`);
-      s3.listObjects(dparams, function(err, data) {
-        if (err){
-          console.log(err.message);
-            throw err;
-        }
-        console.log(`listed files successful.`);
-    
-        dparams = {Bucket: bucket};
-        dparams.Delete = {Objects:[]};
-    
-        data.Contents.forEach(function(content) {
-          console.log(`deleting file. ${content.Key}`);
-          dparams.Delete.Objects.push({Key: content.Key});
-        });
-    
-        s3.deleteObjects(dparams, function(err, data) {
-          if (err){
-            console.log(err.message);
-              throw err;
-          }
-          console.log(`delete files successful.`);
-          
-          uploadFile(source);
-        });
-      });
-} 
-catch (error) {
-    core.setFailed(error.message);
-}
-
-/***/ }),
-
-/***/ 9403:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2754:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -103,8 +14,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const os = __importStar(__webpack_require__(2087));
-const utils_1 = __webpack_require__(4163);
+const os = __importStar(__nccwpck_require__(2087));
+const utils_1 = __nccwpck_require__(2865);
 /**
  * Commands
  *
@@ -176,8 +87,8 @@ function escapeProperty(s) {
 
 /***/ }),
 
-/***/ 8021:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 754:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -198,11 +109,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const command_1 = __webpack_require__(9403);
-const file_command_1 = __webpack_require__(1704);
-const utils_1 = __webpack_require__(4163);
-const os = __importStar(__webpack_require__(2087));
-const path = __importStar(__webpack_require__(5622));
+const command_1 = __nccwpck_require__(2754);
+const file_command_1 = __nccwpck_require__(3587);
+const utils_1 = __nccwpck_require__(2865);
+const os = __importStar(__nccwpck_require__(2087));
+const path = __importStar(__nccwpck_require__(5622));
 /**
  * The code to exit an action
  */
@@ -421,8 +332,8 @@ exports.getState = getState;
 
 /***/ }),
 
-/***/ 1704:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3587:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -437,9 +348,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const fs = __importStar(__webpack_require__(5747));
-const os = __importStar(__webpack_require__(2087));
-const utils_1 = __webpack_require__(4163);
+const fs = __importStar(__nccwpck_require__(5747));
+const os = __importStar(__nccwpck_require__(2087));
+const utils_1 = __nccwpck_require__(2865);
 function issueCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
@@ -457,7 +368,7 @@ exports.issueCommand = issueCommand;
 
 /***/ }),
 
-/***/ 4163:
+/***/ 2865:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -483,21 +394,21 @@ exports.toCommandValue = toCommandValue;
 
 /***/ }),
 
-/***/ 8947:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 4977:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-__webpack_require__(9051);
-var AWS = __webpack_require__(1026);
+__nccwpck_require__(2254);
+var AWS = __nccwpck_require__(7671);
 var Service = AWS.Service;
 var apiLoader = AWS.apiLoader;
 
 apiLoader.services['cognitoidentity'] = {};
 AWS.CognitoIdentity = Service.defineService('cognitoidentity', ['2014-06-30']);
-__webpack_require__(7308);
+__nccwpck_require__(3316);
 Object.defineProperty(apiLoader.services['cognitoidentity'], '2014-06-30', {
   get: function get() {
-    var model = __webpack_require__(6102);
-    model.paginators = __webpack_require__(796)/* .pagination */ .o;
+    var model = __nccwpck_require__(6102);
+    model.paginators = __nccwpck_require__(796)/* .pagination */ .o;
     return model;
   },
   enumerable: true,
@@ -509,22 +420,22 @@ module.exports = AWS.CognitoIdentity;
 
 /***/ }),
 
-/***/ 8039:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 3137:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-__webpack_require__(9051);
-var AWS = __webpack_require__(1026);
+__nccwpck_require__(2254);
+var AWS = __nccwpck_require__(7671);
 var Service = AWS.Service;
 var apiLoader = AWS.apiLoader;
 
 apiLoader.services['s3'] = {};
 AWS.S3 = Service.defineService('s3', ['2006-03-01']);
-__webpack_require__(2641);
+__nccwpck_require__(1057);
 Object.defineProperty(apiLoader.services['s3'], '2006-03-01', {
   get: function get() {
-    var model = __webpack_require__(2581);
-    model.paginators = __webpack_require__(3175)/* .pagination */ .o;
-    model.waiters = __webpack_require__(4494)/* .waiters */ .V;
+    var model = __nccwpck_require__(2581);
+    model.paginators = __nccwpck_require__(3175)/* .pagination */ .o;
+    model.waiters = __nccwpck_require__(4494)/* .waiters */ .V;
     return model;
   },
   enumerable: true,
@@ -536,21 +447,21 @@ module.exports = AWS.S3;
 
 /***/ }),
 
-/***/ 6434:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 8008:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-__webpack_require__(9051);
-var AWS = __webpack_require__(1026);
+__nccwpck_require__(2254);
+var AWS = __nccwpck_require__(7671);
 var Service = AWS.Service;
 var apiLoader = AWS.apiLoader;
 
 apiLoader.services['sts'] = {};
 AWS.STS = Service.defineService('sts', ['2011-06-15']);
-__webpack_require__(973);
+__nccwpck_require__(18);
 Object.defineProperty(apiLoader.services['sts'], '2011-06-15', {
   get: function get() {
-    var model = __webpack_require__(8976);
-    model.paginators = __webpack_require__(2952)/* .pagination */ .o;
+    var model = __nccwpck_require__(8976);
+    model.paginators = __nccwpck_require__(2952)/* .pagination */ .o;
     return model;
   },
   enumerable: true,
@@ -562,7 +473,7 @@ module.exports = AWS.STS;
 
 /***/ }),
 
-/***/ 8628:
+/***/ 1735:
 /***/ ((module) => {
 
 function apiLoader(svc, version) {
@@ -588,12 +499,12 @@ module.exports = apiLoader;
 
 /***/ }),
 
-/***/ 5855:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 3599:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-__webpack_require__(5849);
-__webpack_require__(1514);
+var AWS = __nccwpck_require__(7671);
+__nccwpck_require__(7976);
+__nccwpck_require__(8546);
 var PromisesDependency;
 
 /**
@@ -1213,10 +1124,10 @@ AWS.config = new AWS.Config();
 
 /***/ }),
 
-/***/ 2684:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 406:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 /**
  * @api private
  */
@@ -1287,13 +1198,13 @@ module.exports = resolveRegionalEndpointsFlag;
 
 /***/ }),
 
-/***/ 1026:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 7671:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /**
  * The main AWS namespace
  */
-var AWS = { util: __webpack_require__(8762) };
+var AWS = { util: __nccwpck_require__(3082) };
 
 /**
  * @api private
@@ -1323,18 +1234,18 @@ AWS.util.update(AWS, {
    * @api private
    */
   Protocol: {
-    Json: __webpack_require__(5748),
-    Query: __webpack_require__(5938),
-    Rest: __webpack_require__(6791),
-    RestJson: __webpack_require__(6247),
-    RestXml: __webpack_require__(5804)
+    Json: __nccwpck_require__(9631),
+    Query: __nccwpck_require__(2085),
+    Rest: __nccwpck_require__(829),
+    RestJson: __nccwpck_require__(3368),
+    RestXml: __nccwpck_require__(7524)
   },
 
   /**
    * @api private
    */
   XML: {
-    Builder: __webpack_require__(2759),
+    Builder: __nccwpck_require__(3036),
     Parser: null // conditionally set based on environment
   },
 
@@ -1342,41 +1253,41 @@ AWS.util.update(AWS, {
    * @api private
    */
   JSON: {
-    Builder: __webpack_require__(8780),
-    Parser: __webpack_require__(8129)
+    Builder: __nccwpck_require__(5646),
+    Parser: __nccwpck_require__(2978)
   },
 
   /**
    * @api private
    */
   Model: {
-    Api: __webpack_require__(861),
-    Operation: __webpack_require__(6753),
-    Shape: __webpack_require__(7569),
-    Paginator: __webpack_require__(4899),
-    ResourceWaiter: __webpack_require__(2554)
+    Api: __nccwpck_require__(1878),
+    Operation: __nccwpck_require__(4364),
+    Shape: __nccwpck_require__(9078),
+    Paginator: __nccwpck_require__(1067),
+    ResourceWaiter: __nccwpck_require__(7342)
   },
 
   /**
    * @api private
    */
-  apiLoader: __webpack_require__(8628),
+  apiLoader: __nccwpck_require__(1735),
 
   /**
    * @api private
    */
-  EndpointCache: __webpack_require__(5128)/* .EndpointCache */ .$
+  EndpointCache: __nccwpck_require__(8328)/* .EndpointCache */ .$
 });
-__webpack_require__(9205);
-__webpack_require__(7648);
-__webpack_require__(5855);
-__webpack_require__(168);
-__webpack_require__(3039);
-__webpack_require__(1008);
-__webpack_require__(6664);
-__webpack_require__(6846);
-__webpack_require__(8646);
-__webpack_require__(2629);
+__nccwpck_require__(9323);
+__nccwpck_require__(136);
+__nccwpck_require__(3599);
+__nccwpck_require__(8278);
+__nccwpck_require__(9225);
+__nccwpck_require__(1606);
+__nccwpck_require__(1877);
+__nccwpck_require__(835);
+__nccwpck_require__(1736);
+__nccwpck_require__(8594);
 
 /**
  * @readonly
@@ -1403,10 +1314,10 @@ AWS.util.memoizedProperty(AWS, 'endpointCache', function() {
 
 /***/ }),
 
-/***/ 5849:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 7976:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 
 /**
  * Represents your AWS security credentials, specifically the
@@ -1656,11 +1567,11 @@ AWS.util.addPromises(AWS.Credentials);
 
 /***/ }),
 
-/***/ 3463:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5146:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var STS = __webpack_require__(6434);
+var AWS = __nccwpck_require__(7671);
+var STS = __nccwpck_require__(8008);
 
 /**
  * Represents temporary credentials retrieved from {AWS.STS}. Without any
@@ -1863,12 +1774,12 @@ AWS.ChainableTemporaryCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 7919:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 6007:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var CognitoIdentity = __webpack_require__(8947);
-var STS = __webpack_require__(6434);
+var AWS = __nccwpck_require__(7671);
+var CognitoIdentity = __nccwpck_require__(4977);
+var STS = __nccwpck_require__(8008);
 
 /**
  * Represents credentials retrieved from STS Web Identity Federation using
@@ -2255,10 +2166,10 @@ AWS.CognitoIdentityCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 1514:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 8546:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 
 /**
  * Creates a credential provider chain that searches for AWS credentials
@@ -2441,11 +2352,11 @@ AWS.util.addPromises(AWS.CredentialProviderChain);
 
 /***/ }),
 
-/***/ 5716:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5342:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-__webpack_require__(6816);
+var AWS = __nccwpck_require__(7671);
+__nccwpck_require__(8643);
 
 /**
  * Represents credentials received from the metadata service on an EC2 instance.
@@ -2555,10 +2466,10 @@ AWS.EC2MetadataCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 8489:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 2548:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 
 /**
  * Represents credentials received from relative URI specified in the ECS container.
@@ -2590,10 +2501,10 @@ AWS.ECSCredentials = AWS.RemoteCredentials;
 
 /***/ }),
 
-/***/ 845:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 7089:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 
 /**
  * Represents credentials from the environment.
@@ -2688,10 +2599,10 @@ AWS.EnvironmentCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 7538:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 655:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 
 /**
  * Represents credentials from a JSON file on disk.
@@ -2763,11 +2674,11 @@ AWS.FileSystemCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 4140:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 8968:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var proc = __webpack_require__(3129);
+var AWS = __nccwpck_require__(7671);
+var proc = __nccwpck_require__(3129);
 var iniLoader = AWS.util.iniLoader;
 
 /**
@@ -2935,10 +2846,10 @@ AWS.ProcessCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 7442:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5015:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026),
+var AWS = __nccwpck_require__(7671),
   ENV_RELATIVE_URI = 'AWS_CONTAINER_CREDENTIALS_RELATIVE_URI',
   ENV_FULL_URI = 'AWS_CONTAINER_CREDENTIALS_FULL_URI',
   ENV_AUTH_TOKEN = 'AWS_CONTAINER_AUTHORIZATION_TOKEN',
@@ -3150,11 +3061,11 @@ AWS.RemoteCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 9118:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 4565:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var STS = __webpack_require__(6434);
+var AWS = __nccwpck_require__(7671);
+var STS = __nccwpck_require__(8008);
 
 /**
  * Represents credentials retrieved from STS SAML support.
@@ -3251,11 +3162,11 @@ AWS.SAMLCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 752:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5233:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var STS = __webpack_require__(6434);
+var AWS = __nccwpck_require__(7671);
+var STS = __nccwpck_require__(8008);
 var iniLoader = AWS.util.iniLoader;
 
 var ASSUME_ROLE_DEFAULT_REGION = 'us-east-1';
@@ -3540,11 +3451,11 @@ AWS.SharedIniFileCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 2464:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 12:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var STS = __webpack_require__(6434);
+var AWS = __nccwpck_require__(7671);
+var STS = __nccwpck_require__(8008);
 
 /**
  * Represents temporary credentials retrieved from {AWS.STS}. Without any
@@ -3676,12 +3587,12 @@ AWS.TemporaryCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 5215:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 2845:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var fs = __webpack_require__(5747);
-var STS = __webpack_require__(6434);
+var AWS = __nccwpck_require__(7671);
+var fs = __nccwpck_require__(5747);
+var STS = __nccwpck_require__(8008);
 var iniLoader = AWS.util.iniLoader;
 
 /**
@@ -3890,11 +3801,11 @@ AWS.TokenFileWebIdentityCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 7282:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5964:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var STS = __webpack_require__(6434);
+var AWS = __nccwpck_require__(7671);
+var STS = __nccwpck_require__(8008);
 
 /**
  * Represents credentials retrieved from STS Web Identity Federation support.
@@ -4012,11 +3923,11 @@ AWS.WebIdentityCredentials = AWS.util.inherit(AWS.Credentials, {
 
 /***/ }),
 
-/***/ 8816:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 3448:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var util = __webpack_require__(8762);
+var AWS = __nccwpck_require__(7671);
+var util = __nccwpck_require__(3082);
 var endpointDiscoveryEnabledEnvs = ['AWS_ENABLE_ENDPOINT_DISCOVERY', 'AWS_ENDPOINT_DISCOVERY_ENABLED'];
 
 /**
@@ -4396,11 +4307,11 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5838:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 4941:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var eventMessageChunker = __webpack_require__(2655).eventMessageChunker;
-var parseEvent = __webpack_require__(8170).parseEvent;
+var eventMessageChunker = __nccwpck_require__(5841).eventMessageChunker;
+var parseEvent = __nccwpck_require__(4685).parseEvent;
 
 function createEventStream(body, parser, model) {
     var eventMessages = eventMessageChunker(body);
@@ -4424,11 +4335,11 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4456:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 352:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(1026).util;
-var Transform = __webpack_require__(2413).Transform;
+var util = __nccwpck_require__(7671).util;
+var Transform = __nccwpck_require__(2413).Transform;
 var allocBuffer = util.buffer.alloc;
 
 /** @type {Transform} */
@@ -4552,7 +4463,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 2655:
+/***/ 5841:
 /***/ ((module) => {
 
 /**
@@ -4589,11 +4500,11 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4913:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 8521:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var Transform = __webpack_require__(2413).Transform;
-var parseEvent = __webpack_require__(8170).parseEvent;
+var Transform = __nccwpck_require__(2413).Transform;
+var parseEvent = __nccwpck_require__(4685).parseEvent;
 
 /** @type {Transform} */
 function EventUnmarshallerStream(options) {
@@ -4635,10 +4546,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5131:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 2319:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(1026).util;
+var util = __nccwpck_require__(7671).util;
 var toBuffer = util.buffer.toBuffer;
 
 /**
@@ -4735,10 +4646,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ 8170:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 4685:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var parseMessage = __webpack_require__(8233).parseMessage;
+var parseMessage = __nccwpck_require__(3645).parseMessage;
 
 /**
  *
@@ -4815,12 +4726,12 @@ module.exports = {
 
 /***/ }),
 
-/***/ 8233:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 3645:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var Int64 = __webpack_require__(5131).Int64;
+var Int64 = __nccwpck_require__(2319).Int64;
 
-var splitMessage = __webpack_require__(7806).splitMessage;
+var splitMessage = __nccwpck_require__(6666).splitMessage;
 
 var BOOLEAN_TAG = 'boolean';
 var BYTE_TAG = 'byte';
@@ -4950,10 +4861,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ 7806:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 6666:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(1026).util;
+var util = __nccwpck_require__(7671).util;
 var toBuffer = util.buffer.toBuffer;
 
 // All prelude components are unsigned, 32-bit integers
@@ -5027,8 +4938,8 @@ module.exports = {
 
 /***/ }),
 
-/***/ 8877:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 7422:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /**
  * What is necessary to create an event stream in node?
@@ -5037,8 +4948,8 @@ module.exports = {
  *  - event stream model
  */
 
-var EventMessageChunkerStream = __webpack_require__(4456).EventMessageChunkerStream;
-var EventUnmarshallerStream = __webpack_require__(4913).EventUnmarshallerStream;
+var EventMessageChunkerStream = __nccwpck_require__(352).EventMessageChunkerStream;
+var EventUnmarshallerStream = __nccwpck_require__(8521).EventUnmarshallerStream;
 
 function createEventStream(stream, parser, model) {
     var eventStream = new EventUnmarshallerStream({
@@ -5073,12 +4984,12 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3039:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 9225:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var SequentialExecutor = __webpack_require__(9205);
-var DISCOVER_ENDPOINT = __webpack_require__(8816).discoverEndpoint;
+var AWS = __nccwpck_require__(7671);
+var SequentialExecutor = __nccwpck_require__(9323);
+var DISCOVER_ENDPOINT = __nccwpck_require__(3448).discoverEndpoint;
 /**
  * The namespace used to register global event listeners for request building
  * and sending.
@@ -5647,7 +5558,7 @@ AWS.EventListeners = {
           var inputShape = req.service.api.operations[req.operation].input;
           censoredParams = filterSensitiveLog(inputShape, req.params);
         }
-        var params = __webpack_require__(1669).inspect(censoredParams, true, null);
+        var params = __nccwpck_require__(1669).inspect(censoredParams, true, null);
         var message = '';
         if (ansi) message += '\x1B[33m';
         message += '[AWS ' + req.service.serviceIdentifier + ' ' + status;
@@ -5669,35 +5580,35 @@ AWS.EventListeners = {
   }),
 
   Json: new SequentialExecutor().addNamedListeners(function(add) {
-    var svc = __webpack_require__(5748);
+    var svc = __nccwpck_require__(9631);
     add('BUILD', 'build', svc.buildRequest);
     add('EXTRACT_DATA', 'extractData', svc.extractData);
     add('EXTRACT_ERROR', 'extractError', svc.extractError);
   }),
 
   Rest: new SequentialExecutor().addNamedListeners(function(add) {
-    var svc = __webpack_require__(6791);
+    var svc = __nccwpck_require__(829);
     add('BUILD', 'build', svc.buildRequest);
     add('EXTRACT_DATA', 'extractData', svc.extractData);
     add('EXTRACT_ERROR', 'extractError', svc.extractError);
   }),
 
   RestJson: new SequentialExecutor().addNamedListeners(function(add) {
-    var svc = __webpack_require__(6247);
+    var svc = __nccwpck_require__(3368);
     add('BUILD', 'build', svc.buildRequest);
     add('EXTRACT_DATA', 'extractData', svc.extractData);
     add('EXTRACT_ERROR', 'extractError', svc.extractError);
   }),
 
   RestXml: new SequentialExecutor().addNamedListeners(function(add) {
-    var svc = __webpack_require__(5804);
+    var svc = __nccwpck_require__(7524);
     add('BUILD', 'build', svc.buildRequest);
     add('EXTRACT_DATA', 'extractData', svc.extractData);
     add('EXTRACT_ERROR', 'extractError', svc.extractError);
   }),
 
   Query: new SequentialExecutor().addNamedListeners(function(add) {
-    var svc = __webpack_require__(5938);
+    var svc = __nccwpck_require__(2085);
     add('BUILD', 'build', svc.buildRequest);
     add('EXTRACT_DATA', 'extractData', svc.extractData);
     add('EXTRACT_ERROR', 'extractError', svc.extractError);
@@ -5707,10 +5618,10 @@ AWS.EventListeners = {
 
 /***/ }),
 
-/***/ 168:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 8278:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 var inherit = AWS.util.inherit;
 
 /**
@@ -5952,14 +5863,14 @@ AWS.HttpClient.getInstance = function getInstance() {
 
 /***/ }),
 
-/***/ 5094:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5666:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 var Stream = AWS.util.stream.Stream;
 var TransformStream = AWS.util.stream.Transform;
 var ReadableStream = AWS.util.stream.Readable;
-__webpack_require__(168);
+__nccwpck_require__(8278);
 var CONNECTION_REUSE_ENV_NAME = 'AWS_NODEJS_CONNECTION_REUSE_ENABLED';
 
 /**
@@ -5980,7 +5891,7 @@ AWS.NodeHttpClient = AWS.util.inherit({
     }
 
     var useSSL = endpoint.protocol === 'https:';
-    var http = useSSL ? __webpack_require__(7211) : __webpack_require__(8605);
+    var http = useSSL ? __nccwpck_require__(7211) : __nccwpck_require__(8605);
     var options = {
       host: endpoint.hostname,
       port: endpoint.port,
@@ -6102,7 +6013,7 @@ AWS.NodeHttpClient = AWS.util.inherit({
    * Create the https.Agent or http.Agent according to the request schema.
    */
   getAgent: function getAgent(useSSL, agentOptions) {
-    var http = useSSL ? __webpack_require__(7211) : __webpack_require__(8605);
+    var http = useSSL ? __nccwpck_require__(7211) : __nccwpck_require__(8605);
     if (useSSL) {
       if (!AWS.NodeHttpClient.sslAgent) {
         AWS.NodeHttpClient.sslAgent = new http.Agent(AWS.util.merge({
@@ -6173,10 +6084,10 @@ AWS.HttpClient.streamsApiVersion = ReadableStream ? 2 : 1;
 
 /***/ }),
 
-/***/ 8780:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5646:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(8762);
+var util = __nccwpck_require__(3082);
 
 function JsonBuilder() { }
 
@@ -6239,10 +6150,10 @@ module.exports = JsonBuilder;
 
 /***/ }),
 
-/***/ 8129:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 2978:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(8762);
+var util = __nccwpck_require__(3082);
 
 function JsonParser() { }
 
@@ -6313,11 +6224,11 @@ module.exports = JsonParser;
 
 /***/ }),
 
-/***/ 6816:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 8643:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-__webpack_require__(168);
+var AWS = __nccwpck_require__(7671);
+__nccwpck_require__(8278);
 var inherit = AWS.util.inherit;
 
 /**
@@ -6555,17 +6466,17 @@ module.exports = AWS.MetadataService;
 
 /***/ }),
 
-/***/ 861:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 1878:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var Collection = __webpack_require__(8765);
-var Operation = __webpack_require__(6753);
-var Shape = __webpack_require__(7569);
-var Paginator = __webpack_require__(4899);
-var ResourceWaiter = __webpack_require__(2554);
-var metadata = __webpack_require__(9497);
+var Collection = __nccwpck_require__(5822);
+var Operation = __nccwpck_require__(4364);
+var Shape = __nccwpck_require__(9078);
+var Paginator = __nccwpck_require__(1067);
+var ResourceWaiter = __nccwpck_require__(7342);
+var metadata = __nccwpck_require__(9497);
 
-var util = __webpack_require__(8762);
+var util = __nccwpck_require__(3082);
 var property = util.property;
 var memoizedProperty = util.memoizedProperty;
 
@@ -6650,10 +6561,10 @@ module.exports = Api;
 
 /***/ }),
 
-/***/ 8765:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5822:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var memoizedProperty = __webpack_require__(8762).memoizedProperty;
+var memoizedProperty = __nccwpck_require__(3082).memoizedProperty;
 
 function memoize(name, value, factory, nameTr) {
   memoizedProperty(this, nameTr(name), function() {
@@ -6681,12 +6592,12 @@ module.exports = Collection;
 
 /***/ }),
 
-/***/ 6753:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 4364:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var Shape = __webpack_require__(7569);
+var Shape = __nccwpck_require__(9078);
 
-var util = __webpack_require__(8762);
+var util = __nccwpck_require__(3082);
 var property = util.property;
 var memoizedProperty = util.memoizedProperty;
 
@@ -6801,10 +6712,10 @@ module.exports = Operation;
 
 /***/ }),
 
-/***/ 4899:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 1067:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var property = __webpack_require__(8762).property;
+var property = __nccwpck_require__(3082).property;
 
 function Paginator(name, paginator) {
   property(this, 'inputToken', paginator.input_token);
@@ -6822,10 +6733,10 @@ module.exports = Paginator;
 
 /***/ }),
 
-/***/ 2554:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 7342:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(8762);
+var util = __nccwpck_require__(3082);
 var property = util.property;
 
 function ResourceWaiter(name, waiter, options) {
@@ -6862,12 +6773,12 @@ module.exports = ResourceWaiter;
 
 /***/ }),
 
-/***/ 7569:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 9078:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var Collection = __webpack_require__(8765);
+var Collection = __nccwpck_require__(5822);
 
-var util = __webpack_require__(8762);
+var util = __nccwpck_require__(3082);
 
 function property(obj, name, value) {
   if (value !== null && value !== undefined) {
@@ -7275,65 +7186,65 @@ module.exports = Shape;
 
 /***/ }),
 
-/***/ 9051:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 2254:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(8762);
+var util = __nccwpck_require__(3082);
 
 util.isBrowser = function() { return false; };
 util.isNode = function() { return true; };
 
 // node.js specific modules
-util.crypto.lib = __webpack_require__(6417);
-util.Buffer = __webpack_require__(4293).Buffer;
-util.domain = __webpack_require__(5229);
-util.stream = __webpack_require__(2413);
-util.url = __webpack_require__(8835);
-util.querystring = __webpack_require__(1191);
+util.crypto.lib = __nccwpck_require__(6417);
+util.Buffer = __nccwpck_require__(4293).Buffer;
+util.domain = __nccwpck_require__(5229);
+util.stream = __nccwpck_require__(2413);
+util.url = __nccwpck_require__(8835);
+util.querystring = __nccwpck_require__(1191);
 util.environment = 'nodejs';
 util.createEventStream = util.stream.Readable ?
-  __webpack_require__(8877).createEventStream : __webpack_require__(5838).createEventStream;
-util.realClock = __webpack_require__(2349);
+  __nccwpck_require__(7422).createEventStream : __nccwpck_require__(4941).createEventStream;
+util.realClock = __nccwpck_require__(9223);
 util.clientSideMonitoring = {
-  Publisher: __webpack_require__(2389).Publisher,
-  configProvider: __webpack_require__(372),
+  Publisher: __nccwpck_require__(4398).Publisher,
+  configProvider: __nccwpck_require__(4618),
 };
-util.iniLoader = __webpack_require__(481)/* .iniLoader */ .b;
-util.getSystemErrorName = __webpack_require__(1669).getSystemErrorName;
+util.iniLoader = __nccwpck_require__(7736)/* .iniLoader */ .b;
+util.getSystemErrorName = __nccwpck_require__(1669).getSystemErrorName;
 
 var AWS;
 
 /**
  * @api private
  */
-module.exports = AWS = __webpack_require__(1026);
+module.exports = AWS = __nccwpck_require__(7671);
 
-__webpack_require__(5849);
-__webpack_require__(1514);
-__webpack_require__(2464);
-__webpack_require__(3463);
-__webpack_require__(7282);
-__webpack_require__(7919);
-__webpack_require__(9118);
-__webpack_require__(4140);
+__nccwpck_require__(7976);
+__nccwpck_require__(8546);
+__nccwpck_require__(12);
+__nccwpck_require__(5146);
+__nccwpck_require__(5964);
+__nccwpck_require__(6007);
+__nccwpck_require__(4565);
+__nccwpck_require__(8968);
 
 // Load the xml2js XML parser
-AWS.XML.Parser = __webpack_require__(94);
+AWS.XML.Parser = __nccwpck_require__(5209);
 
 // Load Node HTTP client
-__webpack_require__(5094);
+__nccwpck_require__(5666);
 
-__webpack_require__(1300);
+__nccwpck_require__(880);
 
 // Load custom credential providers
-__webpack_require__(5215);
-__webpack_require__(5716);
-__webpack_require__(7442);
-__webpack_require__(8489);
-__webpack_require__(845);
-__webpack_require__(7538);
-__webpack_require__(752);
-__webpack_require__(4140);
+__nccwpck_require__(2845);
+__nccwpck_require__(5342);
+__nccwpck_require__(5015);
+__nccwpck_require__(2548);
+__nccwpck_require__(7089);
+__nccwpck_require__(655);
+__nccwpck_require__(5233);
+__nccwpck_require__(8968);
 
 // Setup default chain providers
 // If this changes, please update documentation for
@@ -7393,10 +7304,10 @@ AWS.config = new AWS.Config();
 
 /***/ }),
 
-/***/ 2629:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 8594:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 
 /**
  * @api private
@@ -7670,11 +7581,11 @@ AWS.ParamValidator = AWS.util.inherit({
 
 /***/ }),
 
-/***/ 8569:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 1985:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util =  __webpack_require__(8762);
-var AWS = __webpack_require__(1026);
+var util =  __nccwpck_require__(3082);
+var AWS = __nccwpck_require__(7671);
 
 /**
  * Prepend prefix defined by API model to endpoint that's already
@@ -7766,13 +7677,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5748:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 9631:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(8762);
-var JsonBuilder = __webpack_require__(8780);
-var JsonParser = __webpack_require__(8129);
-var populateHostPrefix = __webpack_require__(8569).populateHostPrefix;
+var util = __nccwpck_require__(3082);
+var JsonBuilder = __nccwpck_require__(5646);
+var JsonParser = __nccwpck_require__(2978);
+var populateHostPrefix = __nccwpck_require__(1985).populateHostPrefix;
 
 function buildRequest(req) {
   var httpRequest = req.httpRequest;
@@ -7847,14 +7758,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5938:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 2085:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var util = __webpack_require__(8762);
-var QueryParamSerializer = __webpack_require__(9278);
-var Shape = __webpack_require__(7569);
-var populateHostPrefix = __webpack_require__(8569).populateHostPrefix;
+var AWS = __nccwpck_require__(7671);
+var util = __nccwpck_require__(3082);
+var QueryParamSerializer = __nccwpck_require__(2543);
+var Shape = __nccwpck_require__(9078);
+var populateHostPrefix = __nccwpck_require__(1985).populateHostPrefix;
 
 function buildRequest(req) {
   var operation = req.service.api.operations[req.operation];
@@ -7964,11 +7875,11 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6791:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 829:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(8762);
-var populateHostPrefix = __webpack_require__(8569).populateHostPrefix;
+var util = __nccwpck_require__(3082);
+var populateHostPrefix = __nccwpck_require__(1985).populateHostPrefix;
 
 function populateMethod(req) {
   req.httpRequest.method = req.service.api.operations[req.operation].httpMethod;
@@ -8119,14 +8030,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6247:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 3368:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(8762);
-var Rest = __webpack_require__(6791);
-var Json = __webpack_require__(5748);
-var JsonBuilder = __webpack_require__(8780);
-var JsonParser = __webpack_require__(8129);
+var util = __nccwpck_require__(3082);
+var Rest = __nccwpck_require__(829);
+var Json = __nccwpck_require__(9631);
+var JsonBuilder = __nccwpck_require__(5646);
+var JsonParser = __nccwpck_require__(2978);
 
 function populateBody(req) {
   var builder = new JsonBuilder();
@@ -8225,12 +8136,12 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5804:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 7524:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var util = __webpack_require__(8762);
-var Rest = __webpack_require__(6791);
+var AWS = __nccwpck_require__(7671);
+var util = __nccwpck_require__(3082);
+var Rest = __nccwpck_require__(829);
 
 function populateBody(req) {
   var input = req.service.api.operations[req.operation].input;
@@ -8340,10 +8251,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ 372:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 4618:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 
 /**
  * Resolve client-side monitoring configuration from either environmental variables
@@ -8429,11 +8340,11 @@ module.exports = resolveMonitoringConfig;
 
 /***/ }),
 
-/***/ 2389:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 4398:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(1026).util;
-var dgram = __webpack_require__(6200);
+var util = __nccwpck_require__(7671).util;
+var dgram = __nccwpck_require__(6200);
 var stringToBuffer = util.buffer.toBuffer;
 
 var MAX_MESSAGE_SIZE = 1024 * 8; // 8 KB
@@ -8561,10 +8472,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9278:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 2543:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(8762);
+var util = __nccwpck_require__(3082);
 
 function QueryParamSerializer() {
 }
@@ -8652,7 +8563,7 @@ module.exports = QueryParamSerializer;
 
 /***/ }),
 
-/***/ 2349:
+/***/ 9223:
 /***/ ((module) => {
 
 module.exports = {
@@ -8666,11 +8577,11 @@ module.exports = {
 
 /***/ }),
 
-/***/ 8394:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 1811:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(8762);
-var regionConfig = __webpack_require__(1765);
+var util = __nccwpck_require__(3082);
+var regionConfig = __nccwpck_require__(1765);
 
 function generateRegionPrefix(region) {
   if (!region) return null;
@@ -8772,14 +8683,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1008:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 1606:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var AcceptorStateMachine = __webpack_require__(1727);
+var AWS = __nccwpck_require__(7671);
+var AcceptorStateMachine = __nccwpck_require__(8404);
 var inherit = AWS.util.inherit;
 var domain = AWS.util.domain;
-var jmespath = __webpack_require__(1794);
+var jmespath = __nccwpck_require__(9547);
 
 /**
  * @api private
@@ -9590,8 +9501,8 @@ AWS.util.mixin(AWS.Request, AWS.SequentialExecutor);
 
 /***/ }),
 
-/***/ 6846:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 835:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /**
  * Copyright 2012-2013 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -9608,9 +9519,9 @@ AWS.util.mixin(AWS.Request, AWS.SequentialExecutor);
  * language governing permissions and limitations under the License.
  */
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 var inherit = AWS.util.inherit;
-var jmespath = __webpack_require__(1794);
+var jmespath = __nccwpck_require__(9547);
 
 /**
  * @api private
@@ -9801,12 +9712,12 @@ AWS.ResourceWaiter = inherit({
 
 /***/ }),
 
-/***/ 6664:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 1877:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 var inherit = AWS.util.inherit;
-var jmespath = __webpack_require__(1794);
+var jmespath = __nccwpck_require__(9547);
 
 /**
  * This class encapsulates the response information
@@ -10009,10 +9920,10 @@ AWS.Response = inherit({
 
 /***/ }),
 
-/***/ 2360:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5835:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 var byteLength = AWS.util.string.byteLength;
 var Buffer = AWS.util.Buffer;
 
@@ -10742,10 +10653,10 @@ module.exports = AWS.S3.ManagedUpload;
 
 /***/ }),
 
-/***/ 9205:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 9323:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 
 /**
  * @api private
@@ -10984,12 +10895,12 @@ module.exports = AWS.SequentialExecutor;
 
 /***/ }),
 
-/***/ 7648:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 136:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var Api = __webpack_require__(861);
-var regionConfig = __webpack_require__(8394);
+var AWS = __nccwpck_require__(7671);
+var Api = __nccwpck_require__(1878);
+var regionConfig = __nccwpck_require__(1811);
 
 var inherit = AWS.util.inherit;
 var clientCount = 0;
@@ -11824,10 +11735,10 @@ module.exports = AWS.Service;
 
 /***/ }),
 
-/***/ 7308:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 3316:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 
 AWS.util.update(AWS.CognitoIdentity.prototype, {
   getOpenIdToken: function getOpenIdToken(params, callback) {
@@ -11846,17 +11757,17 @@ AWS.util.update(AWS.CognitoIdentity.prototype, {
 
 /***/ }),
 
-/***/ 2641:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 1057:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var v4Credentials = __webpack_require__(2329);
-var resolveRegionalEndpointsFlag = __webpack_require__(2684);
-var s3util = __webpack_require__(4793);
-var regionUtil = __webpack_require__(8394);
+var AWS = __nccwpck_require__(7671);
+var v4Credentials = __nccwpck_require__(6602);
+var resolveRegionalEndpointsFlag = __nccwpck_require__(406);
+var s3util = __nccwpck_require__(8663);
+var regionUtil = __nccwpck_require__(1811);
 
 // Pull in managed upload extension
-__webpack_require__(2360);
+__nccwpck_require__(5835);
 
 /**
  * @api private
@@ -13125,11 +13036,11 @@ AWS.util.addPromises(AWS.S3);
 
 /***/ }),
 
-/***/ 4793:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 8663:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var regionUtil = __webpack_require__(8394);
+var AWS = __nccwpck_require__(7671);
+var regionUtil = __nccwpck_require__(1811);
 
 var s3util = {
   /**
@@ -13398,11 +13309,11 @@ module.exports = s3util;
 
 /***/ }),
 
-/***/ 973:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 18:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var resolveRegionalEndpointsFlag = __webpack_require__(2684);
+var AWS = __nccwpck_require__(7671);
+var resolveRegionalEndpointsFlag = __nccwpck_require__(406);
 var ENV_REGIONAL_ENDPOINT_ENABLED = 'AWS_STS_REGIONAL_ENDPOINTS';
 var CONFIG_REGIONAL_ENDPOINT_ENABLED = 'sts_regional_endpoints';
 
@@ -13491,10 +13402,10 @@ AWS.util.update(AWS.STS.prototype, {
 
 /***/ }),
 
-/***/ 481:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 7736:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var IniLoader = __webpack_require__(1300).IniLoader;
+var IniLoader = __nccwpck_require__(880).IniLoader;
 /**
  * Singleton object to load specified config/credentials files.
  * It will cache all the files ever loaded;
@@ -13504,12 +13415,12 @@ module.exports.b = new IniLoader();
 
 /***/ }),
 
-/***/ 1300:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 880:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var os = __webpack_require__(2087);
-var path = __webpack_require__(5622);
+var AWS = __nccwpck_require__(7671);
+var os = __nccwpck_require__(2087);
+var path = __nccwpck_require__(5622);
 
 function parseFile(filename, isConfig) {
     var content = AWS.util.ini.parse(AWS.util.readFileSync(filename));
@@ -13617,10 +13528,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ 7645:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 7937:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 var inherit = AWS.util.inherit;
 
 /**
@@ -13743,10 +13654,10 @@ module.exports = AWS.Signers.Presign;
 
 /***/ }),
 
-/***/ 8646:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 1736:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 
 var inherit = AWS.util.inherit;
 
@@ -13779,20 +13690,20 @@ AWS.Signers.RequestSigner.getVersion = function getVersion(version) {
   throw new Error('Unknown signing version ' + version);
 };
 
-__webpack_require__(695);
-__webpack_require__(8953);
-__webpack_require__(6181);
-__webpack_require__(1397);
-__webpack_require__(2751);
-__webpack_require__(7645);
+__nccwpck_require__(35);
+__nccwpck_require__(5133);
+__nccwpck_require__(1937);
+__nccwpck_require__(7364);
+__nccwpck_require__(2484);
+__nccwpck_require__(7937);
 
 
 /***/ }),
 
-/***/ 2751:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 2484:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 var inherit = AWS.util.inherit;
 
 /**
@@ -13971,10 +13882,10 @@ module.exports = AWS.Signers.S3;
 
 /***/ }),
 
-/***/ 695:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 35:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 var inherit = AWS.util.inherit;
 
 /**
@@ -14026,10 +13937,10 @@ module.exports = AWS.Signers.V2;
 
 /***/ }),
 
-/***/ 8953:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5133:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 var inherit = AWS.util.inherit;
 
 /**
@@ -14110,13 +14021,13 @@ module.exports = AWS.Signers.V3;
 
 /***/ }),
 
-/***/ 6181:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 1937:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 var inherit = AWS.util.inherit;
 
-__webpack_require__(8953);
+__nccwpck_require__(5133);
 
 /**
  * @api private
@@ -14142,11 +14053,11 @@ module.exports = AWS.Signers.V3Https;
 
 /***/ }),
 
-/***/ 1397:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 7364:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
-var v4Credentials = __webpack_require__(2329);
+var AWS = __nccwpck_require__(7671);
+var v4Credentials = __nccwpck_require__(6602);
 var inherit = AWS.util.inherit;
 
 /**
@@ -14364,10 +14275,10 @@ module.exports = AWS.Signers.V4;
 
 /***/ }),
 
-/***/ 2329:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 6602:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 
 /**
  * @api private
@@ -14471,7 +14382,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1727:
+/***/ 8404:
 /***/ ((module) => {
 
 function AcceptorStateMachine(states, state) {
@@ -14523,8 +14434,8 @@ module.exports = AcceptorStateMachine;
 
 /***/ }),
 
-/***/ 8762:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 3082:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /* eslint guard-for-in:0 */
 var AWS;
@@ -14559,7 +14470,7 @@ var util = {
 
   userAgent: function userAgent() {
     var name = util.environment;
-    var agent = 'aws-sdk-' + name + '/' + __webpack_require__(1026).VERSION;
+    var agent = 'aws-sdk-' + name + '/' + __nccwpck_require__(7671).VERSION;
     if (name === 'nodejs') agent += ' ' + util.engine();
     return agent;
   },
@@ -14620,7 +14531,7 @@ var util = {
 
   readFileSync: function readFileSync(path) {
     if (util.isBrowser()) return null;
-    return __webpack_require__(5747).readFileSync(path, 'utf-8');
+    return __nccwpck_require__(5747).readFileSync(path, 'utf-8');
   },
 
   base64: {
@@ -14723,7 +14634,7 @@ var util = {
       } else if (typeof string.size === 'number') {
         return string.size;
       } else if (typeof string.path === 'string') {
-        return __webpack_require__(5747).lstatSync(string.path).size;
+        return __nccwpck_require__(5747).lstatSync(string.path).size;
       } else {
         throw util.error(new Error('Cannot determine length of ' + string),
           { object: string });
@@ -14796,7 +14707,7 @@ var util = {
      *   requests.
      */
     getDate: function getDate() {
-      if (!AWS) AWS = __webpack_require__(1026);
+      if (!AWS) AWS = __nccwpck_require__(7671);
       if (AWS.config.systemClockOffset) { // use offset when non-zero
         return new Date(new Date().getTime() + AWS.config.systemClockOffset);
       } else {
@@ -15253,7 +15164,7 @@ var util = {
   computeSha256: function computeSha256(body, done) {
     if (util.isNode()) {
       var Stream = util.stream.Stream;
-      var fs = __webpack_require__(5747);
+      var fs = __nccwpck_require__(5747);
       if (typeof Stream === 'function' && body instanceof Stream) {
         if (typeof body.path === 'string') { // assume file object
           var settings = {};
@@ -15369,7 +15280,7 @@ var util = {
    */
   isDualstackAvailable: function isDualstackAvailable(service) {
     if (!service) return false;
-    var metadata = __webpack_require__(9497);
+    var metadata = __nccwpck_require__(9497);
     if (typeof service !== 'string') service = service.serviceIdentifier;
     if (typeof service !== 'string' || !metadata.hasOwnProperty(service)) return false;
     return !!metadata[service].dualstackAvailable;
@@ -15441,7 +15352,7 @@ var util = {
    */
   uuid: {
     v4: function uuidV4() {
-      return __webpack_require__(2819).v4();
+      return __nccwpck_require__(781).v4();
     }
   },
 
@@ -15576,12 +15487,12 @@ module.exports = util;
 
 /***/ }),
 
-/***/ 2759:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 3036:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var util = __webpack_require__(8762);
-var XmlNode = __webpack_require__(2173).XmlNode;
-var XmlText = __webpack_require__(2664).XmlText;
+var util = __nccwpck_require__(3082);
+var XmlNode = __nccwpck_require__(1835).XmlNode;
+var XmlText = __nccwpck_require__(235).XmlText;
 
 function XmlBuilder() { }
 
@@ -15685,7 +15596,7 @@ module.exports = XmlBuilder;
 
 /***/ }),
 
-/***/ 6700:
+/***/ 1554:
 /***/ ((module) => {
 
 /**
@@ -15705,7 +15616,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9262:
+/***/ 5040:
 /***/ ((module) => {
 
 /**
@@ -15725,14 +15636,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ 94:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5209:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var AWS = __webpack_require__(1026);
+var AWS = __nccwpck_require__(7671);
 var util = AWS.util;
 var Shape = AWS.Model.Shape;
 
-var xml2js = __webpack_require__(6592);
+var xml2js = __nccwpck_require__(9194);
 
 /**
  * @api private
@@ -15895,10 +15806,10 @@ module.exports = NodeXmlParser;
 
 /***/ }),
 
-/***/ 2173:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 1835:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var escapeAttribute = __webpack_require__(6700).escapeAttribute;
+var escapeAttribute = __nccwpck_require__(1554).escapeAttribute;
 
 /**
  * Represents an XML node.
@@ -15947,10 +15858,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ 2664:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 235:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var escapeElement = __webpack_require__(9262).escapeElement;
+var escapeElement = __nccwpck_require__(5040).escapeElement;
 
 /**
  * Represents an XML text value.
@@ -15974,14 +15885,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5128:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8328:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 var __webpack_unused_export__;
 
 __webpack_unused_export__ = ({ value: true });
-var LRU_1 = __webpack_require__(3352);
+var LRU_1 = __nccwpck_require__(5050);
 var CACHE_SIZE = 1000;
 /**
  * Inspired node-lru-cache[https://github.com/isaacs/node-lru-cache]
@@ -16051,7 +15962,7 @@ exports.$ = EndpointCache;
 
 /***/ }),
 
-/***/ 3352:
+/***/ 5050:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -16165,7 +16076,7 @@ exports.LRUCache = LRUCache;
 
 /***/ }),
 
-/***/ 1794:
+/***/ 9547:
 /***/ ((__unused_webpack_module, exports) => {
 
 (function(exports) {
@@ -17839,8 +17750,8 @@ exports.LRUCache = LRUCache;
 
 /***/ }),
 
-/***/ 7497:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 9808:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 ;(function (sax) { // wrapper for non-node envs
   sax.parser = function (strict, opt) { return new SAXParser(strict, opt) }
@@ -18004,7 +17915,7 @@ exports.LRUCache = LRUCache;
 
   var Stream
   try {
-    Stream = __webpack_require__(2413).Stream
+    Stream = __nccwpck_require__(2413).Stream
   } catch (ex) {
     Stream = function () {}
   }
@@ -18074,7 +17985,7 @@ exports.LRUCache = LRUCache;
       typeof Buffer.isBuffer === 'function' &&
       Buffer.isBuffer(data)) {
       if (!this._decoder) {
-        var SD = __webpack_require__(4304).StringDecoder
+        var SD = __nccwpck_require__(4304).StringDecoder
         this._decoder = new SD('utf8')
       }
       data = this._decoder.write(data)
@@ -19422,7 +19333,7 @@ exports.LRUCache = LRUCache;
 
 /***/ }),
 
-/***/ 8741:
+/***/ 4498:
 /***/ ((module) => {
 
 "use strict";
@@ -19441,11 +19352,11 @@ module.exports = path => {
 
 /***/ }),
 
-/***/ 2819:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 781:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var v1 = __webpack_require__(262);
-var v4 = __webpack_require__(2841);
+var v1 = __nccwpck_require__(4717);
+var v4 = __nccwpck_require__(202);
 
 var uuid = v4;
 uuid.v1 = v1;
@@ -19456,7 +19367,7 @@ module.exports = uuid;
 
 /***/ }),
 
-/***/ 9609:
+/***/ 9976:
 /***/ ((module) => {
 
 /**
@@ -19487,13 +19398,13 @@ module.exports = bytesToUuid;
 
 /***/ }),
 
-/***/ 7560:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 4353:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // Unique ID creation requires a high quality random # generator.  In node.js
 // this is pretty straight-forward - we use the crypto API.
 
-var crypto = __webpack_require__(6417);
+var crypto = __nccwpck_require__(6417);
 
 module.exports = function nodeRNG() {
   return crypto.randomBytes(16);
@@ -19502,11 +19413,11 @@ module.exports = function nodeRNG() {
 
 /***/ }),
 
-/***/ 262:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 4717:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var rng = __webpack_require__(7560);
-var bytesToUuid = __webpack_require__(9609);
+var rng = __nccwpck_require__(4353);
+var bytesToUuid = __nccwpck_require__(9976);
 
 // **`v1()` - Generate time-based UUID**
 //
@@ -19618,11 +19529,11 @@ module.exports = v1;
 
 /***/ }),
 
-/***/ 2841:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 202:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var rng = __webpack_require__(7560);
-var bytesToUuid = __webpack_require__(9609);
+var rng = __nccwpck_require__(4353);
+var bytesToUuid = __nccwpck_require__(9976);
 
 function v4(options, buf, offset) {
   var i = buf && offset || 0;
@@ -19654,7 +19565,7 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 9279:
+/***/ 6448:
 /***/ (function(__unused_webpack_module, exports) {
 
 // Generated by CoffeeScript 1.12.7
@@ -19673,8 +19584,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 1205:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 523:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -19682,9 +19593,9 @@ module.exports = v4;
   var builder, defaults, escapeCDATA, requiresCDATA, wrapCDATA,
     hasProp = {}.hasOwnProperty;
 
-  builder = __webpack_require__(590);
+  builder = __nccwpck_require__(8726);
 
-  defaults = __webpack_require__(3205).defaults;
+  defaults = __nccwpck_require__(3002).defaults;
 
   requiresCDATA = function(entry) {
     return typeof entry === "string" && (entry.indexOf('&') >= 0 || entry.indexOf('>') >= 0 || entry.indexOf('<') >= 0);
@@ -19807,7 +19718,7 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 3205:
+/***/ 3002:
 /***/ (function(__unused_webpack_module, exports) {
 
 // Generated by CoffeeScript 1.12.7
@@ -19886,8 +19797,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 3972:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4709:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -19897,17 +19808,17 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  sax = __webpack_require__(7497);
+  sax = __nccwpck_require__(9808);
 
-  events = __webpack_require__(8614);
+  events = __nccwpck_require__(8614);
 
-  bom = __webpack_require__(9279);
+  bom = __nccwpck_require__(6448);
 
-  processors = __webpack_require__(4951);
+  processors = __nccwpck_require__(1746);
 
-  setImmediate = __webpack_require__(8213).setImmediate;
+  setImmediate = __nccwpck_require__(8213).setImmediate;
 
-  defaults = __webpack_require__(3205).defaults;
+  defaults = __nccwpck_require__(3002).defaults;
 
   isEmpty = function(thing) {
     return typeof thing === "object" && (thing != null) && Object.keys(thing).length === 0;
@@ -20250,7 +20161,7 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 4951:
+/***/ 1746:
 /***/ (function(__unused_webpack_module, exports) {
 
 // Generated by CoffeeScript 1.12.7
@@ -20291,8 +20202,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 6592:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9194:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -20301,13 +20212,13 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  defaults = __webpack_require__(3205);
+  defaults = __nccwpck_require__(3002);
 
-  builder = __webpack_require__(1205);
+  builder = __nccwpck_require__(523);
 
-  parser = __webpack_require__(3972);
+  parser = __nccwpck_require__(4709);
 
-  processors = __webpack_require__(4951);
+  processors = __nccwpck_require__(1746);
 
   exports.defaults = defaults.defaults;
 
@@ -20335,7 +20246,7 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 8871:
+/***/ 7735:
 /***/ (function(module) {
 
 // Generated by CoffeeScript 1.12.7
@@ -20415,7 +20326,7 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 460:
+/***/ 5273:
 /***/ (function(module) {
 
 // Generated by CoffeeScript 1.12.7
@@ -20453,8 +20364,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 717:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 6497:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -20462,7 +20373,7 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
   module.exports = XMLCData = (function(superClass) {
     extend(XMLCData, superClass);
@@ -20492,8 +20403,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 1567:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 6381:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -20501,7 +20412,7 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
   module.exports = XMLComment = (function(superClass) {
     extend(XMLComment, superClass);
@@ -20531,8 +20442,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 1885:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 1466:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -20540,7 +20451,7 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
   module.exports = XMLDTDAttList = (function(superClass) {
     extend(XMLDTDAttList, superClass);
@@ -20588,8 +20499,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 4998:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 9279:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -20597,7 +20508,7 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
   module.exports = XMLDTDElement = (function(superClass) {
     extend(XMLDTDElement, superClass);
@@ -20630,8 +20541,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 669:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 7599:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -20639,9 +20550,9 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  isObject = __webpack_require__(8871).isObject;
+  isObject = __nccwpck_require__(7735).isObject;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
   module.exports = XMLDTDEntity = (function(superClass) {
     extend(XMLDTDEntity, superClass);
@@ -20693,8 +20604,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 3873:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 2584:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -20702,7 +20613,7 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
   module.exports = XMLDTDNotation = (function(superClass) {
     extend(XMLDTDNotation, superClass);
@@ -20737,8 +20648,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 8920:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 8892:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -20746,9 +20657,9 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  isObject = __webpack_require__(8871).isObject;
+  isObject = __nccwpck_require__(7735).isObject;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
   module.exports = XMLDeclaration = (function(superClass) {
     extend(XMLDeclaration, superClass);
@@ -20784,8 +20695,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 9226:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 2518:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -20793,17 +20704,17 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  isObject = __webpack_require__(8871).isObject;
+  isObject = __nccwpck_require__(7735).isObject;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
-  XMLDTDAttList = __webpack_require__(1885);
+  XMLDTDAttList = __nccwpck_require__(1466);
 
-  XMLDTDEntity = __webpack_require__(669);
+  XMLDTDEntity = __nccwpck_require__(7599);
 
-  XMLDTDElement = __webpack_require__(4998);
+  XMLDTDElement = __nccwpck_require__(9279);
 
-  XMLDTDNotation = __webpack_require__(3873);
+  XMLDTDNotation = __nccwpck_require__(2584);
 
   module.exports = XMLDocType = (function(superClass) {
     extend(XMLDocType, superClass);
@@ -20898,8 +20809,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 5637:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 8670:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -20907,13 +20818,13 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  isPlainObject = __webpack_require__(8871).isPlainObject;
+  isPlainObject = __nccwpck_require__(7735).isPlainObject;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
-  XMLStringifier = __webpack_require__(3837);
+  XMLStringifier = __nccwpck_require__(7583);
 
-  XMLStringWriter = __webpack_require__(4530);
+  XMLStringWriter = __nccwpck_require__(4370);
 
   module.exports = XMLDocument = (function(superClass) {
     extend(XMLDocument, superClass);
@@ -20953,45 +20864,45 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 434:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 4034:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
   var XMLAttribute, XMLCData, XMLComment, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDeclaration, XMLDocType, XMLDocumentCB, XMLElement, XMLProcessingInstruction, XMLRaw, XMLStringWriter, XMLStringifier, XMLText, isFunction, isObject, isPlainObject, ref,
     hasProp = {}.hasOwnProperty;
 
-  ref = __webpack_require__(8871), isObject = ref.isObject, isFunction = ref.isFunction, isPlainObject = ref.isPlainObject;
+  ref = __nccwpck_require__(7735), isObject = ref.isObject, isFunction = ref.isFunction, isPlainObject = ref.isPlainObject;
 
-  XMLElement = __webpack_require__(6093);
+  XMLElement = __nccwpck_require__(152);
 
-  XMLCData = __webpack_require__(717);
+  XMLCData = __nccwpck_require__(6497);
 
-  XMLComment = __webpack_require__(1567);
+  XMLComment = __nccwpck_require__(6381);
 
-  XMLRaw = __webpack_require__(431);
+  XMLRaw = __nccwpck_require__(6093);
 
-  XMLText = __webpack_require__(4196);
+  XMLText = __nccwpck_require__(8878);
 
-  XMLProcessingInstruction = __webpack_require__(7624);
+  XMLProcessingInstruction = __nccwpck_require__(4422);
 
-  XMLDeclaration = __webpack_require__(8920);
+  XMLDeclaration = __nccwpck_require__(8892);
 
-  XMLDocType = __webpack_require__(9226);
+  XMLDocType = __nccwpck_require__(2518);
 
-  XMLDTDAttList = __webpack_require__(1885);
+  XMLDTDAttList = __nccwpck_require__(1466);
 
-  XMLDTDEntity = __webpack_require__(669);
+  XMLDTDEntity = __nccwpck_require__(7599);
 
-  XMLDTDElement = __webpack_require__(4998);
+  XMLDTDElement = __nccwpck_require__(9279);
 
-  XMLDTDNotation = __webpack_require__(3873);
+  XMLDTDNotation = __nccwpck_require__(2584);
 
-  XMLAttribute = __webpack_require__(460);
+  XMLAttribute = __nccwpck_require__(5273);
 
-  XMLStringifier = __webpack_require__(3837);
+  XMLStringifier = __nccwpck_require__(7583);
 
-  XMLStringWriter = __webpack_require__(4530);
+  XMLStringWriter = __nccwpck_require__(4370);
 
   module.exports = XMLDocumentCB = (function() {
     function XMLDocumentCB(options, onData, onEnd) {
@@ -21362,8 +21273,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 6093:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 152:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -21371,11 +21282,11 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  ref = __webpack_require__(8871), isObject = ref.isObject, isFunction = ref.isFunction;
+  ref = __nccwpck_require__(7735), isObject = ref.isObject, isFunction = ref.isFunction;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
-  XMLAttribute = __webpack_require__(460);
+  XMLAttribute = __nccwpck_require__(5273);
 
   module.exports = XMLElement = (function(superClass) {
     extend(XMLElement, superClass);
@@ -21480,15 +21391,15 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 2691:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 3957:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
   var XMLCData, XMLComment, XMLDeclaration, XMLDocType, XMLElement, XMLNode, XMLProcessingInstruction, XMLRaw, XMLText, isEmpty, isFunction, isObject, ref,
     hasProp = {}.hasOwnProperty;
 
-  ref = __webpack_require__(8871), isObject = ref.isObject, isFunction = ref.isFunction, isEmpty = ref.isEmpty;
+  ref = __nccwpck_require__(7735), isObject = ref.isObject, isFunction = ref.isFunction, isEmpty = ref.isEmpty;
 
   XMLElement = null;
 
@@ -21515,14 +21426,14 @@ module.exports = v4;
       }
       this.children = [];
       if (!XMLElement) {
-        XMLElement = __webpack_require__(6093);
-        XMLCData = __webpack_require__(717);
-        XMLComment = __webpack_require__(1567);
-        XMLDeclaration = __webpack_require__(8920);
-        XMLDocType = __webpack_require__(9226);
-        XMLRaw = __webpack_require__(431);
-        XMLText = __webpack_require__(4196);
-        XMLProcessingInstruction = __webpack_require__(7624);
+        XMLElement = __nccwpck_require__(152);
+        XMLCData = __nccwpck_require__(6497);
+        XMLComment = __nccwpck_require__(6381);
+        XMLDeclaration = __nccwpck_require__(8892);
+        XMLDocType = __nccwpck_require__(2518);
+        XMLRaw = __nccwpck_require__(6093);
+        XMLText = __nccwpck_require__(8878);
+        XMLProcessingInstruction = __nccwpck_require__(4422);
       }
     }
 
@@ -21919,8 +21830,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 7624:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 4422:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -21928,7 +21839,7 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
   module.exports = XMLProcessingInstruction = (function(superClass) {
     extend(XMLProcessingInstruction, superClass);
@@ -21961,8 +21872,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 431:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 6093:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -21970,7 +21881,7 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
   module.exports = XMLRaw = (function(superClass) {
     extend(XMLRaw, superClass);
@@ -22000,8 +21911,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 2893:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 8139:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -22009,31 +21920,31 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  XMLDeclaration = __webpack_require__(8920);
+  XMLDeclaration = __nccwpck_require__(8892);
 
-  XMLDocType = __webpack_require__(9226);
+  XMLDocType = __nccwpck_require__(2518);
 
-  XMLCData = __webpack_require__(717);
+  XMLCData = __nccwpck_require__(6497);
 
-  XMLComment = __webpack_require__(1567);
+  XMLComment = __nccwpck_require__(6381);
 
-  XMLElement = __webpack_require__(6093);
+  XMLElement = __nccwpck_require__(152);
 
-  XMLRaw = __webpack_require__(431);
+  XMLRaw = __nccwpck_require__(6093);
 
-  XMLText = __webpack_require__(4196);
+  XMLText = __nccwpck_require__(8878);
 
-  XMLProcessingInstruction = __webpack_require__(7624);
+  XMLProcessingInstruction = __nccwpck_require__(4422);
 
-  XMLDTDAttList = __webpack_require__(1885);
+  XMLDTDAttList = __nccwpck_require__(1466);
 
-  XMLDTDElement = __webpack_require__(4998);
+  XMLDTDElement = __nccwpck_require__(9279);
 
-  XMLDTDEntity = __webpack_require__(669);
+  XMLDTDEntity = __nccwpck_require__(7599);
 
-  XMLDTDNotation = __webpack_require__(3873);
+  XMLDTDNotation = __nccwpck_require__(2584);
 
-  XMLWriterBase = __webpack_require__(8586);
+  XMLWriterBase = __nccwpck_require__(7290);
 
   module.exports = XMLStreamWriter = (function(superClass) {
     extend(XMLStreamWriter, superClass);
@@ -22286,8 +22197,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 4530:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 4370:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -22295,31 +22206,31 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  XMLDeclaration = __webpack_require__(8920);
+  XMLDeclaration = __nccwpck_require__(8892);
 
-  XMLDocType = __webpack_require__(9226);
+  XMLDocType = __nccwpck_require__(2518);
 
-  XMLCData = __webpack_require__(717);
+  XMLCData = __nccwpck_require__(6497);
 
-  XMLComment = __webpack_require__(1567);
+  XMLComment = __nccwpck_require__(6381);
 
-  XMLElement = __webpack_require__(6093);
+  XMLElement = __nccwpck_require__(152);
 
-  XMLRaw = __webpack_require__(431);
+  XMLRaw = __nccwpck_require__(6093);
 
-  XMLText = __webpack_require__(4196);
+  XMLText = __nccwpck_require__(8878);
 
-  XMLProcessingInstruction = __webpack_require__(7624);
+  XMLProcessingInstruction = __nccwpck_require__(4422);
 
-  XMLDTDAttList = __webpack_require__(1885);
+  XMLDTDAttList = __nccwpck_require__(1466);
 
-  XMLDTDElement = __webpack_require__(4998);
+  XMLDTDElement = __nccwpck_require__(9279);
 
-  XMLDTDEntity = __webpack_require__(669);
+  XMLDTDEntity = __nccwpck_require__(7599);
 
-  XMLDTDNotation = __webpack_require__(3873);
+  XMLDTDNotation = __nccwpck_require__(2584);
 
-  XMLWriterBase = __webpack_require__(8586);
+  XMLWriterBase = __nccwpck_require__(7290);
 
   module.exports = XMLStringWriter = (function(superClass) {
     extend(XMLStringWriter, superClass);
@@ -22627,7 +22538,7 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 3837:
+/***/ 7583:
 /***/ (function(module) {
 
 // Generated by CoffeeScript 1.12.7
@@ -22797,8 +22708,8 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 4196:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 8878:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
@@ -22806,7 +22717,7 @@ module.exports = v4;
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  XMLNode = __webpack_require__(2691);
+  XMLNode = __nccwpck_require__(3957);
 
   module.exports = XMLText = (function(superClass) {
     extend(XMLText, superClass);
@@ -22836,7 +22747,7 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 8586:
+/***/ 7290:
 /***/ (function(module) {
 
 // Generated by CoffeeScript 1.12.7
@@ -22933,22 +22844,22 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 590:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ 8726:
+/***/ (function(module, __unused_webpack_exports, __nccwpck_require__) {
 
 // Generated by CoffeeScript 1.12.7
 (function() {
   var XMLDocument, XMLDocumentCB, XMLStreamWriter, XMLStringWriter, assign, isFunction, ref;
 
-  ref = __webpack_require__(8871), assign = ref.assign, isFunction = ref.isFunction;
+  ref = __nccwpck_require__(7735), assign = ref.assign, isFunction = ref.isFunction;
 
-  XMLDocument = __webpack_require__(5637);
+  XMLDocument = __nccwpck_require__(8670);
 
-  XMLDocumentCB = __webpack_require__(434);
+  XMLDocumentCB = __nccwpck_require__(4034);
 
-  XMLStringWriter = __webpack_require__(4530);
+  XMLStringWriter = __nccwpck_require__(4370);
 
-  XMLStreamWriter = __webpack_require__(2893);
+  XMLStreamWriter = __nccwpck_require__(8139);
 
   module.exports.create = function(name, xmldec, doctype, options) {
     var doc, root;
@@ -22997,7 +22908,7 @@ module.exports = v4;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"version\":\"2.0\",\"metadata\":{\"apiVersion\":\"2014-06-30\",\"endpointPrefix\":\"cognito-identity\",\"jsonVersion\":\"1.1\",\"protocol\":\"json\",\"serviceFullName\":\"Amazon Cognito Identity\",\"serviceId\":\"Cognito Identity\",\"signatureVersion\":\"v4\",\"targetPrefix\":\"AWSCognitoIdentityService\",\"uid\":\"cognito-identity-2014-06-30\"},\"operations\":{\"CreateIdentityPool\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityPoolName\",\"AllowUnauthenticatedIdentities\"],\"members\":{\"IdentityPoolName\":{},\"AllowUnauthenticatedIdentities\":{\"type\":\"boolean\"},\"AllowClassicFlow\":{\"type\":\"boolean\"},\"SupportedLoginProviders\":{\"shape\":\"S5\"},\"DeveloperProviderName\":{},\"OpenIdConnectProviderARNs\":{\"shape\":\"S9\"},\"CognitoIdentityProviders\":{\"shape\":\"Sb\"},\"SamlProviderARNs\":{\"shape\":\"Sg\"},\"IdentityPoolTags\":{\"shape\":\"Sh\"}}},\"output\":{\"shape\":\"Sk\"}},\"DeleteIdentities\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityIdsToDelete\"],\"members\":{\"IdentityIdsToDelete\":{\"type\":\"list\",\"member\":{}}}},\"output\":{\"type\":\"structure\",\"members\":{\"UnprocessedIdentityIds\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"IdentityId\":{},\"ErrorCode\":{}}}}}}},\"DeleteIdentityPool\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityPoolId\"],\"members\":{\"IdentityPoolId\":{}}}},\"DescribeIdentity\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityId\"],\"members\":{\"IdentityId\":{}}},\"output\":{\"shape\":\"Sv\"}},\"DescribeIdentityPool\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityPoolId\"],\"members\":{\"IdentityPoolId\":{}}},\"output\":{\"shape\":\"Sk\"}},\"GetCredentialsForIdentity\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityId\"],\"members\":{\"IdentityId\":{},\"Logins\":{\"shape\":\"S10\"},\"CustomRoleArn\":{}}},\"output\":{\"type\":\"structure\",\"members\":{\"IdentityId\":{},\"Credentials\":{\"type\":\"structure\",\"members\":{\"AccessKeyId\":{},\"SecretKey\":{},\"SessionToken\":{},\"Expiration\":{\"type\":\"timestamp\"}}}}}},\"GetId\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityPoolId\"],\"members\":{\"AccountId\":{},\"IdentityPoolId\":{},\"Logins\":{\"shape\":\"S10\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"IdentityId\":{}}}},\"GetIdentityPoolRoles\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityPoolId\"],\"members\":{\"IdentityPoolId\":{}}},\"output\":{\"type\":\"structure\",\"members\":{\"IdentityPoolId\":{},\"Roles\":{\"shape\":\"S1c\"},\"RoleMappings\":{\"shape\":\"S1e\"}}}},\"GetOpenIdToken\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityId\"],\"members\":{\"IdentityId\":{},\"Logins\":{\"shape\":\"S10\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"IdentityId\":{},\"Token\":{}}}},\"GetOpenIdTokenForDeveloperIdentity\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityPoolId\",\"Logins\"],\"members\":{\"IdentityPoolId\":{},\"IdentityId\":{},\"Logins\":{\"shape\":\"S10\"},\"TokenDuration\":{\"type\":\"long\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"IdentityId\":{},\"Token\":{}}}},\"ListIdentities\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityPoolId\",\"MaxResults\"],\"members\":{\"IdentityPoolId\":{},\"MaxResults\":{\"type\":\"integer\"},\"NextToken\":{},\"HideDisabled\":{\"type\":\"boolean\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"IdentityPoolId\":{},\"Identities\":{\"type\":\"list\",\"member\":{\"shape\":\"Sv\"}},\"NextToken\":{}}}},\"ListIdentityPools\":{\"input\":{\"type\":\"structure\",\"required\":[\"MaxResults\"],\"members\":{\"MaxResults\":{\"type\":\"integer\"},\"NextToken\":{}}},\"output\":{\"type\":\"structure\",\"members\":{\"IdentityPools\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"IdentityPoolId\":{},\"IdentityPoolName\":{}}}},\"NextToken\":{}}}},\"ListTagsForResource\":{\"input\":{\"type\":\"structure\",\"required\":[\"ResourceArn\"],\"members\":{\"ResourceArn\":{}}},\"output\":{\"type\":\"structure\",\"members\":{\"Tags\":{\"shape\":\"Sh\"}}}},\"LookupDeveloperIdentity\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityPoolId\"],\"members\":{\"IdentityPoolId\":{},\"IdentityId\":{},\"DeveloperUserIdentifier\":{},\"MaxResults\":{\"type\":\"integer\"},\"NextToken\":{}}},\"output\":{\"type\":\"structure\",\"members\":{\"IdentityId\":{},\"DeveloperUserIdentifierList\":{\"type\":\"list\",\"member\":{}},\"NextToken\":{}}}},\"MergeDeveloperIdentities\":{\"input\":{\"type\":\"structure\",\"required\":[\"SourceUserIdentifier\",\"DestinationUserIdentifier\",\"DeveloperProviderName\",\"IdentityPoolId\"],\"members\":{\"SourceUserIdentifier\":{},\"DestinationUserIdentifier\":{},\"DeveloperProviderName\":{},\"IdentityPoolId\":{}}},\"output\":{\"type\":\"structure\",\"members\":{\"IdentityId\":{}}}},\"SetIdentityPoolRoles\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityPoolId\",\"Roles\"],\"members\":{\"IdentityPoolId\":{},\"Roles\":{\"shape\":\"S1c\"},\"RoleMappings\":{\"shape\":\"S1e\"}}}},\"TagResource\":{\"input\":{\"type\":\"structure\",\"required\":[\"ResourceArn\",\"Tags\"],\"members\":{\"ResourceArn\":{},\"Tags\":{\"shape\":\"Sh\"}}},\"output\":{\"type\":\"structure\",\"members\":{}}},\"UnlinkDeveloperIdentity\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityId\",\"IdentityPoolId\",\"DeveloperProviderName\",\"DeveloperUserIdentifier\"],\"members\":{\"IdentityId\":{},\"IdentityPoolId\":{},\"DeveloperProviderName\":{},\"DeveloperUserIdentifier\":{}}}},\"UnlinkIdentity\":{\"input\":{\"type\":\"structure\",\"required\":[\"IdentityId\",\"Logins\",\"LoginsToRemove\"],\"members\":{\"IdentityId\":{},\"Logins\":{\"shape\":\"S10\"},\"LoginsToRemove\":{\"shape\":\"Sw\"}}}},\"UntagResource\":{\"input\":{\"type\":\"structure\",\"required\":[\"ResourceArn\",\"TagKeys\"],\"members\":{\"ResourceArn\":{},\"TagKeys\":{\"type\":\"list\",\"member\":{}}}},\"output\":{\"type\":\"structure\",\"members\":{}}},\"UpdateIdentityPool\":{\"input\":{\"shape\":\"Sk\"},\"output\":{\"shape\":\"Sk\"}}},\"shapes\":{\"S5\":{\"type\":\"map\",\"key\":{},\"value\":{}},\"S9\":{\"type\":\"list\",\"member\":{}},\"Sb\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"ProviderName\":{},\"ClientId\":{},\"ServerSideTokenCheck\":{\"type\":\"boolean\"}}}},\"Sg\":{\"type\":\"list\",\"member\":{}},\"Sh\":{\"type\":\"map\",\"key\":{},\"value\":{}},\"Sk\":{\"type\":\"structure\",\"required\":[\"IdentityPoolId\",\"IdentityPoolName\",\"AllowUnauthenticatedIdentities\"],\"members\":{\"IdentityPoolId\":{},\"IdentityPoolName\":{},\"AllowUnauthenticatedIdentities\":{\"type\":\"boolean\"},\"AllowClassicFlow\":{\"type\":\"boolean\"},\"SupportedLoginProviders\":{\"shape\":\"S5\"},\"DeveloperProviderName\":{},\"OpenIdConnectProviderARNs\":{\"shape\":\"S9\"},\"CognitoIdentityProviders\":{\"shape\":\"Sb\"},\"SamlProviderARNs\":{\"shape\":\"Sg\"},\"IdentityPoolTags\":{\"shape\":\"Sh\"}}},\"Sv\":{\"type\":\"structure\",\"members\":{\"IdentityId\":{},\"Logins\":{\"shape\":\"Sw\"},\"CreationDate\":{\"type\":\"timestamp\"},\"LastModifiedDate\":{\"type\":\"timestamp\"}}},\"Sw\":{\"type\":\"list\",\"member\":{}},\"S10\":{\"type\":\"map\",\"key\":{},\"value\":{}},\"S1c\":{\"type\":\"map\",\"key\":{},\"value\":{}},\"S1e\":{\"type\":\"map\",\"key\":{},\"value\":{\"type\":\"structure\",\"required\":[\"Type\"],\"members\":{\"Type\":{},\"AmbiguousRoleResolution\":{},\"RulesConfiguration\":{\"type\":\"structure\",\"required\":[\"Rules\"],\"members\":{\"Rules\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"required\":[\"Claim\",\"MatchType\",\"Value\",\"RoleARN\"],\"members\":{\"Claim\":{},\"MatchType\":{},\"Value\":{},\"RoleARN\":{}}}}}}}}}}}");
+module.exports = JSON.parse('{"version":"2.0","metadata":{"apiVersion":"2014-06-30","endpointPrefix":"cognito-identity","jsonVersion":"1.1","protocol":"json","serviceFullName":"Amazon Cognito Identity","serviceId":"Cognito Identity","signatureVersion":"v4","targetPrefix":"AWSCognitoIdentityService","uid":"cognito-identity-2014-06-30"},"operations":{"CreateIdentityPool":{"input":{"type":"structure","required":["IdentityPoolName","AllowUnauthenticatedIdentities"],"members":{"IdentityPoolName":{},"AllowUnauthenticatedIdentities":{"type":"boolean"},"AllowClassicFlow":{"type":"boolean"},"SupportedLoginProviders":{"shape":"S5"},"DeveloperProviderName":{},"OpenIdConnectProviderARNs":{"shape":"S9"},"CognitoIdentityProviders":{"shape":"Sb"},"SamlProviderARNs":{"shape":"Sg"},"IdentityPoolTags":{"shape":"Sh"}}},"output":{"shape":"Sk"}},"DeleteIdentities":{"input":{"type":"structure","required":["IdentityIdsToDelete"],"members":{"IdentityIdsToDelete":{"type":"list","member":{}}}},"output":{"type":"structure","members":{"UnprocessedIdentityIds":{"type":"list","member":{"type":"structure","members":{"IdentityId":{},"ErrorCode":{}}}}}}},"DeleteIdentityPool":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{}}}},"DescribeIdentity":{"input":{"type":"structure","required":["IdentityId"],"members":{"IdentityId":{}}},"output":{"shape":"Sv"}},"DescribeIdentityPool":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{}}},"output":{"shape":"Sk"}},"GetCredentialsForIdentity":{"input":{"type":"structure","required":["IdentityId"],"members":{"IdentityId":{},"Logins":{"shape":"S10"},"CustomRoleArn":{}}},"output":{"type":"structure","members":{"IdentityId":{},"Credentials":{"type":"structure","members":{"AccessKeyId":{},"SecretKey":{},"SessionToken":{},"Expiration":{"type":"timestamp"}}}}}},"GetId":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"AccountId":{},"IdentityPoolId":{},"Logins":{"shape":"S10"}}},"output":{"type":"structure","members":{"IdentityId":{}}}},"GetIdentityPoolRoles":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"Roles":{"shape":"S1c"},"RoleMappings":{"shape":"S1e"}}}},"GetOpenIdToken":{"input":{"type":"structure","required":["IdentityId"],"members":{"IdentityId":{},"Logins":{"shape":"S10"}}},"output":{"type":"structure","members":{"IdentityId":{},"Token":{}}}},"GetOpenIdTokenForDeveloperIdentity":{"input":{"type":"structure","required":["IdentityPoolId","Logins"],"members":{"IdentityPoolId":{},"IdentityId":{},"Logins":{"shape":"S10"},"TokenDuration":{"type":"long"}}},"output":{"type":"structure","members":{"IdentityId":{},"Token":{}}}},"ListIdentities":{"input":{"type":"structure","required":["IdentityPoolId","MaxResults"],"members":{"IdentityPoolId":{},"MaxResults":{"type":"integer"},"NextToken":{},"HideDisabled":{"type":"boolean"}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"Identities":{"type":"list","member":{"shape":"Sv"}},"NextToken":{}}}},"ListIdentityPools":{"input":{"type":"structure","required":["MaxResults"],"members":{"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"IdentityPools":{"type":"list","member":{"type":"structure","members":{"IdentityPoolId":{},"IdentityPoolName":{}}}},"NextToken":{}}}},"ListTagsForResource":{"input":{"type":"structure","required":["ResourceArn"],"members":{"ResourceArn":{}}},"output":{"type":"structure","members":{"Tags":{"shape":"Sh"}}}},"LookupDeveloperIdentity":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{},"IdentityId":{},"DeveloperUserIdentifier":{},"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"IdentityId":{},"DeveloperUserIdentifierList":{"type":"list","member":{}},"NextToken":{}}}},"MergeDeveloperIdentities":{"input":{"type":"structure","required":["SourceUserIdentifier","DestinationUserIdentifier","DeveloperProviderName","IdentityPoolId"],"members":{"SourceUserIdentifier":{},"DestinationUserIdentifier":{},"DeveloperProviderName":{},"IdentityPoolId":{}}},"output":{"type":"structure","members":{"IdentityId":{}}}},"SetIdentityPoolRoles":{"input":{"type":"structure","required":["IdentityPoolId","Roles"],"members":{"IdentityPoolId":{},"Roles":{"shape":"S1c"},"RoleMappings":{"shape":"S1e"}}}},"TagResource":{"input":{"type":"structure","required":["ResourceArn","Tags"],"members":{"ResourceArn":{},"Tags":{"shape":"Sh"}}},"output":{"type":"structure","members":{}}},"UnlinkDeveloperIdentity":{"input":{"type":"structure","required":["IdentityId","IdentityPoolId","DeveloperProviderName","DeveloperUserIdentifier"],"members":{"IdentityId":{},"IdentityPoolId":{},"DeveloperProviderName":{},"DeveloperUserIdentifier":{}}}},"UnlinkIdentity":{"input":{"type":"structure","required":["IdentityId","Logins","LoginsToRemove"],"members":{"IdentityId":{},"Logins":{"shape":"S10"},"LoginsToRemove":{"shape":"Sw"}}}},"UntagResource":{"input":{"type":"structure","required":["ResourceArn","TagKeys"],"members":{"ResourceArn":{},"TagKeys":{"type":"list","member":{}}}},"output":{"type":"structure","members":{}}},"UpdateIdentityPool":{"input":{"shape":"Sk"},"output":{"shape":"Sk"}}},"shapes":{"S5":{"type":"map","key":{},"value":{}},"S9":{"type":"list","member":{}},"Sb":{"type":"list","member":{"type":"structure","members":{"ProviderName":{},"ClientId":{},"ServerSideTokenCheck":{"type":"boolean"}}}},"Sg":{"type":"list","member":{}},"Sh":{"type":"map","key":{},"value":{}},"Sk":{"type":"structure","required":["IdentityPoolId","IdentityPoolName","AllowUnauthenticatedIdentities"],"members":{"IdentityPoolId":{},"IdentityPoolName":{},"AllowUnauthenticatedIdentities":{"type":"boolean"},"AllowClassicFlow":{"type":"boolean"},"SupportedLoginProviders":{"shape":"S5"},"DeveloperProviderName":{},"OpenIdConnectProviderARNs":{"shape":"S9"},"CognitoIdentityProviders":{"shape":"Sb"},"SamlProviderARNs":{"shape":"Sg"},"IdentityPoolTags":{"shape":"Sh"}}},"Sv":{"type":"structure","members":{"IdentityId":{},"Logins":{"shape":"Sw"},"CreationDate":{"type":"timestamp"},"LastModifiedDate":{"type":"timestamp"}}},"Sw":{"type":"list","member":{}},"S10":{"type":"map","key":{},"value":{}},"S1c":{"type":"map","key":{},"value":{}},"S1e":{"type":"map","key":{},"value":{"type":"structure","required":["Type"],"members":{"Type":{},"AmbiguousRoleResolution":{},"RulesConfiguration":{"type":"structure","required":["Rules"],"members":{"Rules":{"type":"list","member":{"type":"structure","required":["Claim","MatchType","Value","RoleARN"],"members":{"Claim":{},"MatchType":{},"Value":{},"RoleARN":{}}}}}}}}}}}');
 
 /***/ }),
 
@@ -23013,7 +22924,7 @@ module.exports = {"o":{}};
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"acm\":{\"name\":\"ACM\",\"cors\":true},\"apigateway\":{\"name\":\"APIGateway\",\"cors\":true},\"applicationautoscaling\":{\"prefix\":\"application-autoscaling\",\"name\":\"ApplicationAutoScaling\",\"cors\":true},\"appstream\":{\"name\":\"AppStream\"},\"autoscaling\":{\"name\":\"AutoScaling\",\"cors\":true},\"batch\":{\"name\":\"Batch\"},\"budgets\":{\"name\":\"Budgets\"},\"clouddirectory\":{\"name\":\"CloudDirectory\",\"versions\":[\"2016-05-10*\"]},\"cloudformation\":{\"name\":\"CloudFormation\",\"cors\":true},\"cloudfront\":{\"name\":\"CloudFront\",\"versions\":[\"2013-05-12*\",\"2013-11-11*\",\"2014-05-31*\",\"2014-10-21*\",\"2014-11-06*\",\"2015-04-17*\",\"2015-07-27*\",\"2015-09-17*\",\"2016-01-13*\",\"2016-01-28*\",\"2016-08-01*\",\"2016-08-20*\",\"2016-09-07*\",\"2016-09-29*\",\"2016-11-25*\",\"2017-03-25*\",\"2017-10-30*\",\"2018-06-18*\",\"2018-11-05*\",\"2019-03-26*\"],\"cors\":true},\"cloudhsm\":{\"name\":\"CloudHSM\",\"cors\":true},\"cloudsearch\":{\"name\":\"CloudSearch\"},\"cloudsearchdomain\":{\"name\":\"CloudSearchDomain\"},\"cloudtrail\":{\"name\":\"CloudTrail\",\"cors\":true},\"cloudwatch\":{\"prefix\":\"monitoring\",\"name\":\"CloudWatch\",\"cors\":true},\"cloudwatchevents\":{\"prefix\":\"events\",\"name\":\"CloudWatchEvents\",\"versions\":[\"2014-02-03*\"],\"cors\":true},\"cloudwatchlogs\":{\"prefix\":\"logs\",\"name\":\"CloudWatchLogs\",\"cors\":true},\"codebuild\":{\"name\":\"CodeBuild\",\"cors\":true},\"codecommit\":{\"name\":\"CodeCommit\",\"cors\":true},\"codedeploy\":{\"name\":\"CodeDeploy\",\"cors\":true},\"codepipeline\":{\"name\":\"CodePipeline\",\"cors\":true},\"cognitoidentity\":{\"prefix\":\"cognito-identity\",\"name\":\"CognitoIdentity\",\"cors\":true},\"cognitoidentityserviceprovider\":{\"prefix\":\"cognito-idp\",\"name\":\"CognitoIdentityServiceProvider\",\"cors\":true},\"cognitosync\":{\"prefix\":\"cognito-sync\",\"name\":\"CognitoSync\",\"cors\":true},\"configservice\":{\"prefix\":\"config\",\"name\":\"ConfigService\",\"cors\":true},\"cur\":{\"name\":\"CUR\",\"cors\":true},\"datapipeline\":{\"name\":\"DataPipeline\"},\"devicefarm\":{\"name\":\"DeviceFarm\",\"cors\":true},\"directconnect\":{\"name\":\"DirectConnect\",\"cors\":true},\"directoryservice\":{\"prefix\":\"ds\",\"name\":\"DirectoryService\"},\"discovery\":{\"name\":\"Discovery\"},\"dms\":{\"name\":\"DMS\"},\"dynamodb\":{\"name\":\"DynamoDB\",\"cors\":true},\"dynamodbstreams\":{\"prefix\":\"streams.dynamodb\",\"name\":\"DynamoDBStreams\",\"cors\":true},\"ec2\":{\"name\":\"EC2\",\"versions\":[\"2013-06-15*\",\"2013-10-15*\",\"2014-02-01*\",\"2014-05-01*\",\"2014-06-15*\",\"2014-09-01*\",\"2014-10-01*\",\"2015-03-01*\",\"2015-04-15*\",\"2015-10-01*\",\"2016-04-01*\",\"2016-09-15*\"],\"cors\":true},\"ecr\":{\"name\":\"ECR\",\"cors\":true},\"ecs\":{\"name\":\"ECS\",\"cors\":true},\"efs\":{\"prefix\":\"elasticfilesystem\",\"name\":\"EFS\",\"cors\":true},\"elasticache\":{\"name\":\"ElastiCache\",\"versions\":[\"2012-11-15*\",\"2014-03-24*\",\"2014-07-15*\",\"2014-09-30*\"],\"cors\":true},\"elasticbeanstalk\":{\"name\":\"ElasticBeanstalk\",\"cors\":true},\"elb\":{\"prefix\":\"elasticloadbalancing\",\"name\":\"ELB\",\"cors\":true},\"elbv2\":{\"prefix\":\"elasticloadbalancingv2\",\"name\":\"ELBv2\",\"cors\":true},\"emr\":{\"prefix\":\"elasticmapreduce\",\"name\":\"EMR\",\"cors\":true},\"es\":{\"name\":\"ES\"},\"elastictranscoder\":{\"name\":\"ElasticTranscoder\",\"cors\":true},\"firehose\":{\"name\":\"Firehose\",\"cors\":true},\"gamelift\":{\"name\":\"GameLift\",\"cors\":true},\"glacier\":{\"name\":\"Glacier\"},\"health\":{\"name\":\"Health\"},\"iam\":{\"name\":\"IAM\",\"cors\":true},\"importexport\":{\"name\":\"ImportExport\"},\"inspector\":{\"name\":\"Inspector\",\"versions\":[\"2015-08-18*\"],\"cors\":true},\"iot\":{\"name\":\"Iot\",\"cors\":true},\"iotdata\":{\"prefix\":\"iot-data\",\"name\":\"IotData\",\"cors\":true},\"kinesis\":{\"name\":\"Kinesis\",\"cors\":true},\"kinesisanalytics\":{\"name\":\"KinesisAnalytics\"},\"kms\":{\"name\":\"KMS\",\"cors\":true},\"lambda\":{\"name\":\"Lambda\",\"cors\":true},\"lexruntime\":{\"prefix\":\"runtime.lex\",\"name\":\"LexRuntime\",\"cors\":true},\"lightsail\":{\"name\":\"Lightsail\"},\"machinelearning\":{\"name\":\"MachineLearning\",\"cors\":true},\"marketplacecommerceanalytics\":{\"name\":\"MarketplaceCommerceAnalytics\",\"cors\":true},\"marketplacemetering\":{\"prefix\":\"meteringmarketplace\",\"name\":\"MarketplaceMetering\"},\"mturk\":{\"prefix\":\"mturk-requester\",\"name\":\"MTurk\",\"cors\":true},\"mobileanalytics\":{\"name\":\"MobileAnalytics\",\"cors\":true},\"opsworks\":{\"name\":\"OpsWorks\",\"cors\":true},\"opsworkscm\":{\"name\":\"OpsWorksCM\"},\"organizations\":{\"name\":\"Organizations\"},\"pinpoint\":{\"name\":\"Pinpoint\"},\"polly\":{\"name\":\"Polly\",\"cors\":true},\"rds\":{\"name\":\"RDS\",\"versions\":[\"2014-09-01*\"],\"cors\":true},\"redshift\":{\"name\":\"Redshift\",\"cors\":true},\"rekognition\":{\"name\":\"Rekognition\",\"cors\":true},\"resourcegroupstaggingapi\":{\"name\":\"ResourceGroupsTaggingAPI\"},\"route53\":{\"name\":\"Route53\",\"cors\":true},\"route53domains\":{\"name\":\"Route53Domains\",\"cors\":true},\"s3\":{\"name\":\"S3\",\"dualstackAvailable\":true,\"cors\":true},\"s3control\":{\"name\":\"S3Control\",\"dualstackAvailable\":true,\"xmlNoDefaultLists\":true},\"servicecatalog\":{\"name\":\"ServiceCatalog\",\"cors\":true},\"ses\":{\"prefix\":\"email\",\"name\":\"SES\",\"cors\":true},\"shield\":{\"name\":\"Shield\"},\"simpledb\":{\"prefix\":\"sdb\",\"name\":\"SimpleDB\"},\"sms\":{\"name\":\"SMS\"},\"snowball\":{\"name\":\"Snowball\"},\"sns\":{\"name\":\"SNS\",\"cors\":true},\"sqs\":{\"name\":\"SQS\",\"cors\":true},\"ssm\":{\"name\":\"SSM\",\"cors\":true},\"storagegateway\":{\"name\":\"StorageGateway\",\"cors\":true},\"stepfunctions\":{\"prefix\":\"states\",\"name\":\"StepFunctions\"},\"sts\":{\"name\":\"STS\",\"cors\":true},\"support\":{\"name\":\"Support\"},\"swf\":{\"name\":\"SWF\"},\"xray\":{\"name\":\"XRay\",\"cors\":true},\"waf\":{\"name\":\"WAF\",\"cors\":true},\"wafregional\":{\"prefix\":\"waf-regional\",\"name\":\"WAFRegional\"},\"workdocs\":{\"name\":\"WorkDocs\",\"cors\":true},\"workspaces\":{\"name\":\"WorkSpaces\"},\"codestar\":{\"name\":\"CodeStar\"},\"lexmodelbuildingservice\":{\"prefix\":\"lex-models\",\"name\":\"LexModelBuildingService\",\"cors\":true},\"marketplaceentitlementservice\":{\"prefix\":\"entitlement.marketplace\",\"name\":\"MarketplaceEntitlementService\"},\"athena\":{\"name\":\"Athena\"},\"greengrass\":{\"name\":\"Greengrass\"},\"dax\":{\"name\":\"DAX\"},\"migrationhub\":{\"prefix\":\"AWSMigrationHub\",\"name\":\"MigrationHub\"},\"cloudhsmv2\":{\"name\":\"CloudHSMV2\"},\"glue\":{\"name\":\"Glue\"},\"mobile\":{\"name\":\"Mobile\"},\"pricing\":{\"name\":\"Pricing\",\"cors\":true},\"costexplorer\":{\"prefix\":\"ce\",\"name\":\"CostExplorer\",\"cors\":true},\"mediaconvert\":{\"name\":\"MediaConvert\"},\"medialive\":{\"name\":\"MediaLive\"},\"mediapackage\":{\"name\":\"MediaPackage\"},\"mediastore\":{\"name\":\"MediaStore\"},\"mediastoredata\":{\"prefix\":\"mediastore-data\",\"name\":\"MediaStoreData\",\"cors\":true},\"appsync\":{\"name\":\"AppSync\"},\"guardduty\":{\"name\":\"GuardDuty\"},\"mq\":{\"name\":\"MQ\"},\"comprehend\":{\"name\":\"Comprehend\",\"cors\":true},\"iotjobsdataplane\":{\"prefix\":\"iot-jobs-data\",\"name\":\"IoTJobsDataPlane\"},\"kinesisvideoarchivedmedia\":{\"prefix\":\"kinesis-video-archived-media\",\"name\":\"KinesisVideoArchivedMedia\",\"cors\":true},\"kinesisvideomedia\":{\"prefix\":\"kinesis-video-media\",\"name\":\"KinesisVideoMedia\",\"cors\":true},\"kinesisvideo\":{\"name\":\"KinesisVideo\",\"cors\":true},\"sagemakerruntime\":{\"prefix\":\"runtime.sagemaker\",\"name\":\"SageMakerRuntime\"},\"sagemaker\":{\"name\":\"SageMaker\"},\"translate\":{\"name\":\"Translate\",\"cors\":true},\"resourcegroups\":{\"prefix\":\"resource-groups\",\"name\":\"ResourceGroups\",\"cors\":true},\"alexaforbusiness\":{\"name\":\"AlexaForBusiness\"},\"cloud9\":{\"name\":\"Cloud9\"},\"serverlessapplicationrepository\":{\"prefix\":\"serverlessrepo\",\"name\":\"ServerlessApplicationRepository\"},\"servicediscovery\":{\"name\":\"ServiceDiscovery\"},\"workmail\":{\"name\":\"WorkMail\"},\"autoscalingplans\":{\"prefix\":\"autoscaling-plans\",\"name\":\"AutoScalingPlans\"},\"transcribeservice\":{\"prefix\":\"transcribe\",\"name\":\"TranscribeService\"},\"connect\":{\"name\":\"Connect\",\"cors\":true},\"acmpca\":{\"prefix\":\"acm-pca\",\"name\":\"ACMPCA\"},\"fms\":{\"name\":\"FMS\"},\"secretsmanager\":{\"name\":\"SecretsManager\",\"cors\":true},\"iotanalytics\":{\"name\":\"IoTAnalytics\",\"cors\":true},\"iot1clickdevicesservice\":{\"prefix\":\"iot1click-devices\",\"name\":\"IoT1ClickDevicesService\"},\"iot1clickprojects\":{\"prefix\":\"iot1click-projects\",\"name\":\"IoT1ClickProjects\"},\"pi\":{\"name\":\"PI\"},\"neptune\":{\"name\":\"Neptune\"},\"mediatailor\":{\"name\":\"MediaTailor\"},\"eks\":{\"name\":\"EKS\"},\"macie\":{\"name\":\"Macie\"},\"dlm\":{\"name\":\"DLM\"},\"signer\":{\"name\":\"Signer\"},\"chime\":{\"name\":\"Chime\"},\"pinpointemail\":{\"prefix\":\"pinpoint-email\",\"name\":\"PinpointEmail\"},\"ram\":{\"name\":\"RAM\"},\"route53resolver\":{\"name\":\"Route53Resolver\"},\"pinpointsmsvoice\":{\"prefix\":\"sms-voice\",\"name\":\"PinpointSMSVoice\"},\"quicksight\":{\"name\":\"QuickSight\"},\"rdsdataservice\":{\"prefix\":\"rds-data\",\"name\":\"RDSDataService\"},\"amplify\":{\"name\":\"Amplify\"},\"datasync\":{\"name\":\"DataSync\"},\"robomaker\":{\"name\":\"RoboMaker\"},\"transfer\":{\"name\":\"Transfer\"},\"globalaccelerator\":{\"name\":\"GlobalAccelerator\"},\"comprehendmedical\":{\"name\":\"ComprehendMedical\",\"cors\":true},\"kinesisanalyticsv2\":{\"name\":\"KinesisAnalyticsV2\"},\"mediaconnect\":{\"name\":\"MediaConnect\"},\"fsx\":{\"name\":\"FSx\"},\"securityhub\":{\"name\":\"SecurityHub\"},\"appmesh\":{\"name\":\"AppMesh\",\"versions\":[\"2018-10-01*\"]},\"licensemanager\":{\"prefix\":\"license-manager\",\"name\":\"LicenseManager\"},\"kafka\":{\"name\":\"Kafka\"},\"apigatewaymanagementapi\":{\"name\":\"ApiGatewayManagementApi\"},\"apigatewayv2\":{\"name\":\"ApiGatewayV2\"},\"docdb\":{\"name\":\"DocDB\"},\"backup\":{\"name\":\"Backup\"},\"worklink\":{\"name\":\"WorkLink\"},\"textract\":{\"name\":\"Textract\"},\"managedblockchain\":{\"name\":\"ManagedBlockchain\"},\"mediapackagevod\":{\"prefix\":\"mediapackage-vod\",\"name\":\"MediaPackageVod\"},\"groundstation\":{\"name\":\"GroundStation\"},\"iotthingsgraph\":{\"name\":\"IoTThingsGraph\"},\"iotevents\":{\"name\":\"IoTEvents\"},\"ioteventsdata\":{\"prefix\":\"iotevents-data\",\"name\":\"IoTEventsData\"},\"personalize\":{\"name\":\"Personalize\",\"cors\":true},\"personalizeevents\":{\"prefix\":\"personalize-events\",\"name\":\"PersonalizeEvents\",\"cors\":true},\"personalizeruntime\":{\"prefix\":\"personalize-runtime\",\"name\":\"PersonalizeRuntime\",\"cors\":true},\"applicationinsights\":{\"prefix\":\"application-insights\",\"name\":\"ApplicationInsights\"},\"servicequotas\":{\"prefix\":\"service-quotas\",\"name\":\"ServiceQuotas\"},\"ec2instanceconnect\":{\"prefix\":\"ec2-instance-connect\",\"name\":\"EC2InstanceConnect\"},\"eventbridge\":{\"name\":\"EventBridge\"},\"lakeformation\":{\"name\":\"LakeFormation\"},\"forecastservice\":{\"prefix\":\"forecast\",\"name\":\"ForecastService\",\"cors\":true},\"forecastqueryservice\":{\"prefix\":\"forecastquery\",\"name\":\"ForecastQueryService\",\"cors\":true},\"qldb\":{\"name\":\"QLDB\"},\"qldbsession\":{\"prefix\":\"qldb-session\",\"name\":\"QLDBSession\"},\"workmailmessageflow\":{\"name\":\"WorkMailMessageFlow\"},\"codestarnotifications\":{\"prefix\":\"codestar-notifications\",\"name\":\"CodeStarNotifications\"},\"savingsplans\":{\"name\":\"SavingsPlans\"},\"sso\":{\"name\":\"SSO\"},\"ssooidc\":{\"prefix\":\"sso-oidc\",\"name\":\"SSOOIDC\"},\"marketplacecatalog\":{\"prefix\":\"marketplace-catalog\",\"name\":\"MarketplaceCatalog\"},\"dataexchange\":{\"name\":\"DataExchange\"},\"sesv2\":{\"name\":\"SESV2\"},\"migrationhubconfig\":{\"prefix\":\"migrationhub-config\",\"name\":\"MigrationHubConfig\"},\"connectparticipant\":{\"name\":\"ConnectParticipant\"},\"appconfig\":{\"name\":\"AppConfig\"},\"iotsecuretunneling\":{\"name\":\"IoTSecureTunneling\"},\"wafv2\":{\"name\":\"WAFV2\"},\"elasticinference\":{\"prefix\":\"elastic-inference\",\"name\":\"ElasticInference\"},\"imagebuilder\":{\"name\":\"Imagebuilder\"},\"schemas\":{\"name\":\"Schemas\"},\"accessanalyzer\":{\"name\":\"AccessAnalyzer\"},\"codegurureviewer\":{\"prefix\":\"codeguru-reviewer\",\"name\":\"CodeGuruReviewer\"},\"codeguruprofiler\":{\"name\":\"CodeGuruProfiler\"},\"computeoptimizer\":{\"prefix\":\"compute-optimizer\",\"name\":\"ComputeOptimizer\"},\"frauddetector\":{\"name\":\"FraudDetector\"},\"kendra\":{\"name\":\"Kendra\"},\"networkmanager\":{\"name\":\"NetworkManager\"},\"outposts\":{\"name\":\"Outposts\"},\"augmentedairuntime\":{\"prefix\":\"sagemaker-a2i-runtime\",\"name\":\"AugmentedAIRuntime\"},\"ebs\":{\"name\":\"EBS\"},\"kinesisvideosignalingchannels\":{\"prefix\":\"kinesis-video-signaling\",\"name\":\"KinesisVideoSignalingChannels\",\"cors\":true},\"detective\":{\"name\":\"Detective\"},\"codestarconnections\":{\"prefix\":\"codestar-connections\",\"name\":\"CodeStarconnections\"},\"synthetics\":{\"name\":\"Synthetics\"},\"iotsitewise\":{\"name\":\"IoTSiteWise\"},\"macie2\":{\"name\":\"Macie2\"},\"codeartifact\":{\"name\":\"CodeArtifact\"},\"honeycode\":{\"name\":\"Honeycode\"},\"ivs\":{\"name\":\"IVS\"},\"braket\":{\"name\":\"Braket\"},\"identitystore\":{\"name\":\"IdentityStore\"},\"appflow\":{\"name\":\"Appflow\"},\"redshiftdata\":{\"prefix\":\"redshift-data\",\"name\":\"RedshiftData\"},\"ssoadmin\":{\"prefix\":\"sso-admin\",\"name\":\"SSOAdmin\"},\"timestreamquery\":{\"prefix\":\"timestream-query\",\"name\":\"TimestreamQuery\"},\"timestreamwrite\":{\"prefix\":\"timestream-write\",\"name\":\"TimestreamWrite\"},\"s3outposts\":{\"name\":\"S3Outposts\"}}");
+module.exports = JSON.parse('{"acm":{"name":"ACM","cors":true},"apigateway":{"name":"APIGateway","cors":true},"applicationautoscaling":{"prefix":"application-autoscaling","name":"ApplicationAutoScaling","cors":true},"appstream":{"name":"AppStream"},"autoscaling":{"name":"AutoScaling","cors":true},"batch":{"name":"Batch"},"budgets":{"name":"Budgets"},"clouddirectory":{"name":"CloudDirectory","versions":["2016-05-10*"]},"cloudformation":{"name":"CloudFormation","cors":true},"cloudfront":{"name":"CloudFront","versions":["2013-05-12*","2013-11-11*","2014-05-31*","2014-10-21*","2014-11-06*","2015-04-17*","2015-07-27*","2015-09-17*","2016-01-13*","2016-01-28*","2016-08-01*","2016-08-20*","2016-09-07*","2016-09-29*","2016-11-25*","2017-03-25*","2017-10-30*","2018-06-18*","2018-11-05*","2019-03-26*"],"cors":true},"cloudhsm":{"name":"CloudHSM","cors":true},"cloudsearch":{"name":"CloudSearch"},"cloudsearchdomain":{"name":"CloudSearchDomain"},"cloudtrail":{"name":"CloudTrail","cors":true},"cloudwatch":{"prefix":"monitoring","name":"CloudWatch","cors":true},"cloudwatchevents":{"prefix":"events","name":"CloudWatchEvents","versions":["2014-02-03*"],"cors":true},"cloudwatchlogs":{"prefix":"logs","name":"CloudWatchLogs","cors":true},"codebuild":{"name":"CodeBuild","cors":true},"codecommit":{"name":"CodeCommit","cors":true},"codedeploy":{"name":"CodeDeploy","cors":true},"codepipeline":{"name":"CodePipeline","cors":true},"cognitoidentity":{"prefix":"cognito-identity","name":"CognitoIdentity","cors":true},"cognitoidentityserviceprovider":{"prefix":"cognito-idp","name":"CognitoIdentityServiceProvider","cors":true},"cognitosync":{"prefix":"cognito-sync","name":"CognitoSync","cors":true},"configservice":{"prefix":"config","name":"ConfigService","cors":true},"cur":{"name":"CUR","cors":true},"datapipeline":{"name":"DataPipeline"},"devicefarm":{"name":"DeviceFarm","cors":true},"directconnect":{"name":"DirectConnect","cors":true},"directoryservice":{"prefix":"ds","name":"DirectoryService"},"discovery":{"name":"Discovery"},"dms":{"name":"DMS"},"dynamodb":{"name":"DynamoDB","cors":true},"dynamodbstreams":{"prefix":"streams.dynamodb","name":"DynamoDBStreams","cors":true},"ec2":{"name":"EC2","versions":["2013-06-15*","2013-10-15*","2014-02-01*","2014-05-01*","2014-06-15*","2014-09-01*","2014-10-01*","2015-03-01*","2015-04-15*","2015-10-01*","2016-04-01*","2016-09-15*"],"cors":true},"ecr":{"name":"ECR","cors":true},"ecs":{"name":"ECS","cors":true},"efs":{"prefix":"elasticfilesystem","name":"EFS","cors":true},"elasticache":{"name":"ElastiCache","versions":["2012-11-15*","2014-03-24*","2014-07-15*","2014-09-30*"],"cors":true},"elasticbeanstalk":{"name":"ElasticBeanstalk","cors":true},"elb":{"prefix":"elasticloadbalancing","name":"ELB","cors":true},"elbv2":{"prefix":"elasticloadbalancingv2","name":"ELBv2","cors":true},"emr":{"prefix":"elasticmapreduce","name":"EMR","cors":true},"es":{"name":"ES"},"elastictranscoder":{"name":"ElasticTranscoder","cors":true},"firehose":{"name":"Firehose","cors":true},"gamelift":{"name":"GameLift","cors":true},"glacier":{"name":"Glacier"},"health":{"name":"Health"},"iam":{"name":"IAM","cors":true},"importexport":{"name":"ImportExport"},"inspector":{"name":"Inspector","versions":["2015-08-18*"],"cors":true},"iot":{"name":"Iot","cors":true},"iotdata":{"prefix":"iot-data","name":"IotData","cors":true},"kinesis":{"name":"Kinesis","cors":true},"kinesisanalytics":{"name":"KinesisAnalytics"},"kms":{"name":"KMS","cors":true},"lambda":{"name":"Lambda","cors":true},"lexruntime":{"prefix":"runtime.lex","name":"LexRuntime","cors":true},"lightsail":{"name":"Lightsail"},"machinelearning":{"name":"MachineLearning","cors":true},"marketplacecommerceanalytics":{"name":"MarketplaceCommerceAnalytics","cors":true},"marketplacemetering":{"prefix":"meteringmarketplace","name":"MarketplaceMetering"},"mturk":{"prefix":"mturk-requester","name":"MTurk","cors":true},"mobileanalytics":{"name":"MobileAnalytics","cors":true},"opsworks":{"name":"OpsWorks","cors":true},"opsworkscm":{"name":"OpsWorksCM"},"organizations":{"name":"Organizations"},"pinpoint":{"name":"Pinpoint"},"polly":{"name":"Polly","cors":true},"rds":{"name":"RDS","versions":["2014-09-01*"],"cors":true},"redshift":{"name":"Redshift","cors":true},"rekognition":{"name":"Rekognition","cors":true},"resourcegroupstaggingapi":{"name":"ResourceGroupsTaggingAPI"},"route53":{"name":"Route53","cors":true},"route53domains":{"name":"Route53Domains","cors":true},"s3":{"name":"S3","dualstackAvailable":true,"cors":true},"s3control":{"name":"S3Control","dualstackAvailable":true,"xmlNoDefaultLists":true},"servicecatalog":{"name":"ServiceCatalog","cors":true},"ses":{"prefix":"email","name":"SES","cors":true},"shield":{"name":"Shield"},"simpledb":{"prefix":"sdb","name":"SimpleDB"},"sms":{"name":"SMS"},"snowball":{"name":"Snowball"},"sns":{"name":"SNS","cors":true},"sqs":{"name":"SQS","cors":true},"ssm":{"name":"SSM","cors":true},"storagegateway":{"name":"StorageGateway","cors":true},"stepfunctions":{"prefix":"states","name":"StepFunctions"},"sts":{"name":"STS","cors":true},"support":{"name":"Support"},"swf":{"name":"SWF"},"xray":{"name":"XRay","cors":true},"waf":{"name":"WAF","cors":true},"wafregional":{"prefix":"waf-regional","name":"WAFRegional"},"workdocs":{"name":"WorkDocs","cors":true},"workspaces":{"name":"WorkSpaces"},"codestar":{"name":"CodeStar"},"lexmodelbuildingservice":{"prefix":"lex-models","name":"LexModelBuildingService","cors":true},"marketplaceentitlementservice":{"prefix":"entitlement.marketplace","name":"MarketplaceEntitlementService"},"athena":{"name":"Athena"},"greengrass":{"name":"Greengrass"},"dax":{"name":"DAX"},"migrationhub":{"prefix":"AWSMigrationHub","name":"MigrationHub"},"cloudhsmv2":{"name":"CloudHSMV2"},"glue":{"name":"Glue"},"mobile":{"name":"Mobile"},"pricing":{"name":"Pricing","cors":true},"costexplorer":{"prefix":"ce","name":"CostExplorer","cors":true},"mediaconvert":{"name":"MediaConvert"},"medialive":{"name":"MediaLive"},"mediapackage":{"name":"MediaPackage"},"mediastore":{"name":"MediaStore"},"mediastoredata":{"prefix":"mediastore-data","name":"MediaStoreData","cors":true},"appsync":{"name":"AppSync"},"guardduty":{"name":"GuardDuty"},"mq":{"name":"MQ"},"comprehend":{"name":"Comprehend","cors":true},"iotjobsdataplane":{"prefix":"iot-jobs-data","name":"IoTJobsDataPlane"},"kinesisvideoarchivedmedia":{"prefix":"kinesis-video-archived-media","name":"KinesisVideoArchivedMedia","cors":true},"kinesisvideomedia":{"prefix":"kinesis-video-media","name":"KinesisVideoMedia","cors":true},"kinesisvideo":{"name":"KinesisVideo","cors":true},"sagemakerruntime":{"prefix":"runtime.sagemaker","name":"SageMakerRuntime"},"sagemaker":{"name":"SageMaker"},"translate":{"name":"Translate","cors":true},"resourcegroups":{"prefix":"resource-groups","name":"ResourceGroups","cors":true},"alexaforbusiness":{"name":"AlexaForBusiness"},"cloud9":{"name":"Cloud9"},"serverlessapplicationrepository":{"prefix":"serverlessrepo","name":"ServerlessApplicationRepository"},"servicediscovery":{"name":"ServiceDiscovery"},"workmail":{"name":"WorkMail"},"autoscalingplans":{"prefix":"autoscaling-plans","name":"AutoScalingPlans"},"transcribeservice":{"prefix":"transcribe","name":"TranscribeService"},"connect":{"name":"Connect","cors":true},"acmpca":{"prefix":"acm-pca","name":"ACMPCA"},"fms":{"name":"FMS"},"secretsmanager":{"name":"SecretsManager","cors":true},"iotanalytics":{"name":"IoTAnalytics","cors":true},"iot1clickdevicesservice":{"prefix":"iot1click-devices","name":"IoT1ClickDevicesService"},"iot1clickprojects":{"prefix":"iot1click-projects","name":"IoT1ClickProjects"},"pi":{"name":"PI"},"neptune":{"name":"Neptune"},"mediatailor":{"name":"MediaTailor"},"eks":{"name":"EKS"},"macie":{"name":"Macie"},"dlm":{"name":"DLM"},"signer":{"name":"Signer"},"chime":{"name":"Chime"},"pinpointemail":{"prefix":"pinpoint-email","name":"PinpointEmail"},"ram":{"name":"RAM"},"route53resolver":{"name":"Route53Resolver"},"pinpointsmsvoice":{"prefix":"sms-voice","name":"PinpointSMSVoice"},"quicksight":{"name":"QuickSight"},"rdsdataservice":{"prefix":"rds-data","name":"RDSDataService"},"amplify":{"name":"Amplify"},"datasync":{"name":"DataSync"},"robomaker":{"name":"RoboMaker"},"transfer":{"name":"Transfer"},"globalaccelerator":{"name":"GlobalAccelerator"},"comprehendmedical":{"name":"ComprehendMedical","cors":true},"kinesisanalyticsv2":{"name":"KinesisAnalyticsV2"},"mediaconnect":{"name":"MediaConnect"},"fsx":{"name":"FSx"},"securityhub":{"name":"SecurityHub"},"appmesh":{"name":"AppMesh","versions":["2018-10-01*"]},"licensemanager":{"prefix":"license-manager","name":"LicenseManager"},"kafka":{"name":"Kafka"},"apigatewaymanagementapi":{"name":"ApiGatewayManagementApi"},"apigatewayv2":{"name":"ApiGatewayV2"},"docdb":{"name":"DocDB"},"backup":{"name":"Backup"},"worklink":{"name":"WorkLink"},"textract":{"name":"Textract"},"managedblockchain":{"name":"ManagedBlockchain"},"mediapackagevod":{"prefix":"mediapackage-vod","name":"MediaPackageVod"},"groundstation":{"name":"GroundStation"},"iotthingsgraph":{"name":"IoTThingsGraph"},"iotevents":{"name":"IoTEvents"},"ioteventsdata":{"prefix":"iotevents-data","name":"IoTEventsData"},"personalize":{"name":"Personalize","cors":true},"personalizeevents":{"prefix":"personalize-events","name":"PersonalizeEvents","cors":true},"personalizeruntime":{"prefix":"personalize-runtime","name":"PersonalizeRuntime","cors":true},"applicationinsights":{"prefix":"application-insights","name":"ApplicationInsights"},"servicequotas":{"prefix":"service-quotas","name":"ServiceQuotas"},"ec2instanceconnect":{"prefix":"ec2-instance-connect","name":"EC2InstanceConnect"},"eventbridge":{"name":"EventBridge"},"lakeformation":{"name":"LakeFormation"},"forecastservice":{"prefix":"forecast","name":"ForecastService","cors":true},"forecastqueryservice":{"prefix":"forecastquery","name":"ForecastQueryService","cors":true},"qldb":{"name":"QLDB"},"qldbsession":{"prefix":"qldb-session","name":"QLDBSession"},"workmailmessageflow":{"name":"WorkMailMessageFlow"},"codestarnotifications":{"prefix":"codestar-notifications","name":"CodeStarNotifications"},"savingsplans":{"name":"SavingsPlans"},"sso":{"name":"SSO"},"ssooidc":{"prefix":"sso-oidc","name":"SSOOIDC"},"marketplacecatalog":{"prefix":"marketplace-catalog","name":"MarketplaceCatalog"},"dataexchange":{"name":"DataExchange"},"sesv2":{"name":"SESV2"},"migrationhubconfig":{"prefix":"migrationhub-config","name":"MigrationHubConfig"},"connectparticipant":{"name":"ConnectParticipant"},"appconfig":{"name":"AppConfig"},"iotsecuretunneling":{"name":"IoTSecureTunneling"},"wafv2":{"name":"WAFV2"},"elasticinference":{"prefix":"elastic-inference","name":"ElasticInference"},"imagebuilder":{"name":"Imagebuilder"},"schemas":{"name":"Schemas"},"accessanalyzer":{"name":"AccessAnalyzer"},"codegurureviewer":{"prefix":"codeguru-reviewer","name":"CodeGuruReviewer"},"codeguruprofiler":{"name":"CodeGuruProfiler"},"computeoptimizer":{"prefix":"compute-optimizer","name":"ComputeOptimizer"},"frauddetector":{"name":"FraudDetector"},"kendra":{"name":"Kendra"},"networkmanager":{"name":"NetworkManager"},"outposts":{"name":"Outposts"},"augmentedairuntime":{"prefix":"sagemaker-a2i-runtime","name":"AugmentedAIRuntime"},"ebs":{"name":"EBS"},"kinesisvideosignalingchannels":{"prefix":"kinesis-video-signaling","name":"KinesisVideoSignalingChannels","cors":true},"detective":{"name":"Detective"},"codestarconnections":{"prefix":"codestar-connections","name":"CodeStarconnections"},"synthetics":{"name":"Synthetics"},"iotsitewise":{"name":"IoTSiteWise"},"macie2":{"name":"Macie2"},"codeartifact":{"name":"CodeArtifact"},"honeycode":{"name":"Honeycode"},"ivs":{"name":"IVS"},"braket":{"name":"Braket"},"identitystore":{"name":"IdentityStore"},"appflow":{"name":"Appflow"},"redshiftdata":{"prefix":"redshift-data","name":"RedshiftData"},"ssoadmin":{"prefix":"sso-admin","name":"SSOAdmin"},"timestreamquery":{"prefix":"timestream-query","name":"TimestreamQuery"},"timestreamwrite":{"prefix":"timestream-write","name":"TimestreamWrite"},"s3outposts":{"name":"S3Outposts"}}');
 
 /***/ }),
 
@@ -23021,7 +22932,7 @@ module.exports = JSON.parse("{\"acm\":{\"name\":\"ACM\",\"cors\":true},\"apigate
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"version\":\"2.0\",\"metadata\":{\"apiVersion\":\"2006-03-01\",\"checksumFormat\":\"md5\",\"endpointPrefix\":\"s3\",\"globalEndpoint\":\"s3.amazonaws.com\",\"protocol\":\"rest-xml\",\"serviceAbbreviation\":\"Amazon S3\",\"serviceFullName\":\"Amazon Simple Storage Service\",\"serviceId\":\"S3\",\"signatureVersion\":\"s3\",\"uid\":\"s3-2006-03-01\"},\"operations\":{\"AbortMultipartUpload\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}/{Key+}\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\",\"UploadId\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"UploadId\":{\"location\":\"querystring\",\"locationName\":\"uploadId\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}}},\"CompleteMultipartUpload\":{\"http\":{\"requestUri\":\"/{Bucket}/{Key+}\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\",\"UploadId\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"MultipartUpload\":{\"locationName\":\"CompleteMultipartUpload\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"members\":{\"Parts\":{\"locationName\":\"Part\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"ETag\":{},\"PartNumber\":{\"type\":\"integer\"}}},\"flattened\":true}}},\"UploadId\":{\"location\":\"querystring\",\"locationName\":\"uploadId\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"MultipartUpload\"},\"output\":{\"type\":\"structure\",\"members\":{\"Location\":{},\"Bucket\":{},\"Key\":{},\"Expiration\":{\"location\":\"header\",\"locationName\":\"x-amz-expiration\"},\"ETag\":{},\"ServerSideEncryption\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption\"},\"VersionId\":{\"location\":\"header\",\"locationName\":\"x-amz-version-id\"},\"SSEKMSKeyId\":{\"shape\":\"Sk\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-aws-kms-key-id\"},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}}},\"CopyObject\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}/{Key+}\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"CopySource\",\"Key\"],\"members\":{\"ACL\":{\"location\":\"header\",\"locationName\":\"x-amz-acl\"},\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"CacheControl\":{\"location\":\"header\",\"locationName\":\"Cache-Control\"},\"ContentDisposition\":{\"location\":\"header\",\"locationName\":\"Content-Disposition\"},\"ContentEncoding\":{\"location\":\"header\",\"locationName\":\"Content-Encoding\"},\"ContentLanguage\":{\"location\":\"header\",\"locationName\":\"Content-Language\"},\"ContentType\":{\"location\":\"header\",\"locationName\":\"Content-Type\"},\"CopySource\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source\"},\"CopySourceIfMatch\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-if-match\"},\"CopySourceIfModifiedSince\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-if-modified-since\",\"type\":\"timestamp\"},\"CopySourceIfNoneMatch\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-if-none-match\"},\"CopySourceIfUnmodifiedSince\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-if-unmodified-since\",\"type\":\"timestamp\"},\"Expires\":{\"location\":\"header\",\"locationName\":\"Expires\",\"type\":\"timestamp\"},\"GrantFullControl\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-full-control\"},\"GrantRead\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read\"},\"GrantReadACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read-acp\"},\"GrantWriteACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-write-acp\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"Metadata\":{\"shape\":\"S12\",\"location\":\"headers\",\"locationName\":\"x-amz-meta-\"},\"MetadataDirective\":{\"location\":\"header\",\"locationName\":\"x-amz-metadata-directive\"},\"TaggingDirective\":{\"location\":\"header\",\"locationName\":\"x-amz-tagging-directive\"},\"ServerSideEncryption\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption\"},\"StorageClass\":{\"location\":\"header\",\"locationName\":\"x-amz-storage-class\"},\"WebsiteRedirectLocation\":{\"location\":\"header\",\"locationName\":\"x-amz-website-redirect-location\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKey\":{\"shape\":\"S1a\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"SSEKMSKeyId\":{\"shape\":\"Sk\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-aws-kms-key-id\"},\"SSEKMSEncryptionContext\":{\"shape\":\"S1c\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-context\"},\"CopySourceSSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-server-side-encryption-customer-algorithm\"},\"CopySourceSSECustomerKey\":{\"shape\":\"S1e\",\"location\":\"header\",\"locationName\":\"x-amz-copy-source-server-side-encryption-customer-key\"},\"CopySourceSSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-server-side-encryption-customer-key-MD5\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"Tagging\":{\"location\":\"header\",\"locationName\":\"x-amz-tagging\"},\"ObjectLockMode\":{\"location\":\"header\",\"locationName\":\"x-amz-object-lock-mode\"},\"ObjectLockRetainUntilDate\":{\"shape\":\"S1i\",\"location\":\"header\",\"locationName\":\"x-amz-object-lock-retain-until-date\"},\"ObjectLockLegalHoldStatus\":{\"location\":\"header\",\"locationName\":\"x-amz-object-lock-legal-hold\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"},\"ExpectedSourceBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-source-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"CopyObjectResult\":{\"type\":\"structure\",\"members\":{\"ETag\":{},\"LastModified\":{\"type\":\"timestamp\"}}},\"Expiration\":{\"location\":\"header\",\"locationName\":\"x-amz-expiration\"},\"CopySourceVersionId\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-version-id\"},\"VersionId\":{\"location\":\"header\",\"locationName\":\"x-amz-version-id\"},\"ServerSideEncryption\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"SSEKMSKeyId\":{\"shape\":\"Sk\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-aws-kms-key-id\"},\"SSEKMSEncryptionContext\":{\"shape\":\"S1c\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-context\"},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}},\"payload\":\"CopyObjectResult\"},\"alias\":\"PutObjectCopy\"},\"CreateBucket\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"ACL\":{\"location\":\"header\",\"locationName\":\"x-amz-acl\"},\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"CreateBucketConfiguration\":{\"locationName\":\"CreateBucketConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"members\":{\"LocationConstraint\":{}}},\"GrantFullControl\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-full-control\"},\"GrantRead\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read\"},\"GrantReadACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read-acp\"},\"GrantWrite\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-write\"},\"GrantWriteACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-write-acp\"},\"ObjectLockEnabledForBucket\":{\"location\":\"header\",\"locationName\":\"x-amz-bucket-object-lock-enabled\",\"type\":\"boolean\"}},\"payload\":\"CreateBucketConfiguration\"},\"output\":{\"type\":\"structure\",\"members\":{\"Location\":{\"location\":\"header\",\"locationName\":\"Location\"}}},\"alias\":\"PutBucket\"},\"CreateMultipartUpload\":{\"http\":{\"requestUri\":\"/{Bucket}/{Key+}?uploads\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"ACL\":{\"location\":\"header\",\"locationName\":\"x-amz-acl\"},\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"CacheControl\":{\"location\":\"header\",\"locationName\":\"Cache-Control\"},\"ContentDisposition\":{\"location\":\"header\",\"locationName\":\"Content-Disposition\"},\"ContentEncoding\":{\"location\":\"header\",\"locationName\":\"Content-Encoding\"},\"ContentLanguage\":{\"location\":\"header\",\"locationName\":\"Content-Language\"},\"ContentType\":{\"location\":\"header\",\"locationName\":\"Content-Type\"},\"Expires\":{\"location\":\"header\",\"locationName\":\"Expires\",\"type\":\"timestamp\"},\"GrantFullControl\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-full-control\"},\"GrantRead\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read\"},\"GrantReadACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read-acp\"},\"GrantWriteACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-write-acp\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"Metadata\":{\"shape\":\"S12\",\"location\":\"headers\",\"locationName\":\"x-amz-meta-\"},\"ServerSideEncryption\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption\"},\"StorageClass\":{\"location\":\"header\",\"locationName\":\"x-amz-storage-class\"},\"WebsiteRedirectLocation\":{\"location\":\"header\",\"locationName\":\"x-amz-website-redirect-location\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKey\":{\"shape\":\"S1a\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"SSEKMSKeyId\":{\"shape\":\"Sk\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-aws-kms-key-id\"},\"SSEKMSEncryptionContext\":{\"shape\":\"S1c\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-context\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"Tagging\":{\"location\":\"header\",\"locationName\":\"x-amz-tagging\"},\"ObjectLockMode\":{\"location\":\"header\",\"locationName\":\"x-amz-object-lock-mode\"},\"ObjectLockRetainUntilDate\":{\"shape\":\"S1i\",\"location\":\"header\",\"locationName\":\"x-amz-object-lock-retain-until-date\"},\"ObjectLockLegalHoldStatus\":{\"location\":\"header\",\"locationName\":\"x-amz-object-lock-legal-hold\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"AbortDate\":{\"location\":\"header\",\"locationName\":\"x-amz-abort-date\",\"type\":\"timestamp\"},\"AbortRuleId\":{\"location\":\"header\",\"locationName\":\"x-amz-abort-rule-id\"},\"Bucket\":{\"locationName\":\"Bucket\"},\"Key\":{},\"UploadId\":{},\"ServerSideEncryption\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"SSEKMSKeyId\":{\"shape\":\"Sk\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-aws-kms-key-id\"},\"SSEKMSEncryptionContext\":{\"shape\":\"S1c\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-context\"},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}},\"alias\":\"InitiateMultipartUpload\"},\"DeleteBucket\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"DeleteBucketAnalyticsConfiguration\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}?analytics\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Id\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Id\":{\"location\":\"querystring\",\"locationName\":\"id\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"DeleteBucketCors\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}?cors\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"DeleteBucketEncryption\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}?encryption\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"DeleteBucketInventoryConfiguration\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}?inventory\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Id\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Id\":{\"location\":\"querystring\",\"locationName\":\"id\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"DeleteBucketLifecycle\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}?lifecycle\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"DeleteBucketMetricsConfiguration\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}?metrics\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Id\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Id\":{\"location\":\"querystring\",\"locationName\":\"id\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"DeleteBucketPolicy\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}?policy\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"DeleteBucketReplication\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}?replication\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"DeleteBucketTagging\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}?tagging\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"DeleteBucketWebsite\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}?website\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"DeleteObject\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}/{Key+}\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"MFA\":{\"location\":\"header\",\"locationName\":\"x-amz-mfa\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"BypassGovernanceRetention\":{\"location\":\"header\",\"locationName\":\"x-amz-bypass-governance-retention\",\"type\":\"boolean\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"DeleteMarker\":{\"location\":\"header\",\"locationName\":\"x-amz-delete-marker\",\"type\":\"boolean\"},\"VersionId\":{\"location\":\"header\",\"locationName\":\"x-amz-version-id\"},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}}},\"DeleteObjectTagging\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}/{Key+}?tagging\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"VersionId\":{\"location\":\"header\",\"locationName\":\"x-amz-version-id\"}}}},\"DeleteObjects\":{\"http\":{\"requestUri\":\"/{Bucket}?delete\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Delete\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Delete\":{\"locationName\":\"Delete\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"required\":[\"Objects\"],\"members\":{\"Objects\":{\"locationName\":\"Object\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"required\":[\"Key\"],\"members\":{\"Key\":{},\"VersionId\":{}}},\"flattened\":true},\"Quiet\":{\"type\":\"boolean\"}}},\"MFA\":{\"location\":\"header\",\"locationName\":\"x-amz-mfa\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"BypassGovernanceRetention\":{\"location\":\"header\",\"locationName\":\"x-amz-bypass-governance-retention\",\"type\":\"boolean\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"Delete\"},\"output\":{\"type\":\"structure\",\"members\":{\"Deleted\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"Key\":{},\"VersionId\":{},\"DeleteMarker\":{\"type\":\"boolean\"},\"DeleteMarkerVersionId\":{}}},\"flattened\":true},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"},\"Errors\":{\"locationName\":\"Error\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"Key\":{},\"VersionId\":{},\"Code\":{},\"Message\":{}}},\"flattened\":true}}},\"alias\":\"DeleteMultipleObjects\",\"httpChecksumRequired\":true},\"DeletePublicAccessBlock\":{\"http\":{\"method\":\"DELETE\",\"requestUri\":\"/{Bucket}?publicAccessBlock\",\"responseCode\":204},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"GetBucketAccelerateConfiguration\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?accelerate\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Status\":{}}}},\"GetBucketAcl\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?acl\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Owner\":{\"shape\":\"S33\"},\"Grants\":{\"shape\":\"S36\",\"locationName\":\"AccessControlList\"}}}},\"GetBucketAnalyticsConfiguration\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?analytics\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Id\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Id\":{\"location\":\"querystring\",\"locationName\":\"id\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"AnalyticsConfiguration\":{\"shape\":\"S3f\"}},\"payload\":\"AnalyticsConfiguration\"}},\"GetBucketCors\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?cors\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"CORSRules\":{\"shape\":\"S3u\",\"locationName\":\"CORSRule\"}}}},\"GetBucketEncryption\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?encryption\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"ServerSideEncryptionConfiguration\":{\"shape\":\"S47\"}},\"payload\":\"ServerSideEncryptionConfiguration\"}},\"GetBucketInventoryConfiguration\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?inventory\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Id\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Id\":{\"location\":\"querystring\",\"locationName\":\"id\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"InventoryConfiguration\":{\"shape\":\"S4d\"}},\"payload\":\"InventoryConfiguration\"}},\"GetBucketLifecycle\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?lifecycle\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Rules\":{\"shape\":\"S4t\",\"locationName\":\"Rule\"}}},\"deprecated\":true},\"GetBucketLifecycleConfiguration\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?lifecycle\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Rules\":{\"shape\":\"S58\",\"locationName\":\"Rule\"}}}},\"GetBucketLocation\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?location\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"LocationConstraint\":{}}}},\"GetBucketLogging\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?logging\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"LoggingEnabled\":{\"shape\":\"S5i\"}}}},\"GetBucketMetricsConfiguration\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?metrics\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Id\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Id\":{\"location\":\"querystring\",\"locationName\":\"id\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"MetricsConfiguration\":{\"shape\":\"S5q\"}},\"payload\":\"MetricsConfiguration\"}},\"GetBucketNotification\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?notification\"},\"input\":{\"shape\":\"S5t\"},\"output\":{\"shape\":\"S5u\"},\"deprecated\":true},\"GetBucketNotificationConfiguration\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?notification\"},\"input\":{\"shape\":\"S5t\"},\"output\":{\"shape\":\"S65\"}},\"GetBucketPolicy\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?policy\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Policy\":{}},\"payload\":\"Policy\"}},\"GetBucketPolicyStatus\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?policyStatus\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"PolicyStatus\":{\"type\":\"structure\",\"members\":{\"IsPublic\":{\"locationName\":\"IsPublic\",\"type\":\"boolean\"}}}},\"payload\":\"PolicyStatus\"}},\"GetBucketReplication\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?replication\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"ReplicationConfiguration\":{\"shape\":\"S6s\"}},\"payload\":\"ReplicationConfiguration\"}},\"GetBucketRequestPayment\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?requestPayment\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Payer\":{}}}},\"GetBucketTagging\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?tagging\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"required\":[\"TagSet\"],\"members\":{\"TagSet\":{\"shape\":\"S3l\"}}}},\"GetBucketVersioning\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?versioning\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Status\":{},\"MFADelete\":{\"locationName\":\"MfaDelete\"}}}},\"GetBucketWebsite\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?website\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"RedirectAllRequestsTo\":{\"shape\":\"S7t\"},\"IndexDocument\":{\"shape\":\"S7w\"},\"ErrorDocument\":{\"shape\":\"S7y\"},\"RoutingRules\":{\"shape\":\"S7z\"}}}},\"GetObject\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}/{Key+}\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"IfMatch\":{\"location\":\"header\",\"locationName\":\"If-Match\"},\"IfModifiedSince\":{\"location\":\"header\",\"locationName\":\"If-Modified-Since\",\"type\":\"timestamp\"},\"IfNoneMatch\":{\"location\":\"header\",\"locationName\":\"If-None-Match\"},\"IfUnmodifiedSince\":{\"location\":\"header\",\"locationName\":\"If-Unmodified-Since\",\"type\":\"timestamp\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"Range\":{\"location\":\"header\",\"locationName\":\"Range\"},\"ResponseCacheControl\":{\"location\":\"querystring\",\"locationName\":\"response-cache-control\"},\"ResponseContentDisposition\":{\"location\":\"querystring\",\"locationName\":\"response-content-disposition\"},\"ResponseContentEncoding\":{\"location\":\"querystring\",\"locationName\":\"response-content-encoding\"},\"ResponseContentLanguage\":{\"location\":\"querystring\",\"locationName\":\"response-content-language\"},\"ResponseContentType\":{\"location\":\"querystring\",\"locationName\":\"response-content-type\"},\"ResponseExpires\":{\"location\":\"querystring\",\"locationName\":\"response-expires\",\"type\":\"timestamp\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKey\":{\"shape\":\"S1a\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"PartNumber\":{\"location\":\"querystring\",\"locationName\":\"partNumber\",\"type\":\"integer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Body\":{\"streaming\":true,\"type\":\"blob\"},\"DeleteMarker\":{\"location\":\"header\",\"locationName\":\"x-amz-delete-marker\",\"type\":\"boolean\"},\"AcceptRanges\":{\"location\":\"header\",\"locationName\":\"accept-ranges\"},\"Expiration\":{\"location\":\"header\",\"locationName\":\"x-amz-expiration\"},\"Restore\":{\"location\":\"header\",\"locationName\":\"x-amz-restore\"},\"LastModified\":{\"location\":\"header\",\"locationName\":\"Last-Modified\",\"type\":\"timestamp\"},\"ContentLength\":{\"location\":\"header\",\"locationName\":\"Content-Length\",\"type\":\"long\"},\"ETag\":{\"location\":\"header\",\"locationName\":\"ETag\"},\"MissingMeta\":{\"location\":\"header\",\"locationName\":\"x-amz-missing-meta\",\"type\":\"integer\"},\"VersionId\":{\"location\":\"header\",\"locationName\":\"x-amz-version-id\"},\"CacheControl\":{\"location\":\"header\",\"locationName\":\"Cache-Control\"},\"ContentDisposition\":{\"location\":\"header\",\"locationName\":\"Content-Disposition\"},\"ContentEncoding\":{\"location\":\"header\",\"locationName\":\"Content-Encoding\"},\"ContentLanguage\":{\"location\":\"header\",\"locationName\":\"Content-Language\"},\"ContentRange\":{\"location\":\"header\",\"locationName\":\"Content-Range\"},\"ContentType\":{\"location\":\"header\",\"locationName\":\"Content-Type\"},\"Expires\":{\"location\":\"header\",\"locationName\":\"Expires\",\"type\":\"timestamp\"},\"WebsiteRedirectLocation\":{\"location\":\"header\",\"locationName\":\"x-amz-website-redirect-location\"},\"ServerSideEncryption\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption\"},\"Metadata\":{\"shape\":\"S12\",\"location\":\"headers\",\"locationName\":\"x-amz-meta-\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"SSEKMSKeyId\":{\"shape\":\"Sk\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-aws-kms-key-id\"},\"StorageClass\":{\"location\":\"header\",\"locationName\":\"x-amz-storage-class\"},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"},\"ReplicationStatus\":{\"location\":\"header\",\"locationName\":\"x-amz-replication-status\"},\"PartsCount\":{\"location\":\"header\",\"locationName\":\"x-amz-mp-parts-count\",\"type\":\"integer\"},\"TagCount\":{\"location\":\"header\",\"locationName\":\"x-amz-tagging-count\",\"type\":\"integer\"},\"ObjectLockMode\":{\"location\":\"header\",\"locationName\":\"x-amz-object-lock-mode\"},\"ObjectLockRetainUntilDate\":{\"shape\":\"S1i\",\"location\":\"header\",\"locationName\":\"x-amz-object-lock-retain-until-date\"},\"ObjectLockLegalHoldStatus\":{\"location\":\"header\",\"locationName\":\"x-amz-object-lock-legal-hold\"}},\"payload\":\"Body\"}},\"GetObjectAcl\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}/{Key+}?acl\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Owner\":{\"shape\":\"S33\"},\"Grants\":{\"shape\":\"S36\",\"locationName\":\"AccessControlList\"},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}}},\"GetObjectLegalHold\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}/{Key+}?legal-hold\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"LegalHold\":{\"shape\":\"S8y\"}},\"payload\":\"LegalHold\"}},\"GetObjectLockConfiguration\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?object-lock\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"ObjectLockConfiguration\":{\"shape\":\"S91\"}},\"payload\":\"ObjectLockConfiguration\"}},\"GetObjectRetention\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}/{Key+}?retention\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Retention\":{\"shape\":\"S99\"}},\"payload\":\"Retention\"}},\"GetObjectTagging\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}/{Key+}?tagging\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"required\":[\"TagSet\"],\"members\":{\"VersionId\":{\"location\":\"header\",\"locationName\":\"x-amz-version-id\"},\"TagSet\":{\"shape\":\"S3l\"}}}},\"GetObjectTorrent\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}/{Key+}?torrent\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Body\":{\"streaming\":true,\"type\":\"blob\"},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}},\"payload\":\"Body\"}},\"GetPublicAccessBlock\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?publicAccessBlock\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"PublicAccessBlockConfiguration\":{\"shape\":\"S9g\"}},\"payload\":\"PublicAccessBlockConfiguration\"}},\"HeadBucket\":{\"http\":{\"method\":\"HEAD\",\"requestUri\":\"/{Bucket}\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}}},\"HeadObject\":{\"http\":{\"method\":\"HEAD\",\"requestUri\":\"/{Bucket}/{Key+}\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"IfMatch\":{\"location\":\"header\",\"locationName\":\"If-Match\"},\"IfModifiedSince\":{\"location\":\"header\",\"locationName\":\"If-Modified-Since\",\"type\":\"timestamp\"},\"IfNoneMatch\":{\"location\":\"header\",\"locationName\":\"If-None-Match\"},\"IfUnmodifiedSince\":{\"location\":\"header\",\"locationName\":\"If-Unmodified-Since\",\"type\":\"timestamp\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"Range\":{\"location\":\"header\",\"locationName\":\"Range\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKey\":{\"shape\":\"S1a\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"PartNumber\":{\"location\":\"querystring\",\"locationName\":\"partNumber\",\"type\":\"integer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"DeleteMarker\":{\"location\":\"header\",\"locationName\":\"x-amz-delete-marker\",\"type\":\"boolean\"},\"AcceptRanges\":{\"location\":\"header\",\"locationName\":\"accept-ranges\"},\"Expiration\":{\"location\":\"header\",\"locationName\":\"x-amz-expiration\"},\"Restore\":{\"location\":\"header\",\"locationName\":\"x-amz-restore\"},\"LastModified\":{\"location\":\"header\",\"locationName\":\"Last-Modified\",\"type\":\"timestamp\"},\"ContentLength\":{\"location\":\"header\",\"locationName\":\"Content-Length\",\"type\":\"long\"},\"ETag\":{\"location\":\"header\",\"locationName\":\"ETag\"},\"MissingMeta\":{\"location\":\"header\",\"locationName\":\"x-amz-missing-meta\",\"type\":\"integer\"},\"VersionId\":{\"location\":\"header\",\"locationName\":\"x-amz-version-id\"},\"CacheControl\":{\"location\":\"header\",\"locationName\":\"Cache-Control\"},\"ContentDisposition\":{\"location\":\"header\",\"locationName\":\"Content-Disposition\"},\"ContentEncoding\":{\"location\":\"header\",\"locationName\":\"Content-Encoding\"},\"ContentLanguage\":{\"location\":\"header\",\"locationName\":\"Content-Language\"},\"ContentType\":{\"location\":\"header\",\"locationName\":\"Content-Type\"},\"Expires\":{\"location\":\"header\",\"locationName\":\"Expires\",\"type\":\"timestamp\"},\"WebsiteRedirectLocation\":{\"location\":\"header\",\"locationName\":\"x-amz-website-redirect-location\"},\"ServerSideEncryption\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption\"},\"Metadata\":{\"shape\":\"S12\",\"location\":\"headers\",\"locationName\":\"x-amz-meta-\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"SSEKMSKeyId\":{\"shape\":\"Sk\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-aws-kms-key-id\"},\"StorageClass\":{\"location\":\"header\",\"locationName\":\"x-amz-storage-class\"},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"},\"ReplicationStatus\":{\"location\":\"header\",\"locationName\":\"x-amz-replication-status\"},\"PartsCount\":{\"location\":\"header\",\"locationName\":\"x-amz-mp-parts-count\",\"type\":\"integer\"},\"ObjectLockMode\":{\"location\":\"header\",\"locationName\":\"x-amz-object-lock-mode\"},\"ObjectLockRetainUntilDate\":{\"shape\":\"S1i\",\"location\":\"header\",\"locationName\":\"x-amz-object-lock-retain-until-date\"},\"ObjectLockLegalHoldStatus\":{\"location\":\"header\",\"locationName\":\"x-amz-object-lock-legal-hold\"}}}},\"ListBucketAnalyticsConfigurations\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?analytics\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContinuationToken\":{\"location\":\"querystring\",\"locationName\":\"continuation-token\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"IsTruncated\":{\"type\":\"boolean\"},\"ContinuationToken\":{},\"NextContinuationToken\":{},\"AnalyticsConfigurationList\":{\"locationName\":\"AnalyticsConfiguration\",\"type\":\"list\",\"member\":{\"shape\":\"S3f\"},\"flattened\":true}}}},\"ListBucketInventoryConfigurations\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?inventory\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContinuationToken\":{\"location\":\"querystring\",\"locationName\":\"continuation-token\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"ContinuationToken\":{},\"InventoryConfigurationList\":{\"locationName\":\"InventoryConfiguration\",\"type\":\"list\",\"member\":{\"shape\":\"S4d\"},\"flattened\":true},\"IsTruncated\":{\"type\":\"boolean\"},\"NextContinuationToken\":{}}}},\"ListBucketMetricsConfigurations\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?metrics\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContinuationToken\":{\"location\":\"querystring\",\"locationName\":\"continuation-token\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"IsTruncated\":{\"type\":\"boolean\"},\"ContinuationToken\":{},\"NextContinuationToken\":{},\"MetricsConfigurationList\":{\"locationName\":\"MetricsConfiguration\",\"type\":\"list\",\"member\":{\"shape\":\"S5q\"},\"flattened\":true}}}},\"ListBuckets\":{\"http\":{\"method\":\"GET\"},\"output\":{\"type\":\"structure\",\"members\":{\"Buckets\":{\"type\":\"list\",\"member\":{\"locationName\":\"Bucket\",\"type\":\"structure\",\"members\":{\"Name\":{},\"CreationDate\":{\"type\":\"timestamp\"}}}},\"Owner\":{\"shape\":\"S33\"}}},\"alias\":\"GetService\"},\"ListMultipartUploads\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?uploads\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Delimiter\":{\"location\":\"querystring\",\"locationName\":\"delimiter\"},\"EncodingType\":{\"location\":\"querystring\",\"locationName\":\"encoding-type\"},\"KeyMarker\":{\"location\":\"querystring\",\"locationName\":\"key-marker\"},\"MaxUploads\":{\"location\":\"querystring\",\"locationName\":\"max-uploads\",\"type\":\"integer\"},\"Prefix\":{\"location\":\"querystring\",\"locationName\":\"prefix\"},\"UploadIdMarker\":{\"location\":\"querystring\",\"locationName\":\"upload-id-marker\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Bucket\":{},\"KeyMarker\":{},\"UploadIdMarker\":{},\"NextKeyMarker\":{},\"Prefix\":{},\"Delimiter\":{},\"NextUploadIdMarker\":{},\"MaxUploads\":{\"type\":\"integer\"},\"IsTruncated\":{\"type\":\"boolean\"},\"Uploads\":{\"locationName\":\"Upload\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"UploadId\":{},\"Key\":{},\"Initiated\":{\"type\":\"timestamp\"},\"StorageClass\":{},\"Owner\":{\"shape\":\"S33\"},\"Initiator\":{\"shape\":\"Sad\"}}},\"flattened\":true},\"CommonPrefixes\":{\"shape\":\"Sae\"},\"EncodingType\":{}}}},\"ListObjectVersions\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?versions\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Delimiter\":{\"location\":\"querystring\",\"locationName\":\"delimiter\"},\"EncodingType\":{\"location\":\"querystring\",\"locationName\":\"encoding-type\"},\"KeyMarker\":{\"location\":\"querystring\",\"locationName\":\"key-marker\"},\"MaxKeys\":{\"location\":\"querystring\",\"locationName\":\"max-keys\",\"type\":\"integer\"},\"Prefix\":{\"location\":\"querystring\",\"locationName\":\"prefix\"},\"VersionIdMarker\":{\"location\":\"querystring\",\"locationName\":\"version-id-marker\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"IsTruncated\":{\"type\":\"boolean\"},\"KeyMarker\":{},\"VersionIdMarker\":{},\"NextKeyMarker\":{},\"NextVersionIdMarker\":{},\"Versions\":{\"locationName\":\"Version\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"ETag\":{},\"Size\":{\"type\":\"integer\"},\"StorageClass\":{},\"Key\":{},\"VersionId\":{},\"IsLatest\":{\"type\":\"boolean\"},\"LastModified\":{\"type\":\"timestamp\"},\"Owner\":{\"shape\":\"S33\"}}},\"flattened\":true},\"DeleteMarkers\":{\"locationName\":\"DeleteMarker\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"Owner\":{\"shape\":\"S33\"},\"Key\":{},\"VersionId\":{},\"IsLatest\":{\"type\":\"boolean\"},\"LastModified\":{\"type\":\"timestamp\"}}},\"flattened\":true},\"Name\":{},\"Prefix\":{},\"Delimiter\":{},\"MaxKeys\":{\"type\":\"integer\"},\"CommonPrefixes\":{\"shape\":\"Sae\"},\"EncodingType\":{}}},\"alias\":\"GetBucketObjectVersions\"},\"ListObjects\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Delimiter\":{\"location\":\"querystring\",\"locationName\":\"delimiter\"},\"EncodingType\":{\"location\":\"querystring\",\"locationName\":\"encoding-type\"},\"Marker\":{\"location\":\"querystring\",\"locationName\":\"marker\"},\"MaxKeys\":{\"location\":\"querystring\",\"locationName\":\"max-keys\",\"type\":\"integer\"},\"Prefix\":{\"location\":\"querystring\",\"locationName\":\"prefix\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"IsTruncated\":{\"type\":\"boolean\"},\"Marker\":{},\"NextMarker\":{},\"Contents\":{\"shape\":\"Saw\"},\"Name\":{},\"Prefix\":{},\"Delimiter\":{},\"MaxKeys\":{\"type\":\"integer\"},\"CommonPrefixes\":{\"shape\":\"Sae\"},\"EncodingType\":{}}},\"alias\":\"GetBucket\"},\"ListObjectsV2\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}?list-type=2\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Delimiter\":{\"location\":\"querystring\",\"locationName\":\"delimiter\"},\"EncodingType\":{\"location\":\"querystring\",\"locationName\":\"encoding-type\"},\"MaxKeys\":{\"location\":\"querystring\",\"locationName\":\"max-keys\",\"type\":\"integer\"},\"Prefix\":{\"location\":\"querystring\",\"locationName\":\"prefix\"},\"ContinuationToken\":{\"location\":\"querystring\",\"locationName\":\"continuation-token\"},\"FetchOwner\":{\"location\":\"querystring\",\"locationName\":\"fetch-owner\",\"type\":\"boolean\"},\"StartAfter\":{\"location\":\"querystring\",\"locationName\":\"start-after\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"IsTruncated\":{\"type\":\"boolean\"},\"Contents\":{\"shape\":\"Saw\"},\"Name\":{},\"Prefix\":{},\"Delimiter\":{},\"MaxKeys\":{\"type\":\"integer\"},\"CommonPrefixes\":{\"shape\":\"Sae\"},\"EncodingType\":{},\"KeyCount\":{\"type\":\"integer\"},\"ContinuationToken\":{},\"NextContinuationToken\":{},\"StartAfter\":{}}}},\"ListParts\":{\"http\":{\"method\":\"GET\",\"requestUri\":\"/{Bucket}/{Key+}\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\",\"UploadId\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"MaxParts\":{\"location\":\"querystring\",\"locationName\":\"max-parts\",\"type\":\"integer\"},\"PartNumberMarker\":{\"location\":\"querystring\",\"locationName\":\"part-number-marker\",\"type\":\"integer\"},\"UploadId\":{\"location\":\"querystring\",\"locationName\":\"uploadId\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"AbortDate\":{\"location\":\"header\",\"locationName\":\"x-amz-abort-date\",\"type\":\"timestamp\"},\"AbortRuleId\":{\"location\":\"header\",\"locationName\":\"x-amz-abort-rule-id\"},\"Bucket\":{},\"Key\":{},\"UploadId\":{},\"PartNumberMarker\":{\"type\":\"integer\"},\"NextPartNumberMarker\":{\"type\":\"integer\"},\"MaxParts\":{\"type\":\"integer\"},\"IsTruncated\":{\"type\":\"boolean\"},\"Parts\":{\"locationName\":\"Part\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"PartNumber\":{\"type\":\"integer\"},\"LastModified\":{\"type\":\"timestamp\"},\"ETag\":{},\"Size\":{\"type\":\"integer\"}}},\"flattened\":true},\"Initiator\":{\"shape\":\"Sad\"},\"Owner\":{\"shape\":\"S33\"},\"StorageClass\":{},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}}},\"PutBucketAccelerateConfiguration\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?accelerate\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"AccelerateConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"AccelerateConfiguration\":{\"locationName\":\"AccelerateConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"members\":{\"Status\":{}}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"AccelerateConfiguration\"}},\"PutBucketAcl\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?acl\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"ACL\":{\"location\":\"header\",\"locationName\":\"x-amz-acl\"},\"AccessControlPolicy\":{\"shape\":\"Sbe\",\"locationName\":\"AccessControlPolicy\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"GrantFullControl\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-full-control\"},\"GrantRead\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read\"},\"GrantReadACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read-acp\"},\"GrantWrite\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-write\"},\"GrantWriteACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-write-acp\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"AccessControlPolicy\"},\"httpChecksumRequired\":true},\"PutBucketAnalyticsConfiguration\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?analytics\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Id\",\"AnalyticsConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Id\":{\"location\":\"querystring\",\"locationName\":\"id\"},\"AnalyticsConfiguration\":{\"shape\":\"S3f\",\"locationName\":\"AnalyticsConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"AnalyticsConfiguration\"}},\"PutBucketCors\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?cors\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"CORSConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"CORSConfiguration\":{\"locationName\":\"CORSConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"required\":[\"CORSRules\"],\"members\":{\"CORSRules\":{\"shape\":\"S3u\",\"locationName\":\"CORSRule\"}}},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"CORSConfiguration\"},\"httpChecksumRequired\":true},\"PutBucketEncryption\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?encryption\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"ServerSideEncryptionConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"ServerSideEncryptionConfiguration\":{\"shape\":\"S47\",\"locationName\":\"ServerSideEncryptionConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"ServerSideEncryptionConfiguration\"},\"httpChecksumRequired\":true},\"PutBucketInventoryConfiguration\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?inventory\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Id\",\"InventoryConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Id\":{\"location\":\"querystring\",\"locationName\":\"id\"},\"InventoryConfiguration\":{\"shape\":\"S4d\",\"locationName\":\"InventoryConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"InventoryConfiguration\"}},\"PutBucketLifecycle\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?lifecycle\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"LifecycleConfiguration\":{\"locationName\":\"LifecycleConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"required\":[\"Rules\"],\"members\":{\"Rules\":{\"shape\":\"S4t\",\"locationName\":\"Rule\"}}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"LifecycleConfiguration\"},\"deprecated\":true,\"httpChecksumRequired\":true},\"PutBucketLifecycleConfiguration\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?lifecycle\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"LifecycleConfiguration\":{\"locationName\":\"LifecycleConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"required\":[\"Rules\"],\"members\":{\"Rules\":{\"shape\":\"S58\",\"locationName\":\"Rule\"}}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"LifecycleConfiguration\"},\"httpChecksumRequired\":true},\"PutBucketLogging\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?logging\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"BucketLoggingStatus\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"BucketLoggingStatus\":{\"locationName\":\"BucketLoggingStatus\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"members\":{\"LoggingEnabled\":{\"shape\":\"S5i\"}}},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"BucketLoggingStatus\"},\"httpChecksumRequired\":true},\"PutBucketMetricsConfiguration\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?metrics\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Id\",\"MetricsConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Id\":{\"location\":\"querystring\",\"locationName\":\"id\"},\"MetricsConfiguration\":{\"shape\":\"S5q\",\"locationName\":\"MetricsConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"MetricsConfiguration\"}},\"PutBucketNotification\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?notification\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"NotificationConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"NotificationConfiguration\":{\"shape\":\"S5u\",\"locationName\":\"NotificationConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"NotificationConfiguration\"},\"deprecated\":true,\"httpChecksumRequired\":true},\"PutBucketNotificationConfiguration\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?notification\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"NotificationConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"NotificationConfiguration\":{\"shape\":\"S65\",\"locationName\":\"NotificationConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"NotificationConfiguration\"}},\"PutBucketPolicy\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?policy\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Policy\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"ConfirmRemoveSelfBucketAccess\":{\"location\":\"header\",\"locationName\":\"x-amz-confirm-remove-self-bucket-access\",\"type\":\"boolean\"},\"Policy\":{},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"Policy\"},\"httpChecksumRequired\":true},\"PutBucketReplication\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?replication\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"ReplicationConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"ReplicationConfiguration\":{\"shape\":\"S6s\",\"locationName\":\"ReplicationConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"Token\":{\"location\":\"header\",\"locationName\":\"x-amz-bucket-object-lock-token\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"ReplicationConfiguration\"},\"httpChecksumRequired\":true},\"PutBucketRequestPayment\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?requestPayment\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"RequestPaymentConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"RequestPaymentConfiguration\":{\"locationName\":\"RequestPaymentConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"required\":[\"Payer\"],\"members\":{\"Payer\":{}}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"RequestPaymentConfiguration\"},\"httpChecksumRequired\":true},\"PutBucketTagging\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?tagging\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Tagging\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"Tagging\":{\"shape\":\"Sc1\",\"locationName\":\"Tagging\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"Tagging\"},\"httpChecksumRequired\":true},\"PutBucketVersioning\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?versioning\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"VersioningConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"MFA\":{\"location\":\"header\",\"locationName\":\"x-amz-mfa\"},\"VersioningConfiguration\":{\"locationName\":\"VersioningConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"members\":{\"MFADelete\":{\"locationName\":\"MfaDelete\"},\"Status\":{}}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"VersioningConfiguration\"},\"httpChecksumRequired\":true},\"PutBucketWebsite\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?website\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"WebsiteConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"WebsiteConfiguration\":{\"locationName\":\"WebsiteConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"members\":{\"ErrorDocument\":{\"shape\":\"S7y\"},\"IndexDocument\":{\"shape\":\"S7w\"},\"RedirectAllRequestsTo\":{\"shape\":\"S7t\"},\"RoutingRules\":{\"shape\":\"S7z\"}}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"WebsiteConfiguration\"},\"httpChecksumRequired\":true},\"PutObject\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}/{Key+}\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"ACL\":{\"location\":\"header\",\"locationName\":\"x-amz-acl\"},\"Body\":{\"streaming\":true,\"type\":\"blob\"},\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"CacheControl\":{\"location\":\"header\",\"locationName\":\"Cache-Control\"},\"ContentDisposition\":{\"location\":\"header\",\"locationName\":\"Content-Disposition\"},\"ContentEncoding\":{\"location\":\"header\",\"locationName\":\"Content-Encoding\"},\"ContentLanguage\":{\"location\":\"header\",\"locationName\":\"Content-Language\"},\"ContentLength\":{\"location\":\"header\",\"locationName\":\"Content-Length\",\"type\":\"long\"},\"ContentMD5\":{\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"ContentType\":{\"location\":\"header\",\"locationName\":\"Content-Type\"},\"Expires\":{\"location\":\"header\",\"locationName\":\"Expires\",\"type\":\"timestamp\"},\"GrantFullControl\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-full-control\"},\"GrantRead\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read\"},\"GrantReadACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read-acp\"},\"GrantWriteACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-write-acp\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"Metadata\":{\"shape\":\"S12\",\"location\":\"headers\",\"locationName\":\"x-amz-meta-\"},\"ServerSideEncryption\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption\"},\"StorageClass\":{\"location\":\"header\",\"locationName\":\"x-amz-storage-class\"},\"WebsiteRedirectLocation\":{\"location\":\"header\",\"locationName\":\"x-amz-website-redirect-location\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKey\":{\"shape\":\"S1a\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"SSEKMSKeyId\":{\"shape\":\"Sk\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-aws-kms-key-id\"},\"SSEKMSEncryptionContext\":{\"shape\":\"S1c\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-context\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"Tagging\":{\"location\":\"header\",\"locationName\":\"x-amz-tagging\"},\"ObjectLockMode\":{\"location\":\"header\",\"locationName\":\"x-amz-object-lock-mode\"},\"ObjectLockRetainUntilDate\":{\"shape\":\"S1i\",\"location\":\"header\",\"locationName\":\"x-amz-object-lock-retain-until-date\"},\"ObjectLockLegalHoldStatus\":{\"location\":\"header\",\"locationName\":\"x-amz-object-lock-legal-hold\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"Body\"},\"output\":{\"type\":\"structure\",\"members\":{\"Expiration\":{\"location\":\"header\",\"locationName\":\"x-amz-expiration\"},\"ETag\":{\"location\":\"header\",\"locationName\":\"ETag\"},\"ServerSideEncryption\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption\"},\"VersionId\":{\"location\":\"header\",\"locationName\":\"x-amz-version-id\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"SSEKMSKeyId\":{\"shape\":\"Sk\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-aws-kms-key-id\"},\"SSEKMSEncryptionContext\":{\"shape\":\"S1c\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-context\"},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}}},\"PutObjectAcl\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}/{Key+}?acl\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"ACL\":{\"location\":\"header\",\"locationName\":\"x-amz-acl\"},\"AccessControlPolicy\":{\"shape\":\"Sbe\",\"locationName\":\"AccessControlPolicy\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"GrantFullControl\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-full-control\"},\"GrantRead\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read\"},\"GrantReadACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-read-acp\"},\"GrantWrite\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-write\"},\"GrantWriteACP\":{\"location\":\"header\",\"locationName\":\"x-amz-grant-write-acp\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"AccessControlPolicy\"},\"output\":{\"type\":\"structure\",\"members\":{\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}},\"httpChecksumRequired\":true},\"PutObjectLegalHold\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}/{Key+}?legal-hold\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"LegalHold\":{\"shape\":\"S8y\",\"locationName\":\"LegalHold\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"LegalHold\"},\"output\":{\"type\":\"structure\",\"members\":{\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}},\"httpChecksumRequired\":true},\"PutObjectLockConfiguration\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?object-lock\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ObjectLockConfiguration\":{\"shape\":\"S91\",\"locationName\":\"ObjectLockConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"Token\":{\"location\":\"header\",\"locationName\":\"x-amz-bucket-object-lock-token\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"ObjectLockConfiguration\"},\"output\":{\"type\":\"structure\",\"members\":{\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}},\"httpChecksumRequired\":true},\"PutObjectRetention\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}/{Key+}?retention\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"Retention\":{\"shape\":\"S99\",\"locationName\":\"Retention\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"BypassGovernanceRetention\":{\"location\":\"header\",\"locationName\":\"x-amz-bypass-governance-retention\",\"type\":\"boolean\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"Retention\"},\"output\":{\"type\":\"structure\",\"members\":{\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}},\"httpChecksumRequired\":true},\"PutObjectTagging\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}/{Key+}?tagging\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\",\"Tagging\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"Tagging\":{\"shape\":\"Sc1\",\"locationName\":\"Tagging\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"Tagging\"},\"output\":{\"type\":\"structure\",\"members\":{\"VersionId\":{\"location\":\"header\",\"locationName\":\"x-amz-version-id\"}}},\"httpChecksumRequired\":true},\"PutPublicAccessBlock\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}?publicAccessBlock\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"PublicAccessBlockConfiguration\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentMD5\":{\"deprecated\":true,\"deprecatedMessage\":\"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.\",\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"PublicAccessBlockConfiguration\":{\"shape\":\"S9g\",\"locationName\":\"PublicAccessBlockConfiguration\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"PublicAccessBlockConfiguration\"},\"httpChecksumRequired\":true},\"RestoreObject\":{\"http\":{\"requestUri\":\"/{Bucket}/{Key+}?restore\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"VersionId\":{\"location\":\"querystring\",\"locationName\":\"versionId\"},\"RestoreRequest\":{\"locationName\":\"RestoreRequest\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"members\":{\"Days\":{\"type\":\"integer\"},\"GlacierJobParameters\":{\"type\":\"structure\",\"required\":[\"Tier\"],\"members\":{\"Tier\":{}}},\"Type\":{},\"Tier\":{},\"Description\":{},\"SelectParameters\":{\"type\":\"structure\",\"required\":[\"InputSerialization\",\"ExpressionType\",\"Expression\",\"OutputSerialization\"],\"members\":{\"InputSerialization\":{\"shape\":\"Scr\"},\"ExpressionType\":{},\"Expression\":{},\"OutputSerialization\":{\"shape\":\"Sd6\"}}},\"OutputLocation\":{\"type\":\"structure\",\"members\":{\"S3\":{\"type\":\"structure\",\"required\":[\"BucketName\",\"Prefix\"],\"members\":{\"BucketName\":{},\"Prefix\":{},\"Encryption\":{\"type\":\"structure\",\"required\":[\"EncryptionType\"],\"members\":{\"EncryptionType\":{},\"KMSKeyId\":{\"shape\":\"Sk\"},\"KMSContext\":{}}},\"CannedACL\":{},\"AccessControlList\":{\"shape\":\"S36\"},\"Tagging\":{\"shape\":\"Sc1\"},\"UserMetadata\":{\"type\":\"list\",\"member\":{\"locationName\":\"MetadataEntry\",\"type\":\"structure\",\"members\":{\"Name\":{},\"Value\":{}}}},\"StorageClass\":{}}}}}}},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"RestoreRequest\"},\"output\":{\"type\":\"structure\",\"members\":{\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"},\"RestoreOutputPath\":{\"location\":\"header\",\"locationName\":\"x-amz-restore-output-path\"}}},\"alias\":\"PostObjectRestore\"},\"SelectObjectContent\":{\"http\":{\"requestUri\":\"/{Bucket}/{Key+}?select&select-type=2\"},\"input\":{\"locationName\":\"SelectObjectContentRequest\",\"xmlNamespace\":{\"uri\":\"http://s3.amazonaws.com/doc/2006-03-01/\"},\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\",\"Expression\",\"ExpressionType\",\"InputSerialization\",\"OutputSerialization\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKey\":{\"shape\":\"S1a\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"Expression\":{},\"ExpressionType\":{},\"RequestProgress\":{\"type\":\"structure\",\"members\":{\"Enabled\":{\"type\":\"boolean\"}}},\"InputSerialization\":{\"shape\":\"Scr\"},\"OutputSerialization\":{\"shape\":\"Sd6\"},\"ScanRange\":{\"type\":\"structure\",\"members\":{\"Start\":{\"type\":\"long\"},\"End\":{\"type\":\"long\"}}},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"Payload\":{\"type\":\"structure\",\"members\":{\"Records\":{\"type\":\"structure\",\"members\":{\"Payload\":{\"eventpayload\":true,\"type\":\"blob\"}},\"event\":true},\"Stats\":{\"type\":\"structure\",\"members\":{\"Details\":{\"eventpayload\":true,\"type\":\"structure\",\"members\":{\"BytesScanned\":{\"type\":\"long\"},\"BytesProcessed\":{\"type\":\"long\"},\"BytesReturned\":{\"type\":\"long\"}}}},\"event\":true},\"Progress\":{\"type\":\"structure\",\"members\":{\"Details\":{\"eventpayload\":true,\"type\":\"structure\",\"members\":{\"BytesScanned\":{\"type\":\"long\"},\"BytesProcessed\":{\"type\":\"long\"},\"BytesReturned\":{\"type\":\"long\"}}}},\"event\":true},\"Cont\":{\"type\":\"structure\",\"members\":{},\"event\":true},\"End\":{\"type\":\"structure\",\"members\":{},\"event\":true}},\"eventstream\":true}},\"payload\":\"Payload\"}},\"UploadPart\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}/{Key+}\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Key\",\"PartNumber\",\"UploadId\"],\"members\":{\"Body\":{\"streaming\":true,\"type\":\"blob\"},\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ContentLength\":{\"location\":\"header\",\"locationName\":\"Content-Length\",\"type\":\"long\"},\"ContentMD5\":{\"location\":\"header\",\"locationName\":\"Content-MD5\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"PartNumber\":{\"location\":\"querystring\",\"locationName\":\"partNumber\",\"type\":\"integer\"},\"UploadId\":{\"location\":\"querystring\",\"locationName\":\"uploadId\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKey\":{\"shape\":\"S1a\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}},\"payload\":\"Body\"},\"output\":{\"type\":\"structure\",\"members\":{\"ServerSideEncryption\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption\"},\"ETag\":{\"location\":\"header\",\"locationName\":\"ETag\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"SSEKMSKeyId\":{\"shape\":\"Sk\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-aws-kms-key-id\"},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}}}},\"UploadPartCopy\":{\"http\":{\"method\":\"PUT\",\"requestUri\":\"/{Bucket}/{Key+}\"},\"input\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"CopySource\",\"Key\",\"PartNumber\",\"UploadId\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"CopySource\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source\"},\"CopySourceIfMatch\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-if-match\"},\"CopySourceIfModifiedSince\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-if-modified-since\",\"type\":\"timestamp\"},\"CopySourceIfNoneMatch\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-if-none-match\"},\"CopySourceIfUnmodifiedSince\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-if-unmodified-since\",\"type\":\"timestamp\"},\"CopySourceRange\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-range\"},\"Key\":{\"location\":\"uri\",\"locationName\":\"Key\"},\"PartNumber\":{\"location\":\"querystring\",\"locationName\":\"partNumber\",\"type\":\"integer\"},\"UploadId\":{\"location\":\"querystring\",\"locationName\":\"uploadId\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKey\":{\"shape\":\"S1a\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"CopySourceSSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-server-side-encryption-customer-algorithm\"},\"CopySourceSSECustomerKey\":{\"shape\":\"S1e\",\"location\":\"header\",\"locationName\":\"x-amz-copy-source-server-side-encryption-customer-key\"},\"CopySourceSSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-server-side-encryption-customer-key-MD5\"},\"RequestPayer\":{\"location\":\"header\",\"locationName\":\"x-amz-request-payer\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"},\"ExpectedSourceBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-source-expected-bucket-owner\"}}},\"output\":{\"type\":\"structure\",\"members\":{\"CopySourceVersionId\":{\"location\":\"header\",\"locationName\":\"x-amz-copy-source-version-id\"},\"CopyPartResult\":{\"type\":\"structure\",\"members\":{\"ETag\":{},\"LastModified\":{\"type\":\"timestamp\"}}},\"ServerSideEncryption\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption\"},\"SSECustomerAlgorithm\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-algorithm\"},\"SSECustomerKeyMD5\":{\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-customer-key-MD5\"},\"SSEKMSKeyId\":{\"shape\":\"Sk\",\"location\":\"header\",\"locationName\":\"x-amz-server-side-encryption-aws-kms-key-id\"},\"RequestCharged\":{\"location\":\"header\",\"locationName\":\"x-amz-request-charged\"}},\"payload\":\"CopyPartResult\"}}},\"shapes\":{\"Sk\":{\"type\":\"string\",\"sensitive\":true},\"S12\":{\"type\":\"map\",\"key\":{},\"value\":{}},\"S1a\":{\"type\":\"blob\",\"sensitive\":true},\"S1c\":{\"type\":\"string\",\"sensitive\":true},\"S1e\":{\"type\":\"blob\",\"sensitive\":true},\"S1i\":{\"type\":\"timestamp\",\"timestampFormat\":\"iso8601\"},\"S33\":{\"type\":\"structure\",\"members\":{\"DisplayName\":{},\"ID\":{}}},\"S36\":{\"type\":\"list\",\"member\":{\"locationName\":\"Grant\",\"type\":\"structure\",\"members\":{\"Grantee\":{\"shape\":\"S38\"},\"Permission\":{}}}},\"S38\":{\"type\":\"structure\",\"required\":[\"Type\"],\"members\":{\"DisplayName\":{},\"EmailAddress\":{},\"ID\":{},\"Type\":{\"locationName\":\"xsi:type\",\"xmlAttribute\":true},\"URI\":{}},\"xmlNamespace\":{\"prefix\":\"xsi\",\"uri\":\"http://www.w3.org/2001/XMLSchema-instance\"}},\"S3f\":{\"type\":\"structure\",\"required\":[\"Id\",\"StorageClassAnalysis\"],\"members\":{\"Id\":{},\"Filter\":{\"type\":\"structure\",\"members\":{\"Prefix\":{},\"Tag\":{\"shape\":\"S3i\"},\"And\":{\"type\":\"structure\",\"members\":{\"Prefix\":{},\"Tags\":{\"shape\":\"S3l\",\"flattened\":true,\"locationName\":\"Tag\"}}}}},\"StorageClassAnalysis\":{\"type\":\"structure\",\"members\":{\"DataExport\":{\"type\":\"structure\",\"required\":[\"OutputSchemaVersion\",\"Destination\"],\"members\":{\"OutputSchemaVersion\":{},\"Destination\":{\"type\":\"structure\",\"required\":[\"S3BucketDestination\"],\"members\":{\"S3BucketDestination\":{\"type\":\"structure\",\"required\":[\"Format\",\"Bucket\"],\"members\":{\"Format\":{},\"BucketAccountId\":{},\"Bucket\":{},\"Prefix\":{}}}}}}}}}}},\"S3i\":{\"type\":\"structure\",\"required\":[\"Key\",\"Value\"],\"members\":{\"Key\":{},\"Value\":{}}},\"S3l\":{\"type\":\"list\",\"member\":{\"shape\":\"S3i\",\"locationName\":\"Tag\"}},\"S3u\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"required\":[\"AllowedMethods\",\"AllowedOrigins\"],\"members\":{\"AllowedHeaders\":{\"locationName\":\"AllowedHeader\",\"type\":\"list\",\"member\":{},\"flattened\":true},\"AllowedMethods\":{\"locationName\":\"AllowedMethod\",\"type\":\"list\",\"member\":{},\"flattened\":true},\"AllowedOrigins\":{\"locationName\":\"AllowedOrigin\",\"type\":\"list\",\"member\":{},\"flattened\":true},\"ExposeHeaders\":{\"locationName\":\"ExposeHeader\",\"type\":\"list\",\"member\":{},\"flattened\":true},\"MaxAgeSeconds\":{\"type\":\"integer\"}}},\"flattened\":true},\"S47\":{\"type\":\"structure\",\"required\":[\"Rules\"],\"members\":{\"Rules\":{\"locationName\":\"Rule\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"ApplyServerSideEncryptionByDefault\":{\"type\":\"structure\",\"required\":[\"SSEAlgorithm\"],\"members\":{\"SSEAlgorithm\":{},\"KMSMasterKeyID\":{\"shape\":\"Sk\"}}}}},\"flattened\":true}}},\"S4d\":{\"type\":\"structure\",\"required\":[\"Destination\",\"IsEnabled\",\"Id\",\"IncludedObjectVersions\",\"Schedule\"],\"members\":{\"Destination\":{\"type\":\"structure\",\"required\":[\"S3BucketDestination\"],\"members\":{\"S3BucketDestination\":{\"type\":\"structure\",\"required\":[\"Bucket\",\"Format\"],\"members\":{\"AccountId\":{},\"Bucket\":{},\"Format\":{},\"Prefix\":{},\"Encryption\":{\"type\":\"structure\",\"members\":{\"SSES3\":{\"locationName\":\"SSE-S3\",\"type\":\"structure\",\"members\":{}},\"SSEKMS\":{\"locationName\":\"SSE-KMS\",\"type\":\"structure\",\"required\":[\"KeyId\"],\"members\":{\"KeyId\":{\"shape\":\"Sk\"}}}}}}}}},\"IsEnabled\":{\"type\":\"boolean\"},\"Filter\":{\"type\":\"structure\",\"required\":[\"Prefix\"],\"members\":{\"Prefix\":{}}},\"Id\":{},\"IncludedObjectVersions\":{},\"OptionalFields\":{\"type\":\"list\",\"member\":{\"locationName\":\"Field\"}},\"Schedule\":{\"type\":\"structure\",\"required\":[\"Frequency\"],\"members\":{\"Frequency\":{}}}}},\"S4t\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"required\":[\"Prefix\",\"Status\"],\"members\":{\"Expiration\":{\"shape\":\"S4v\"},\"ID\":{},\"Prefix\":{},\"Status\":{},\"Transition\":{\"shape\":\"S50\"},\"NoncurrentVersionTransition\":{\"shape\":\"S52\"},\"NoncurrentVersionExpiration\":{\"shape\":\"S53\"},\"AbortIncompleteMultipartUpload\":{\"shape\":\"S54\"}}},\"flattened\":true},\"S4v\":{\"type\":\"structure\",\"members\":{\"Date\":{\"shape\":\"S4w\"},\"Days\":{\"type\":\"integer\"},\"ExpiredObjectDeleteMarker\":{\"type\":\"boolean\"}}},\"S4w\":{\"type\":\"timestamp\",\"timestampFormat\":\"iso8601\"},\"S50\":{\"type\":\"structure\",\"members\":{\"Date\":{\"shape\":\"S4w\"},\"Days\":{\"type\":\"integer\"},\"StorageClass\":{}}},\"S52\":{\"type\":\"structure\",\"members\":{\"NoncurrentDays\":{\"type\":\"integer\"},\"StorageClass\":{}}},\"S53\":{\"type\":\"structure\",\"members\":{\"NoncurrentDays\":{\"type\":\"integer\"}}},\"S54\":{\"type\":\"structure\",\"members\":{\"DaysAfterInitiation\":{\"type\":\"integer\"}}},\"S58\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"required\":[\"Status\"],\"members\":{\"Expiration\":{\"shape\":\"S4v\"},\"ID\":{},\"Prefix\":{\"deprecated\":true},\"Filter\":{\"type\":\"structure\",\"members\":{\"Prefix\":{},\"Tag\":{\"shape\":\"S3i\"},\"And\":{\"type\":\"structure\",\"members\":{\"Prefix\":{},\"Tags\":{\"shape\":\"S3l\",\"flattened\":true,\"locationName\":\"Tag\"}}}}},\"Status\":{},\"Transitions\":{\"locationName\":\"Transition\",\"type\":\"list\",\"member\":{\"shape\":\"S50\"},\"flattened\":true},\"NoncurrentVersionTransitions\":{\"locationName\":\"NoncurrentVersionTransition\",\"type\":\"list\",\"member\":{\"shape\":\"S52\"},\"flattened\":true},\"NoncurrentVersionExpiration\":{\"shape\":\"S53\"},\"AbortIncompleteMultipartUpload\":{\"shape\":\"S54\"}}},\"flattened\":true},\"S5i\":{\"type\":\"structure\",\"required\":[\"TargetBucket\",\"TargetPrefix\"],\"members\":{\"TargetBucket\":{},\"TargetGrants\":{\"type\":\"list\",\"member\":{\"locationName\":\"Grant\",\"type\":\"structure\",\"members\":{\"Grantee\":{\"shape\":\"S38\"},\"Permission\":{}}}},\"TargetPrefix\":{}}},\"S5q\":{\"type\":\"structure\",\"required\":[\"Id\"],\"members\":{\"Id\":{},\"Filter\":{\"type\":\"structure\",\"members\":{\"Prefix\":{},\"Tag\":{\"shape\":\"S3i\"},\"And\":{\"type\":\"structure\",\"members\":{\"Prefix\":{},\"Tags\":{\"shape\":\"S3l\",\"flattened\":true,\"locationName\":\"Tag\"}}}}}}},\"S5t\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{\"location\":\"uri\",\"locationName\":\"Bucket\"},\"ExpectedBucketOwner\":{\"location\":\"header\",\"locationName\":\"x-amz-expected-bucket-owner\"}}},\"S5u\":{\"type\":\"structure\",\"members\":{\"TopicConfiguration\":{\"type\":\"structure\",\"members\":{\"Id\":{},\"Events\":{\"shape\":\"S5x\",\"locationName\":\"Event\"},\"Event\":{\"deprecated\":true},\"Topic\":{}}},\"QueueConfiguration\":{\"type\":\"structure\",\"members\":{\"Id\":{},\"Event\":{\"deprecated\":true},\"Events\":{\"shape\":\"S5x\",\"locationName\":\"Event\"},\"Queue\":{}}},\"CloudFunctionConfiguration\":{\"type\":\"structure\",\"members\":{\"Id\":{},\"Event\":{\"deprecated\":true},\"Events\":{\"shape\":\"S5x\",\"locationName\":\"Event\"},\"CloudFunction\":{},\"InvocationRole\":{}}}}},\"S5x\":{\"type\":\"list\",\"member\":{},\"flattened\":true},\"S65\":{\"type\":\"structure\",\"members\":{\"TopicConfigurations\":{\"locationName\":\"TopicConfiguration\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"required\":[\"TopicArn\",\"Events\"],\"members\":{\"Id\":{},\"TopicArn\":{\"locationName\":\"Topic\"},\"Events\":{\"shape\":\"S5x\",\"locationName\":\"Event\"},\"Filter\":{\"shape\":\"S68\"}}},\"flattened\":true},\"QueueConfigurations\":{\"locationName\":\"QueueConfiguration\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"required\":[\"QueueArn\",\"Events\"],\"members\":{\"Id\":{},\"QueueArn\":{\"locationName\":\"Queue\"},\"Events\":{\"shape\":\"S5x\",\"locationName\":\"Event\"},\"Filter\":{\"shape\":\"S68\"}}},\"flattened\":true},\"LambdaFunctionConfigurations\":{\"locationName\":\"CloudFunctionConfiguration\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"required\":[\"LambdaFunctionArn\",\"Events\"],\"members\":{\"Id\":{},\"LambdaFunctionArn\":{\"locationName\":\"CloudFunction\"},\"Events\":{\"shape\":\"S5x\",\"locationName\":\"Event\"},\"Filter\":{\"shape\":\"S68\"}}},\"flattened\":true}}},\"S68\":{\"type\":\"structure\",\"members\":{\"Key\":{\"locationName\":\"S3Key\",\"type\":\"structure\",\"members\":{\"FilterRules\":{\"locationName\":\"FilterRule\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"Name\":{},\"Value\":{}}},\"flattened\":true}}}}},\"S6s\":{\"type\":\"structure\",\"required\":[\"Role\",\"Rules\"],\"members\":{\"Role\":{},\"Rules\":{\"locationName\":\"Rule\",\"type\":\"list\",\"member\":{\"type\":\"structure\",\"required\":[\"Status\",\"Destination\"],\"members\":{\"ID\":{},\"Priority\":{\"type\":\"integer\"},\"Prefix\":{\"deprecated\":true},\"Filter\":{\"type\":\"structure\",\"members\":{\"Prefix\":{},\"Tag\":{\"shape\":\"S3i\"},\"And\":{\"type\":\"structure\",\"members\":{\"Prefix\":{},\"Tags\":{\"shape\":\"S3l\",\"flattened\":true,\"locationName\":\"Tag\"}}}}},\"Status\":{},\"SourceSelectionCriteria\":{\"type\":\"structure\",\"members\":{\"SseKmsEncryptedObjects\":{\"type\":\"structure\",\"required\":[\"Status\"],\"members\":{\"Status\":{}}}}},\"ExistingObjectReplication\":{\"type\":\"structure\",\"required\":[\"Status\"],\"members\":{\"Status\":{}}},\"Destination\":{\"type\":\"structure\",\"required\":[\"Bucket\"],\"members\":{\"Bucket\":{},\"Account\":{},\"StorageClass\":{},\"AccessControlTranslation\":{\"type\":\"structure\",\"required\":[\"Owner\"],\"members\":{\"Owner\":{}}},\"EncryptionConfiguration\":{\"type\":\"structure\",\"members\":{\"ReplicaKmsKeyID\":{}}},\"ReplicationTime\":{\"type\":\"structure\",\"required\":[\"Status\",\"Time\"],\"members\":{\"Status\":{},\"Time\":{\"shape\":\"S7c\"}}},\"Metrics\":{\"type\":\"structure\",\"required\":[\"Status\",\"EventThreshold\"],\"members\":{\"Status\":{},\"EventThreshold\":{\"shape\":\"S7c\"}}}}},\"DeleteMarkerReplication\":{\"type\":\"structure\",\"members\":{\"Status\":{}}}}},\"flattened\":true}}},\"S7c\":{\"type\":\"structure\",\"members\":{\"Minutes\":{\"type\":\"integer\"}}},\"S7t\":{\"type\":\"structure\",\"required\":[\"HostName\"],\"members\":{\"HostName\":{},\"Protocol\":{}}},\"S7w\":{\"type\":\"structure\",\"required\":[\"Suffix\"],\"members\":{\"Suffix\":{}}},\"S7y\":{\"type\":\"structure\",\"required\":[\"Key\"],\"members\":{\"Key\":{}}},\"S7z\":{\"type\":\"list\",\"member\":{\"locationName\":\"RoutingRule\",\"type\":\"structure\",\"required\":[\"Redirect\"],\"members\":{\"Condition\":{\"type\":\"structure\",\"members\":{\"HttpErrorCodeReturnedEquals\":{},\"KeyPrefixEquals\":{}}},\"Redirect\":{\"type\":\"structure\",\"members\":{\"HostName\":{},\"HttpRedirectCode\":{},\"Protocol\":{},\"ReplaceKeyPrefixWith\":{},\"ReplaceKeyWith\":{}}}}}},\"S8y\":{\"type\":\"structure\",\"members\":{\"Status\":{}}},\"S91\":{\"type\":\"structure\",\"members\":{\"ObjectLockEnabled\":{},\"Rule\":{\"type\":\"structure\",\"members\":{\"DefaultRetention\":{\"type\":\"structure\",\"members\":{\"Mode\":{},\"Days\":{\"type\":\"integer\"},\"Years\":{\"type\":\"integer\"}}}}}}},\"S99\":{\"type\":\"structure\",\"members\":{\"Mode\":{},\"RetainUntilDate\":{\"shape\":\"S4w\"}}},\"S9g\":{\"type\":\"structure\",\"members\":{\"BlockPublicAcls\":{\"locationName\":\"BlockPublicAcls\",\"type\":\"boolean\"},\"IgnorePublicAcls\":{\"locationName\":\"IgnorePublicAcls\",\"type\":\"boolean\"},\"BlockPublicPolicy\":{\"locationName\":\"BlockPublicPolicy\",\"type\":\"boolean\"},\"RestrictPublicBuckets\":{\"locationName\":\"RestrictPublicBuckets\",\"type\":\"boolean\"}}},\"Sad\":{\"type\":\"structure\",\"members\":{\"ID\":{},\"DisplayName\":{}}},\"Sae\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"Prefix\":{}}},\"flattened\":true},\"Saw\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"Key\":{},\"LastModified\":{\"type\":\"timestamp\"},\"ETag\":{},\"Size\":{\"type\":\"integer\"},\"StorageClass\":{},\"Owner\":{\"shape\":\"S33\"}}},\"flattened\":true},\"Sbe\":{\"type\":\"structure\",\"members\":{\"Grants\":{\"shape\":\"S36\",\"locationName\":\"AccessControlList\"},\"Owner\":{\"shape\":\"S33\"}}},\"Sc1\":{\"type\":\"structure\",\"required\":[\"TagSet\"],\"members\":{\"TagSet\":{\"shape\":\"S3l\"}}},\"Scr\":{\"type\":\"structure\",\"members\":{\"CSV\":{\"type\":\"structure\",\"members\":{\"FileHeaderInfo\":{},\"Comments\":{},\"QuoteEscapeCharacter\":{},\"RecordDelimiter\":{},\"FieldDelimiter\":{},\"QuoteCharacter\":{},\"AllowQuotedRecordDelimiter\":{\"type\":\"boolean\"}}},\"CompressionType\":{},\"JSON\":{\"type\":\"structure\",\"members\":{\"Type\":{}}},\"Parquet\":{\"type\":\"structure\",\"members\":{}}}},\"Sd6\":{\"type\":\"structure\",\"members\":{\"CSV\":{\"type\":\"structure\",\"members\":{\"QuoteFields\":{},\"QuoteEscapeCharacter\":{},\"RecordDelimiter\":{},\"FieldDelimiter\":{},\"QuoteCharacter\":{}}},\"JSON\":{\"type\":\"structure\",\"members\":{\"RecordDelimiter\":{}}}}}}}");
+module.exports = JSON.parse('{"version":"2.0","metadata":{"apiVersion":"2006-03-01","checksumFormat":"md5","endpointPrefix":"s3","globalEndpoint":"s3.amazonaws.com","protocol":"rest-xml","serviceAbbreviation":"Amazon S3","serviceFullName":"Amazon Simple Storage Service","serviceId":"S3","signatureVersion":"s3","uid":"s3-2006-03-01"},"operations":{"AbortMultipartUpload":{"http":{"method":"DELETE","requestUri":"/{Bucket}/{Key+}","responseCode":204},"input":{"type":"structure","required":["Bucket","Key","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"UploadId":{"location":"querystring","locationName":"uploadId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"CompleteMultipartUpload":{"http":{"requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"MultipartUpload":{"locationName":"CompleteMultipartUpload","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","members":{"Parts":{"locationName":"Part","type":"list","member":{"type":"structure","members":{"ETag":{},"PartNumber":{"type":"integer"}}},"flattened":true}}},"UploadId":{"location":"querystring","locationName":"uploadId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"MultipartUpload"},"output":{"type":"structure","members":{"Location":{},"Bucket":{},"Key":{},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"ETag":{},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"SSEKMSKeyId":{"shape":"Sk","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"CopyObject":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","CopySource","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Bucket":{"location":"uri","locationName":"Bucket"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentType":{"location":"header","locationName":"Content-Type"},"CopySource":{"location":"header","locationName":"x-amz-copy-source"},"CopySourceIfMatch":{"location":"header","locationName":"x-amz-copy-source-if-match"},"CopySourceIfModifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-modified-since","type":"timestamp"},"CopySourceIfNoneMatch":{"location":"header","locationName":"x-amz-copy-source-if-none-match"},"CopySourceIfUnmodifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-unmodified-since","type":"timestamp"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"Metadata":{"shape":"S12","location":"headers","locationName":"x-amz-meta-"},"MetadataDirective":{"location":"header","locationName":"x-amz-metadata-directive"},"TaggingDirective":{"location":"header","locationName":"x-amz-tagging-directive"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S1a","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sk","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"SSEKMSEncryptionContext":{"shape":"S1c","location":"header","locationName":"x-amz-server-side-encryption-context"},"CopySourceSSECustomerAlgorithm":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-algorithm"},"CopySourceSSECustomerKey":{"shape":"S1e","location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key"},"CopySourceSSECustomerKeyMD5":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"Tagging":{"location":"header","locationName":"x-amz-tagging"},"ObjectLockMode":{"location":"header","locationName":"x-amz-object-lock-mode"},"ObjectLockRetainUntilDate":{"shape":"S1i","location":"header","locationName":"x-amz-object-lock-retain-until-date"},"ObjectLockLegalHoldStatus":{"location":"header","locationName":"x-amz-object-lock-legal-hold"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"},"ExpectedSourceBucketOwner":{"location":"header","locationName":"x-amz-source-expected-bucket-owner"}}},"output":{"type":"structure","members":{"CopyObjectResult":{"type":"structure","members":{"ETag":{},"LastModified":{"type":"timestamp"}}},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"CopySourceVersionId":{"location":"header","locationName":"x-amz-copy-source-version-id"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sk","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"SSEKMSEncryptionContext":{"shape":"S1c","location":"header","locationName":"x-amz-server-side-encryption-context"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}},"payload":"CopyObjectResult"},"alias":"PutObjectCopy"},"CreateBucket":{"http":{"method":"PUT","requestUri":"/{Bucket}"},"input":{"type":"structure","required":["Bucket"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Bucket":{"location":"uri","locationName":"Bucket"},"CreateBucketConfiguration":{"locationName":"CreateBucketConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","members":{"LocationConstraint":{}}},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWrite":{"location":"header","locationName":"x-amz-grant-write"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"ObjectLockEnabledForBucket":{"location":"header","locationName":"x-amz-bucket-object-lock-enabled","type":"boolean"}},"payload":"CreateBucketConfiguration"},"output":{"type":"structure","members":{"Location":{"location":"header","locationName":"Location"}}},"alias":"PutBucket"},"CreateMultipartUpload":{"http":{"requestUri":"/{Bucket}/{Key+}?uploads"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Bucket":{"location":"uri","locationName":"Bucket"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"Metadata":{"shape":"S12","location":"headers","locationName":"x-amz-meta-"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S1a","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sk","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"SSEKMSEncryptionContext":{"shape":"S1c","location":"header","locationName":"x-amz-server-side-encryption-context"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"Tagging":{"location":"header","locationName":"x-amz-tagging"},"ObjectLockMode":{"location":"header","locationName":"x-amz-object-lock-mode"},"ObjectLockRetainUntilDate":{"shape":"S1i","location":"header","locationName":"x-amz-object-lock-retain-until-date"},"ObjectLockLegalHoldStatus":{"location":"header","locationName":"x-amz-object-lock-legal-hold"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"AbortDate":{"location":"header","locationName":"x-amz-abort-date","type":"timestamp"},"AbortRuleId":{"location":"header","locationName":"x-amz-abort-rule-id"},"Bucket":{"locationName":"Bucket"},"Key":{},"UploadId":{},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sk","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"SSEKMSEncryptionContext":{"shape":"S1c","location":"header","locationName":"x-amz-server-side-encryption-context"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}},"alias":"InitiateMultipartUpload"},"DeleteBucket":{"http":{"method":"DELETE","requestUri":"/{Bucket}","responseCode":204},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"DeleteBucketAnalyticsConfiguration":{"http":{"method":"DELETE","requestUri":"/{Bucket}?analytics","responseCode":204},"input":{"type":"structure","required":["Bucket","Id"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Id":{"location":"querystring","locationName":"id"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"DeleteBucketCors":{"http":{"method":"DELETE","requestUri":"/{Bucket}?cors","responseCode":204},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"DeleteBucketEncryption":{"http":{"method":"DELETE","requestUri":"/{Bucket}?encryption","responseCode":204},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"DeleteBucketInventoryConfiguration":{"http":{"method":"DELETE","requestUri":"/{Bucket}?inventory","responseCode":204},"input":{"type":"structure","required":["Bucket","Id"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Id":{"location":"querystring","locationName":"id"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"DeleteBucketLifecycle":{"http":{"method":"DELETE","requestUri":"/{Bucket}?lifecycle","responseCode":204},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"DeleteBucketMetricsConfiguration":{"http":{"method":"DELETE","requestUri":"/{Bucket}?metrics","responseCode":204},"input":{"type":"structure","required":["Bucket","Id"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Id":{"location":"querystring","locationName":"id"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"DeleteBucketPolicy":{"http":{"method":"DELETE","requestUri":"/{Bucket}?policy","responseCode":204},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"DeleteBucketReplication":{"http":{"method":"DELETE","requestUri":"/{Bucket}?replication","responseCode":204},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"DeleteBucketTagging":{"http":{"method":"DELETE","requestUri":"/{Bucket}?tagging","responseCode":204},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"DeleteBucketWebsite":{"http":{"method":"DELETE","requestUri":"/{Bucket}?website","responseCode":204},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"DeleteObject":{"http":{"method":"DELETE","requestUri":"/{Bucket}/{Key+}","responseCode":204},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"MFA":{"location":"header","locationName":"x-amz-mfa"},"VersionId":{"location":"querystring","locationName":"versionId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"BypassGovernanceRetention":{"location":"header","locationName":"x-amz-bypass-governance-retention","type":"boolean"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"DeleteMarker":{"location":"header","locationName":"x-amz-delete-marker","type":"boolean"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"DeleteObjectTagging":{"http":{"method":"DELETE","requestUri":"/{Bucket}/{Key+}?tagging","responseCode":204},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"VersionId":{"location":"querystring","locationName":"versionId"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"VersionId":{"location":"header","locationName":"x-amz-version-id"}}}},"DeleteObjects":{"http":{"requestUri":"/{Bucket}?delete"},"input":{"type":"structure","required":["Bucket","Delete"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delete":{"locationName":"Delete","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","required":["Objects"],"members":{"Objects":{"locationName":"Object","type":"list","member":{"type":"structure","required":["Key"],"members":{"Key":{},"VersionId":{}}},"flattened":true},"Quiet":{"type":"boolean"}}},"MFA":{"location":"header","locationName":"x-amz-mfa"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"BypassGovernanceRetention":{"location":"header","locationName":"x-amz-bypass-governance-retention","type":"boolean"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"Delete"},"output":{"type":"structure","members":{"Deleted":{"type":"list","member":{"type":"structure","members":{"Key":{},"VersionId":{},"DeleteMarker":{"type":"boolean"},"DeleteMarkerVersionId":{}}},"flattened":true},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"},"Errors":{"locationName":"Error","type":"list","member":{"type":"structure","members":{"Key":{},"VersionId":{},"Code":{},"Message":{}}},"flattened":true}}},"alias":"DeleteMultipleObjects","httpChecksumRequired":true},"DeletePublicAccessBlock":{"http":{"method":"DELETE","requestUri":"/{Bucket}?publicAccessBlock","responseCode":204},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"GetBucketAccelerateConfiguration":{"http":{"method":"GET","requestUri":"/{Bucket}?accelerate"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Status":{}}}},"GetBucketAcl":{"http":{"method":"GET","requestUri":"/{Bucket}?acl"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Owner":{"shape":"S33"},"Grants":{"shape":"S36","locationName":"AccessControlList"}}}},"GetBucketAnalyticsConfiguration":{"http":{"method":"GET","requestUri":"/{Bucket}?analytics"},"input":{"type":"structure","required":["Bucket","Id"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Id":{"location":"querystring","locationName":"id"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"AnalyticsConfiguration":{"shape":"S3f"}},"payload":"AnalyticsConfiguration"}},"GetBucketCors":{"http":{"method":"GET","requestUri":"/{Bucket}?cors"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"CORSRules":{"shape":"S3u","locationName":"CORSRule"}}}},"GetBucketEncryption":{"http":{"method":"GET","requestUri":"/{Bucket}?encryption"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"ServerSideEncryptionConfiguration":{"shape":"S47"}},"payload":"ServerSideEncryptionConfiguration"}},"GetBucketInventoryConfiguration":{"http":{"method":"GET","requestUri":"/{Bucket}?inventory"},"input":{"type":"structure","required":["Bucket","Id"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Id":{"location":"querystring","locationName":"id"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"InventoryConfiguration":{"shape":"S4d"}},"payload":"InventoryConfiguration"}},"GetBucketLifecycle":{"http":{"method":"GET","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Rules":{"shape":"S4t","locationName":"Rule"}}},"deprecated":true},"GetBucketLifecycleConfiguration":{"http":{"method":"GET","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Rules":{"shape":"S58","locationName":"Rule"}}}},"GetBucketLocation":{"http":{"method":"GET","requestUri":"/{Bucket}?location"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"LocationConstraint":{}}}},"GetBucketLogging":{"http":{"method":"GET","requestUri":"/{Bucket}?logging"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"LoggingEnabled":{"shape":"S5i"}}}},"GetBucketMetricsConfiguration":{"http":{"method":"GET","requestUri":"/{Bucket}?metrics"},"input":{"type":"structure","required":["Bucket","Id"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Id":{"location":"querystring","locationName":"id"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"MetricsConfiguration":{"shape":"S5q"}},"payload":"MetricsConfiguration"}},"GetBucketNotification":{"http":{"method":"GET","requestUri":"/{Bucket}?notification"},"input":{"shape":"S5t"},"output":{"shape":"S5u"},"deprecated":true},"GetBucketNotificationConfiguration":{"http":{"method":"GET","requestUri":"/{Bucket}?notification"},"input":{"shape":"S5t"},"output":{"shape":"S65"}},"GetBucketPolicy":{"http":{"method":"GET","requestUri":"/{Bucket}?policy"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Policy":{}},"payload":"Policy"}},"GetBucketPolicyStatus":{"http":{"method":"GET","requestUri":"/{Bucket}?policyStatus"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"PolicyStatus":{"type":"structure","members":{"IsPublic":{"locationName":"IsPublic","type":"boolean"}}}},"payload":"PolicyStatus"}},"GetBucketReplication":{"http":{"method":"GET","requestUri":"/{Bucket}?replication"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"ReplicationConfiguration":{"shape":"S6s"}},"payload":"ReplicationConfiguration"}},"GetBucketRequestPayment":{"http":{"method":"GET","requestUri":"/{Bucket}?requestPayment"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Payer":{}}}},"GetBucketTagging":{"http":{"method":"GET","requestUri":"/{Bucket}?tagging"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","required":["TagSet"],"members":{"TagSet":{"shape":"S3l"}}}},"GetBucketVersioning":{"http":{"method":"GET","requestUri":"/{Bucket}?versioning"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Status":{},"MFADelete":{"locationName":"MfaDelete"}}}},"GetBucketWebsite":{"http":{"method":"GET","requestUri":"/{Bucket}?website"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"RedirectAllRequestsTo":{"shape":"S7t"},"IndexDocument":{"shape":"S7w"},"ErrorDocument":{"shape":"S7y"},"RoutingRules":{"shape":"S7z"}}}},"GetObject":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"IfMatch":{"location":"header","locationName":"If-Match"},"IfModifiedSince":{"location":"header","locationName":"If-Modified-Since","type":"timestamp"},"IfNoneMatch":{"location":"header","locationName":"If-None-Match"},"IfUnmodifiedSince":{"location":"header","locationName":"If-Unmodified-Since","type":"timestamp"},"Key":{"location":"uri","locationName":"Key"},"Range":{"location":"header","locationName":"Range"},"ResponseCacheControl":{"location":"querystring","locationName":"response-cache-control"},"ResponseContentDisposition":{"location":"querystring","locationName":"response-content-disposition"},"ResponseContentEncoding":{"location":"querystring","locationName":"response-content-encoding"},"ResponseContentLanguage":{"location":"querystring","locationName":"response-content-language"},"ResponseContentType":{"location":"querystring","locationName":"response-content-type"},"ResponseExpires":{"location":"querystring","locationName":"response-expires","type":"timestamp"},"VersionId":{"location":"querystring","locationName":"versionId"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S1a","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"PartNumber":{"location":"querystring","locationName":"partNumber","type":"integer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Body":{"streaming":true,"type":"blob"},"DeleteMarker":{"location":"header","locationName":"x-amz-delete-marker","type":"boolean"},"AcceptRanges":{"location":"header","locationName":"accept-ranges"},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"Restore":{"location":"header","locationName":"x-amz-restore"},"LastModified":{"location":"header","locationName":"Last-Modified","type":"timestamp"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"long"},"ETag":{"location":"header","locationName":"ETag"},"MissingMeta":{"location":"header","locationName":"x-amz-missing-meta","type":"integer"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentRange":{"location":"header","locationName":"Content-Range"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"Metadata":{"shape":"S12","location":"headers","locationName":"x-amz-meta-"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sk","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"},"ReplicationStatus":{"location":"header","locationName":"x-amz-replication-status"},"PartsCount":{"location":"header","locationName":"x-amz-mp-parts-count","type":"integer"},"TagCount":{"location":"header","locationName":"x-amz-tagging-count","type":"integer"},"ObjectLockMode":{"location":"header","locationName":"x-amz-object-lock-mode"},"ObjectLockRetainUntilDate":{"shape":"S1i","location":"header","locationName":"x-amz-object-lock-retain-until-date"},"ObjectLockLegalHoldStatus":{"location":"header","locationName":"x-amz-object-lock-legal-hold"}},"payload":"Body"}},"GetObjectAcl":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}?acl"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"VersionId":{"location":"querystring","locationName":"versionId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Owner":{"shape":"S33"},"Grants":{"shape":"S36","locationName":"AccessControlList"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"GetObjectLegalHold":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}?legal-hold"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"VersionId":{"location":"querystring","locationName":"versionId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"LegalHold":{"shape":"S8y"}},"payload":"LegalHold"}},"GetObjectLockConfiguration":{"http":{"method":"GET","requestUri":"/{Bucket}?object-lock"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"ObjectLockConfiguration":{"shape":"S91"}},"payload":"ObjectLockConfiguration"}},"GetObjectRetention":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}?retention"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"VersionId":{"location":"querystring","locationName":"versionId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Retention":{"shape":"S99"}},"payload":"Retention"}},"GetObjectTagging":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}?tagging"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"VersionId":{"location":"querystring","locationName":"versionId"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","required":["TagSet"],"members":{"VersionId":{"location":"header","locationName":"x-amz-version-id"},"TagSet":{"shape":"S3l"}}}},"GetObjectTorrent":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}?torrent"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Body":{"streaming":true,"type":"blob"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}},"payload":"Body"}},"GetPublicAccessBlock":{"http":{"method":"GET","requestUri":"/{Bucket}?publicAccessBlock"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"PublicAccessBlockConfiguration":{"shape":"S9g"}},"payload":"PublicAccessBlockConfiguration"}},"HeadBucket":{"http":{"method":"HEAD","requestUri":"/{Bucket}"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}}},"HeadObject":{"http":{"method":"HEAD","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"IfMatch":{"location":"header","locationName":"If-Match"},"IfModifiedSince":{"location":"header","locationName":"If-Modified-Since","type":"timestamp"},"IfNoneMatch":{"location":"header","locationName":"If-None-Match"},"IfUnmodifiedSince":{"location":"header","locationName":"If-Unmodified-Since","type":"timestamp"},"Key":{"location":"uri","locationName":"Key"},"Range":{"location":"header","locationName":"Range"},"VersionId":{"location":"querystring","locationName":"versionId"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S1a","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"PartNumber":{"location":"querystring","locationName":"partNumber","type":"integer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"DeleteMarker":{"location":"header","locationName":"x-amz-delete-marker","type":"boolean"},"AcceptRanges":{"location":"header","locationName":"accept-ranges"},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"Restore":{"location":"header","locationName":"x-amz-restore"},"LastModified":{"location":"header","locationName":"Last-Modified","type":"timestamp"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"long"},"ETag":{"location":"header","locationName":"ETag"},"MissingMeta":{"location":"header","locationName":"x-amz-missing-meta","type":"integer"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"Metadata":{"shape":"S12","location":"headers","locationName":"x-amz-meta-"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sk","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"},"ReplicationStatus":{"location":"header","locationName":"x-amz-replication-status"},"PartsCount":{"location":"header","locationName":"x-amz-mp-parts-count","type":"integer"},"ObjectLockMode":{"location":"header","locationName":"x-amz-object-lock-mode"},"ObjectLockRetainUntilDate":{"shape":"S1i","location":"header","locationName":"x-amz-object-lock-retain-until-date"},"ObjectLockLegalHoldStatus":{"location":"header","locationName":"x-amz-object-lock-legal-hold"}}}},"ListBucketAnalyticsConfigurations":{"http":{"method":"GET","requestUri":"/{Bucket}?analytics"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContinuationToken":{"location":"querystring","locationName":"continuation-token"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"IsTruncated":{"type":"boolean"},"ContinuationToken":{},"NextContinuationToken":{},"AnalyticsConfigurationList":{"locationName":"AnalyticsConfiguration","type":"list","member":{"shape":"S3f"},"flattened":true}}}},"ListBucketInventoryConfigurations":{"http":{"method":"GET","requestUri":"/{Bucket}?inventory"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContinuationToken":{"location":"querystring","locationName":"continuation-token"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"ContinuationToken":{},"InventoryConfigurationList":{"locationName":"InventoryConfiguration","type":"list","member":{"shape":"S4d"},"flattened":true},"IsTruncated":{"type":"boolean"},"NextContinuationToken":{}}}},"ListBucketMetricsConfigurations":{"http":{"method":"GET","requestUri":"/{Bucket}?metrics"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContinuationToken":{"location":"querystring","locationName":"continuation-token"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"IsTruncated":{"type":"boolean"},"ContinuationToken":{},"NextContinuationToken":{},"MetricsConfigurationList":{"locationName":"MetricsConfiguration","type":"list","member":{"shape":"S5q"},"flattened":true}}}},"ListBuckets":{"http":{"method":"GET"},"output":{"type":"structure","members":{"Buckets":{"type":"list","member":{"locationName":"Bucket","type":"structure","members":{"Name":{},"CreationDate":{"type":"timestamp"}}}},"Owner":{"shape":"S33"}}},"alias":"GetService"},"ListMultipartUploads":{"http":{"method":"GET","requestUri":"/{Bucket}?uploads"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delimiter":{"location":"querystring","locationName":"delimiter"},"EncodingType":{"location":"querystring","locationName":"encoding-type"},"KeyMarker":{"location":"querystring","locationName":"key-marker"},"MaxUploads":{"location":"querystring","locationName":"max-uploads","type":"integer"},"Prefix":{"location":"querystring","locationName":"prefix"},"UploadIdMarker":{"location":"querystring","locationName":"upload-id-marker"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Bucket":{},"KeyMarker":{},"UploadIdMarker":{},"NextKeyMarker":{},"Prefix":{},"Delimiter":{},"NextUploadIdMarker":{},"MaxUploads":{"type":"integer"},"IsTruncated":{"type":"boolean"},"Uploads":{"locationName":"Upload","type":"list","member":{"type":"structure","members":{"UploadId":{},"Key":{},"Initiated":{"type":"timestamp"},"StorageClass":{},"Owner":{"shape":"S33"},"Initiator":{"shape":"Sad"}}},"flattened":true},"CommonPrefixes":{"shape":"Sae"},"EncodingType":{}}}},"ListObjectVersions":{"http":{"method":"GET","requestUri":"/{Bucket}?versions"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delimiter":{"location":"querystring","locationName":"delimiter"},"EncodingType":{"location":"querystring","locationName":"encoding-type"},"KeyMarker":{"location":"querystring","locationName":"key-marker"},"MaxKeys":{"location":"querystring","locationName":"max-keys","type":"integer"},"Prefix":{"location":"querystring","locationName":"prefix"},"VersionIdMarker":{"location":"querystring","locationName":"version-id-marker"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"IsTruncated":{"type":"boolean"},"KeyMarker":{},"VersionIdMarker":{},"NextKeyMarker":{},"NextVersionIdMarker":{},"Versions":{"locationName":"Version","type":"list","member":{"type":"structure","members":{"ETag":{},"Size":{"type":"integer"},"StorageClass":{},"Key":{},"VersionId":{},"IsLatest":{"type":"boolean"},"LastModified":{"type":"timestamp"},"Owner":{"shape":"S33"}}},"flattened":true},"DeleteMarkers":{"locationName":"DeleteMarker","type":"list","member":{"type":"structure","members":{"Owner":{"shape":"S33"},"Key":{},"VersionId":{},"IsLatest":{"type":"boolean"},"LastModified":{"type":"timestamp"}}},"flattened":true},"Name":{},"Prefix":{},"Delimiter":{},"MaxKeys":{"type":"integer"},"CommonPrefixes":{"shape":"Sae"},"EncodingType":{}}},"alias":"GetBucketObjectVersions"},"ListObjects":{"http":{"method":"GET","requestUri":"/{Bucket}"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delimiter":{"location":"querystring","locationName":"delimiter"},"EncodingType":{"location":"querystring","locationName":"encoding-type"},"Marker":{"location":"querystring","locationName":"marker"},"MaxKeys":{"location":"querystring","locationName":"max-keys","type":"integer"},"Prefix":{"location":"querystring","locationName":"prefix"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"IsTruncated":{"type":"boolean"},"Marker":{},"NextMarker":{},"Contents":{"shape":"Saw"},"Name":{},"Prefix":{},"Delimiter":{},"MaxKeys":{"type":"integer"},"CommonPrefixes":{"shape":"Sae"},"EncodingType":{}}},"alias":"GetBucket"},"ListObjectsV2":{"http":{"method":"GET","requestUri":"/{Bucket}?list-type=2"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delimiter":{"location":"querystring","locationName":"delimiter"},"EncodingType":{"location":"querystring","locationName":"encoding-type"},"MaxKeys":{"location":"querystring","locationName":"max-keys","type":"integer"},"Prefix":{"location":"querystring","locationName":"prefix"},"ContinuationToken":{"location":"querystring","locationName":"continuation-token"},"FetchOwner":{"location":"querystring","locationName":"fetch-owner","type":"boolean"},"StartAfter":{"location":"querystring","locationName":"start-after"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"IsTruncated":{"type":"boolean"},"Contents":{"shape":"Saw"},"Name":{},"Prefix":{},"Delimiter":{},"MaxKeys":{"type":"integer"},"CommonPrefixes":{"shape":"Sae"},"EncodingType":{},"KeyCount":{"type":"integer"},"ContinuationToken":{},"NextContinuationToken":{},"StartAfter":{}}}},"ListParts":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"MaxParts":{"location":"querystring","locationName":"max-parts","type":"integer"},"PartNumberMarker":{"location":"querystring","locationName":"part-number-marker","type":"integer"},"UploadId":{"location":"querystring","locationName":"uploadId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"AbortDate":{"location":"header","locationName":"x-amz-abort-date","type":"timestamp"},"AbortRuleId":{"location":"header","locationName":"x-amz-abort-rule-id"},"Bucket":{},"Key":{},"UploadId":{},"PartNumberMarker":{"type":"integer"},"NextPartNumberMarker":{"type":"integer"},"MaxParts":{"type":"integer"},"IsTruncated":{"type":"boolean"},"Parts":{"locationName":"Part","type":"list","member":{"type":"structure","members":{"PartNumber":{"type":"integer"},"LastModified":{"type":"timestamp"},"ETag":{},"Size":{"type":"integer"}}},"flattened":true},"Initiator":{"shape":"Sad"},"Owner":{"shape":"S33"},"StorageClass":{},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"PutBucketAccelerateConfiguration":{"http":{"method":"PUT","requestUri":"/{Bucket}?accelerate"},"input":{"type":"structure","required":["Bucket","AccelerateConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"AccelerateConfiguration":{"locationName":"AccelerateConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","members":{"Status":{}}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"AccelerateConfiguration"}},"PutBucketAcl":{"http":{"method":"PUT","requestUri":"/{Bucket}?acl"},"input":{"type":"structure","required":["Bucket"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"AccessControlPolicy":{"shape":"Sbe","locationName":"AccessControlPolicy","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWrite":{"location":"header","locationName":"x-amz-grant-write"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"AccessControlPolicy"},"httpChecksumRequired":true},"PutBucketAnalyticsConfiguration":{"http":{"method":"PUT","requestUri":"/{Bucket}?analytics"},"input":{"type":"structure","required":["Bucket","Id","AnalyticsConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Id":{"location":"querystring","locationName":"id"},"AnalyticsConfiguration":{"shape":"S3f","locationName":"AnalyticsConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"AnalyticsConfiguration"}},"PutBucketCors":{"http":{"method":"PUT","requestUri":"/{Bucket}?cors"},"input":{"type":"structure","required":["Bucket","CORSConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"CORSConfiguration":{"locationName":"CORSConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","required":["CORSRules"],"members":{"CORSRules":{"shape":"S3u","locationName":"CORSRule"}}},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"CORSConfiguration"},"httpChecksumRequired":true},"PutBucketEncryption":{"http":{"method":"PUT","requestUri":"/{Bucket}?encryption"},"input":{"type":"structure","required":["Bucket","ServerSideEncryptionConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"ServerSideEncryptionConfiguration":{"shape":"S47","locationName":"ServerSideEncryptionConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"ServerSideEncryptionConfiguration"},"httpChecksumRequired":true},"PutBucketInventoryConfiguration":{"http":{"method":"PUT","requestUri":"/{Bucket}?inventory"},"input":{"type":"structure","required":["Bucket","Id","InventoryConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Id":{"location":"querystring","locationName":"id"},"InventoryConfiguration":{"shape":"S4d","locationName":"InventoryConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"InventoryConfiguration"}},"PutBucketLifecycle":{"http":{"method":"PUT","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"LifecycleConfiguration":{"locationName":"LifecycleConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","required":["Rules"],"members":{"Rules":{"shape":"S4t","locationName":"Rule"}}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"LifecycleConfiguration"},"deprecated":true,"httpChecksumRequired":true},"PutBucketLifecycleConfiguration":{"http":{"method":"PUT","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"LifecycleConfiguration":{"locationName":"LifecycleConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","required":["Rules"],"members":{"Rules":{"shape":"S58","locationName":"Rule"}}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"LifecycleConfiguration"},"httpChecksumRequired":true},"PutBucketLogging":{"http":{"method":"PUT","requestUri":"/{Bucket}?logging"},"input":{"type":"structure","required":["Bucket","BucketLoggingStatus"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"BucketLoggingStatus":{"locationName":"BucketLoggingStatus","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","members":{"LoggingEnabled":{"shape":"S5i"}}},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"BucketLoggingStatus"},"httpChecksumRequired":true},"PutBucketMetricsConfiguration":{"http":{"method":"PUT","requestUri":"/{Bucket}?metrics"},"input":{"type":"structure","required":["Bucket","Id","MetricsConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Id":{"location":"querystring","locationName":"id"},"MetricsConfiguration":{"shape":"S5q","locationName":"MetricsConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"MetricsConfiguration"}},"PutBucketNotification":{"http":{"method":"PUT","requestUri":"/{Bucket}?notification"},"input":{"type":"structure","required":["Bucket","NotificationConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"NotificationConfiguration":{"shape":"S5u","locationName":"NotificationConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"NotificationConfiguration"},"deprecated":true,"httpChecksumRequired":true},"PutBucketNotificationConfiguration":{"http":{"method":"PUT","requestUri":"/{Bucket}?notification"},"input":{"type":"structure","required":["Bucket","NotificationConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"NotificationConfiguration":{"shape":"S65","locationName":"NotificationConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"NotificationConfiguration"}},"PutBucketPolicy":{"http":{"method":"PUT","requestUri":"/{Bucket}?policy"},"input":{"type":"structure","required":["Bucket","Policy"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"ConfirmRemoveSelfBucketAccess":{"location":"header","locationName":"x-amz-confirm-remove-self-bucket-access","type":"boolean"},"Policy":{},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"Policy"},"httpChecksumRequired":true},"PutBucketReplication":{"http":{"method":"PUT","requestUri":"/{Bucket}?replication"},"input":{"type":"structure","required":["Bucket","ReplicationConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"ReplicationConfiguration":{"shape":"S6s","locationName":"ReplicationConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"Token":{"location":"header","locationName":"x-amz-bucket-object-lock-token"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"ReplicationConfiguration"},"httpChecksumRequired":true},"PutBucketRequestPayment":{"http":{"method":"PUT","requestUri":"/{Bucket}?requestPayment"},"input":{"type":"structure","required":["Bucket","RequestPaymentConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"RequestPaymentConfiguration":{"locationName":"RequestPaymentConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","required":["Payer"],"members":{"Payer":{}}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"RequestPaymentConfiguration"},"httpChecksumRequired":true},"PutBucketTagging":{"http":{"method":"PUT","requestUri":"/{Bucket}?tagging"},"input":{"type":"structure","required":["Bucket","Tagging"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"Tagging":{"shape":"Sc1","locationName":"Tagging","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"Tagging"},"httpChecksumRequired":true},"PutBucketVersioning":{"http":{"method":"PUT","requestUri":"/{Bucket}?versioning"},"input":{"type":"structure","required":["Bucket","VersioningConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"MFA":{"location":"header","locationName":"x-amz-mfa"},"VersioningConfiguration":{"locationName":"VersioningConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","members":{"MFADelete":{"locationName":"MfaDelete"},"Status":{}}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"VersioningConfiguration"},"httpChecksumRequired":true},"PutBucketWebsite":{"http":{"method":"PUT","requestUri":"/{Bucket}?website"},"input":{"type":"structure","required":["Bucket","WebsiteConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"WebsiteConfiguration":{"locationName":"WebsiteConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","members":{"ErrorDocument":{"shape":"S7y"},"IndexDocument":{"shape":"S7w"},"RedirectAllRequestsTo":{"shape":"S7t"},"RoutingRules":{"shape":"S7z"}}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"WebsiteConfiguration"},"httpChecksumRequired":true},"PutObject":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Body":{"streaming":true,"type":"blob"},"Bucket":{"location":"uri","locationName":"Bucket"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"long"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"Metadata":{"shape":"S12","location":"headers","locationName":"x-amz-meta-"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S1a","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sk","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"SSEKMSEncryptionContext":{"shape":"S1c","location":"header","locationName":"x-amz-server-side-encryption-context"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"Tagging":{"location":"header","locationName":"x-amz-tagging"},"ObjectLockMode":{"location":"header","locationName":"x-amz-object-lock-mode"},"ObjectLockRetainUntilDate":{"shape":"S1i","location":"header","locationName":"x-amz-object-lock-retain-until-date"},"ObjectLockLegalHoldStatus":{"location":"header","locationName":"x-amz-object-lock-legal-hold"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"Body"},"output":{"type":"structure","members":{"Expiration":{"location":"header","locationName":"x-amz-expiration"},"ETag":{"location":"header","locationName":"ETag"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sk","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"SSEKMSEncryptionContext":{"shape":"S1c","location":"header","locationName":"x-amz-server-side-encryption-context"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"PutObjectAcl":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}?acl"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"AccessControlPolicy":{"shape":"Sbe","locationName":"AccessControlPolicy","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWrite":{"location":"header","locationName":"x-amz-grant-write"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"VersionId":{"location":"querystring","locationName":"versionId"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"AccessControlPolicy"},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}},"httpChecksumRequired":true},"PutObjectLegalHold":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}?legal-hold"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"LegalHold":{"shape":"S8y","locationName":"LegalHold","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"VersionId":{"location":"querystring","locationName":"versionId"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"LegalHold"},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}},"httpChecksumRequired":true},"PutObjectLockConfiguration":{"http":{"method":"PUT","requestUri":"/{Bucket}?object-lock"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ObjectLockConfiguration":{"shape":"S91","locationName":"ObjectLockConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"Token":{"location":"header","locationName":"x-amz-bucket-object-lock-token"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"ObjectLockConfiguration"},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}},"httpChecksumRequired":true},"PutObjectRetention":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}?retention"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"Retention":{"shape":"S99","locationName":"Retention","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"VersionId":{"location":"querystring","locationName":"versionId"},"BypassGovernanceRetention":{"location":"header","locationName":"x-amz-bypass-governance-retention","type":"boolean"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"Retention"},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}},"httpChecksumRequired":true},"PutObjectTagging":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}?tagging"},"input":{"type":"structure","required":["Bucket","Key","Tagging"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"VersionId":{"location":"querystring","locationName":"versionId"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"Tagging":{"shape":"Sc1","locationName":"Tagging","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"Tagging"},"output":{"type":"structure","members":{"VersionId":{"location":"header","locationName":"x-amz-version-id"}}},"httpChecksumRequired":true},"PutPublicAccessBlock":{"http":{"method":"PUT","requestUri":"/{Bucket}?publicAccessBlock"},"input":{"type":"structure","required":["Bucket","PublicAccessBlockConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"deprecated":true,"deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation\'s Http request.","location":"header","locationName":"Content-MD5"},"PublicAccessBlockConfiguration":{"shape":"S9g","locationName":"PublicAccessBlockConfiguration","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"PublicAccessBlockConfiguration"},"httpChecksumRequired":true},"RestoreObject":{"http":{"requestUri":"/{Bucket}/{Key+}?restore"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"VersionId":{"location":"querystring","locationName":"versionId"},"RestoreRequest":{"locationName":"RestoreRequest","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","members":{"Days":{"type":"integer"},"GlacierJobParameters":{"type":"structure","required":["Tier"],"members":{"Tier":{}}},"Type":{},"Tier":{},"Description":{},"SelectParameters":{"type":"structure","required":["InputSerialization","ExpressionType","Expression","OutputSerialization"],"members":{"InputSerialization":{"shape":"Scr"},"ExpressionType":{},"Expression":{},"OutputSerialization":{"shape":"Sd6"}}},"OutputLocation":{"type":"structure","members":{"S3":{"type":"structure","required":["BucketName","Prefix"],"members":{"BucketName":{},"Prefix":{},"Encryption":{"type":"structure","required":["EncryptionType"],"members":{"EncryptionType":{},"KMSKeyId":{"shape":"Sk"},"KMSContext":{}}},"CannedACL":{},"AccessControlList":{"shape":"S36"},"Tagging":{"shape":"Sc1"},"UserMetadata":{"type":"list","member":{"locationName":"MetadataEntry","type":"structure","members":{"Name":{},"Value":{}}}},"StorageClass":{}}}}}}},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"RestoreRequest"},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"},"RestoreOutputPath":{"location":"header","locationName":"x-amz-restore-output-path"}}},"alias":"PostObjectRestore"},"SelectObjectContent":{"http":{"requestUri":"/{Bucket}/{Key+}?select&select-type=2"},"input":{"locationName":"SelectObjectContentRequest","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","required":["Bucket","Key","Expression","ExpressionType","InputSerialization","OutputSerialization"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S1a","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"Expression":{},"ExpressionType":{},"RequestProgress":{"type":"structure","members":{"Enabled":{"type":"boolean"}}},"InputSerialization":{"shape":"Scr"},"OutputSerialization":{"shape":"Sd6"},"ScanRange":{"type":"structure","members":{"Start":{"type":"long"},"End":{"type":"long"}}},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"output":{"type":"structure","members":{"Payload":{"type":"structure","members":{"Records":{"type":"structure","members":{"Payload":{"eventpayload":true,"type":"blob"}},"event":true},"Stats":{"type":"structure","members":{"Details":{"eventpayload":true,"type":"structure","members":{"BytesScanned":{"type":"long"},"BytesProcessed":{"type":"long"},"BytesReturned":{"type":"long"}}}},"event":true},"Progress":{"type":"structure","members":{"Details":{"eventpayload":true,"type":"structure","members":{"BytesScanned":{"type":"long"},"BytesProcessed":{"type":"long"},"BytesReturned":{"type":"long"}}}},"event":true},"Cont":{"type":"structure","members":{},"event":true},"End":{"type":"structure","members":{},"event":true}},"eventstream":true}},"payload":"Payload"}},"UploadPart":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key","PartNumber","UploadId"],"members":{"Body":{"streaming":true,"type":"blob"},"Bucket":{"location":"uri","locationName":"Bucket"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"long"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"Key":{"location":"uri","locationName":"Key"},"PartNumber":{"location":"querystring","locationName":"partNumber","type":"integer"},"UploadId":{"location":"querystring","locationName":"uploadId"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S1a","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}},"payload":"Body"},"output":{"type":"structure","members":{"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"ETag":{"location":"header","locationName":"ETag"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sk","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"UploadPartCopy":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","CopySource","Key","PartNumber","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"CopySource":{"location":"header","locationName":"x-amz-copy-source"},"CopySourceIfMatch":{"location":"header","locationName":"x-amz-copy-source-if-match"},"CopySourceIfModifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-modified-since","type":"timestamp"},"CopySourceIfNoneMatch":{"location":"header","locationName":"x-amz-copy-source-if-none-match"},"CopySourceIfUnmodifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-unmodified-since","type":"timestamp"},"CopySourceRange":{"location":"header","locationName":"x-amz-copy-source-range"},"Key":{"location":"uri","locationName":"Key"},"PartNumber":{"location":"querystring","locationName":"partNumber","type":"integer"},"UploadId":{"location":"querystring","locationName":"uploadId"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S1a","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"CopySourceSSECustomerAlgorithm":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-algorithm"},"CopySourceSSECustomerKey":{"shape":"S1e","location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key"},"CopySourceSSECustomerKeyMD5":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"},"ExpectedSourceBucketOwner":{"location":"header","locationName":"x-amz-source-expected-bucket-owner"}}},"output":{"type":"structure","members":{"CopySourceVersionId":{"location":"header","locationName":"x-amz-copy-source-version-id"},"CopyPartResult":{"type":"structure","members":{"ETag":{},"LastModified":{"type":"timestamp"}}},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sk","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}},"payload":"CopyPartResult"}}},"shapes":{"Sk":{"type":"string","sensitive":true},"S12":{"type":"map","key":{},"value":{}},"S1a":{"type":"blob","sensitive":true},"S1c":{"type":"string","sensitive":true},"S1e":{"type":"blob","sensitive":true},"S1i":{"type":"timestamp","timestampFormat":"iso8601"},"S33":{"type":"structure","members":{"DisplayName":{},"ID":{}}},"S36":{"type":"list","member":{"locationName":"Grant","type":"structure","members":{"Grantee":{"shape":"S38"},"Permission":{}}}},"S38":{"type":"structure","required":["Type"],"members":{"DisplayName":{},"EmailAddress":{},"ID":{},"Type":{"locationName":"xsi:type","xmlAttribute":true},"URI":{}},"xmlNamespace":{"prefix":"xsi","uri":"http://www.w3.org/2001/XMLSchema-instance"}},"S3f":{"type":"structure","required":["Id","StorageClassAnalysis"],"members":{"Id":{},"Filter":{"type":"structure","members":{"Prefix":{},"Tag":{"shape":"S3i"},"And":{"type":"structure","members":{"Prefix":{},"Tags":{"shape":"S3l","flattened":true,"locationName":"Tag"}}}}},"StorageClassAnalysis":{"type":"structure","members":{"DataExport":{"type":"structure","required":["OutputSchemaVersion","Destination"],"members":{"OutputSchemaVersion":{},"Destination":{"type":"structure","required":["S3BucketDestination"],"members":{"S3BucketDestination":{"type":"structure","required":["Format","Bucket"],"members":{"Format":{},"BucketAccountId":{},"Bucket":{},"Prefix":{}}}}}}}}}}},"S3i":{"type":"structure","required":["Key","Value"],"members":{"Key":{},"Value":{}}},"S3l":{"type":"list","member":{"shape":"S3i","locationName":"Tag"}},"S3u":{"type":"list","member":{"type":"structure","required":["AllowedMethods","AllowedOrigins"],"members":{"AllowedHeaders":{"locationName":"AllowedHeader","type":"list","member":{},"flattened":true},"AllowedMethods":{"locationName":"AllowedMethod","type":"list","member":{},"flattened":true},"AllowedOrigins":{"locationName":"AllowedOrigin","type":"list","member":{},"flattened":true},"ExposeHeaders":{"locationName":"ExposeHeader","type":"list","member":{},"flattened":true},"MaxAgeSeconds":{"type":"integer"}}},"flattened":true},"S47":{"type":"structure","required":["Rules"],"members":{"Rules":{"locationName":"Rule","type":"list","member":{"type":"structure","members":{"ApplyServerSideEncryptionByDefault":{"type":"structure","required":["SSEAlgorithm"],"members":{"SSEAlgorithm":{},"KMSMasterKeyID":{"shape":"Sk"}}}}},"flattened":true}}},"S4d":{"type":"structure","required":["Destination","IsEnabled","Id","IncludedObjectVersions","Schedule"],"members":{"Destination":{"type":"structure","required":["S3BucketDestination"],"members":{"S3BucketDestination":{"type":"structure","required":["Bucket","Format"],"members":{"AccountId":{},"Bucket":{},"Format":{},"Prefix":{},"Encryption":{"type":"structure","members":{"SSES3":{"locationName":"SSE-S3","type":"structure","members":{}},"SSEKMS":{"locationName":"SSE-KMS","type":"structure","required":["KeyId"],"members":{"KeyId":{"shape":"Sk"}}}}}}}}},"IsEnabled":{"type":"boolean"},"Filter":{"type":"structure","required":["Prefix"],"members":{"Prefix":{}}},"Id":{},"IncludedObjectVersions":{},"OptionalFields":{"type":"list","member":{"locationName":"Field"}},"Schedule":{"type":"structure","required":["Frequency"],"members":{"Frequency":{}}}}},"S4t":{"type":"list","member":{"type":"structure","required":["Prefix","Status"],"members":{"Expiration":{"shape":"S4v"},"ID":{},"Prefix":{},"Status":{},"Transition":{"shape":"S50"},"NoncurrentVersionTransition":{"shape":"S52"},"NoncurrentVersionExpiration":{"shape":"S53"},"AbortIncompleteMultipartUpload":{"shape":"S54"}}},"flattened":true},"S4v":{"type":"structure","members":{"Date":{"shape":"S4w"},"Days":{"type":"integer"},"ExpiredObjectDeleteMarker":{"type":"boolean"}}},"S4w":{"type":"timestamp","timestampFormat":"iso8601"},"S50":{"type":"structure","members":{"Date":{"shape":"S4w"},"Days":{"type":"integer"},"StorageClass":{}}},"S52":{"type":"structure","members":{"NoncurrentDays":{"type":"integer"},"StorageClass":{}}},"S53":{"type":"structure","members":{"NoncurrentDays":{"type":"integer"}}},"S54":{"type":"structure","members":{"DaysAfterInitiation":{"type":"integer"}}},"S58":{"type":"list","member":{"type":"structure","required":["Status"],"members":{"Expiration":{"shape":"S4v"},"ID":{},"Prefix":{"deprecated":true},"Filter":{"type":"structure","members":{"Prefix":{},"Tag":{"shape":"S3i"},"And":{"type":"structure","members":{"Prefix":{},"Tags":{"shape":"S3l","flattened":true,"locationName":"Tag"}}}}},"Status":{},"Transitions":{"locationName":"Transition","type":"list","member":{"shape":"S50"},"flattened":true},"NoncurrentVersionTransitions":{"locationName":"NoncurrentVersionTransition","type":"list","member":{"shape":"S52"},"flattened":true},"NoncurrentVersionExpiration":{"shape":"S53"},"AbortIncompleteMultipartUpload":{"shape":"S54"}}},"flattened":true},"S5i":{"type":"structure","required":["TargetBucket","TargetPrefix"],"members":{"TargetBucket":{},"TargetGrants":{"type":"list","member":{"locationName":"Grant","type":"structure","members":{"Grantee":{"shape":"S38"},"Permission":{}}}},"TargetPrefix":{}}},"S5q":{"type":"structure","required":["Id"],"members":{"Id":{},"Filter":{"type":"structure","members":{"Prefix":{},"Tag":{"shape":"S3i"},"And":{"type":"structure","members":{"Prefix":{},"Tags":{"shape":"S3l","flattened":true,"locationName":"Tag"}}}}}}},"S5t":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ExpectedBucketOwner":{"location":"header","locationName":"x-amz-expected-bucket-owner"}}},"S5u":{"type":"structure","members":{"TopicConfiguration":{"type":"structure","members":{"Id":{},"Events":{"shape":"S5x","locationName":"Event"},"Event":{"deprecated":true},"Topic":{}}},"QueueConfiguration":{"type":"structure","members":{"Id":{},"Event":{"deprecated":true},"Events":{"shape":"S5x","locationName":"Event"},"Queue":{}}},"CloudFunctionConfiguration":{"type":"structure","members":{"Id":{},"Event":{"deprecated":true},"Events":{"shape":"S5x","locationName":"Event"},"CloudFunction":{},"InvocationRole":{}}}}},"S5x":{"type":"list","member":{},"flattened":true},"S65":{"type":"structure","members":{"TopicConfigurations":{"locationName":"TopicConfiguration","type":"list","member":{"type":"structure","required":["TopicArn","Events"],"members":{"Id":{},"TopicArn":{"locationName":"Topic"},"Events":{"shape":"S5x","locationName":"Event"},"Filter":{"shape":"S68"}}},"flattened":true},"QueueConfigurations":{"locationName":"QueueConfiguration","type":"list","member":{"type":"structure","required":["QueueArn","Events"],"members":{"Id":{},"QueueArn":{"locationName":"Queue"},"Events":{"shape":"S5x","locationName":"Event"},"Filter":{"shape":"S68"}}},"flattened":true},"LambdaFunctionConfigurations":{"locationName":"CloudFunctionConfiguration","type":"list","member":{"type":"structure","required":["LambdaFunctionArn","Events"],"members":{"Id":{},"LambdaFunctionArn":{"locationName":"CloudFunction"},"Events":{"shape":"S5x","locationName":"Event"},"Filter":{"shape":"S68"}}},"flattened":true}}},"S68":{"type":"structure","members":{"Key":{"locationName":"S3Key","type":"structure","members":{"FilterRules":{"locationName":"FilterRule","type":"list","member":{"type":"structure","members":{"Name":{},"Value":{}}},"flattened":true}}}}},"S6s":{"type":"structure","required":["Role","Rules"],"members":{"Role":{},"Rules":{"locationName":"Rule","type":"list","member":{"type":"structure","required":["Status","Destination"],"members":{"ID":{},"Priority":{"type":"integer"},"Prefix":{"deprecated":true},"Filter":{"type":"structure","members":{"Prefix":{},"Tag":{"shape":"S3i"},"And":{"type":"structure","members":{"Prefix":{},"Tags":{"shape":"S3l","flattened":true,"locationName":"Tag"}}}}},"Status":{},"SourceSelectionCriteria":{"type":"structure","members":{"SseKmsEncryptedObjects":{"type":"structure","required":["Status"],"members":{"Status":{}}}}},"ExistingObjectReplication":{"type":"structure","required":["Status"],"members":{"Status":{}}},"Destination":{"type":"structure","required":["Bucket"],"members":{"Bucket":{},"Account":{},"StorageClass":{},"AccessControlTranslation":{"type":"structure","required":["Owner"],"members":{"Owner":{}}},"EncryptionConfiguration":{"type":"structure","members":{"ReplicaKmsKeyID":{}}},"ReplicationTime":{"type":"structure","required":["Status","Time"],"members":{"Status":{},"Time":{"shape":"S7c"}}},"Metrics":{"type":"structure","required":["Status","EventThreshold"],"members":{"Status":{},"EventThreshold":{"shape":"S7c"}}}}},"DeleteMarkerReplication":{"type":"structure","members":{"Status":{}}}}},"flattened":true}}},"S7c":{"type":"structure","members":{"Minutes":{"type":"integer"}}},"S7t":{"type":"structure","required":["HostName"],"members":{"HostName":{},"Protocol":{}}},"S7w":{"type":"structure","required":["Suffix"],"members":{"Suffix":{}}},"S7y":{"type":"structure","required":["Key"],"members":{"Key":{}}},"S7z":{"type":"list","member":{"locationName":"RoutingRule","type":"structure","required":["Redirect"],"members":{"Condition":{"type":"structure","members":{"HttpErrorCodeReturnedEquals":{},"KeyPrefixEquals":{}}},"Redirect":{"type":"structure","members":{"HostName":{},"HttpRedirectCode":{},"Protocol":{},"ReplaceKeyPrefixWith":{},"ReplaceKeyWith":{}}}}}},"S8y":{"type":"structure","members":{"Status":{}}},"S91":{"type":"structure","members":{"ObjectLockEnabled":{},"Rule":{"type":"structure","members":{"DefaultRetention":{"type":"structure","members":{"Mode":{},"Days":{"type":"integer"},"Years":{"type":"integer"}}}}}}},"S99":{"type":"structure","members":{"Mode":{},"RetainUntilDate":{"shape":"S4w"}}},"S9g":{"type":"structure","members":{"BlockPublicAcls":{"locationName":"BlockPublicAcls","type":"boolean"},"IgnorePublicAcls":{"locationName":"IgnorePublicAcls","type":"boolean"},"BlockPublicPolicy":{"locationName":"BlockPublicPolicy","type":"boolean"},"RestrictPublicBuckets":{"locationName":"RestrictPublicBuckets","type":"boolean"}}},"Sad":{"type":"structure","members":{"ID":{},"DisplayName":{}}},"Sae":{"type":"list","member":{"type":"structure","members":{"Prefix":{}}},"flattened":true},"Saw":{"type":"list","member":{"type":"structure","members":{"Key":{},"LastModified":{"type":"timestamp"},"ETag":{},"Size":{"type":"integer"},"StorageClass":{},"Owner":{"shape":"S33"}}},"flattened":true},"Sbe":{"type":"structure","members":{"Grants":{"shape":"S36","locationName":"AccessControlList"},"Owner":{"shape":"S33"}}},"Sc1":{"type":"structure","required":["TagSet"],"members":{"TagSet":{"shape":"S3l"}}},"Scr":{"type":"structure","members":{"CSV":{"type":"structure","members":{"FileHeaderInfo":{},"Comments":{},"QuoteEscapeCharacter":{},"RecordDelimiter":{},"FieldDelimiter":{},"QuoteCharacter":{},"AllowQuotedRecordDelimiter":{"type":"boolean"}}},"CompressionType":{},"JSON":{"type":"structure","members":{"Type":{}}},"Parquet":{"type":"structure","members":{}}}},"Sd6":{"type":"structure","members":{"CSV":{"type":"structure","members":{"QuoteFields":{},"QuoteEscapeCharacter":{},"RecordDelimiter":{},"FieldDelimiter":{},"QuoteCharacter":{}}},"JSON":{"type":"structure","members":{"RecordDelimiter":{}}}}}}}');
 
 /***/ }),
 
@@ -23029,7 +22940,7 @@ module.exports = JSON.parse("{\"version\":\"2.0\",\"metadata\":{\"apiVersion\":\
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"o\":{\"ListBuckets\":{\"result_key\":\"Buckets\"},\"ListMultipartUploads\":{\"input_token\":[\"KeyMarker\",\"UploadIdMarker\"],\"limit_key\":\"MaxUploads\",\"more_results\":\"IsTruncated\",\"output_token\":[\"NextKeyMarker\",\"NextUploadIdMarker\"],\"result_key\":[\"Uploads\",\"CommonPrefixes\"]},\"ListObjectVersions\":{\"input_token\":[\"KeyMarker\",\"VersionIdMarker\"],\"limit_key\":\"MaxKeys\",\"more_results\":\"IsTruncated\",\"output_token\":[\"NextKeyMarker\",\"NextVersionIdMarker\"],\"result_key\":[\"Versions\",\"DeleteMarkers\",\"CommonPrefixes\"]},\"ListObjects\":{\"input_token\":\"Marker\",\"limit_key\":\"MaxKeys\",\"more_results\":\"IsTruncated\",\"output_token\":\"NextMarker || Contents[-1].Key\",\"result_key\":[\"Contents\",\"CommonPrefixes\"]},\"ListObjectsV2\":{\"input_token\":\"ContinuationToken\",\"limit_key\":\"MaxKeys\",\"output_token\":\"NextContinuationToken\",\"result_key\":[\"Contents\",\"CommonPrefixes\"]},\"ListParts\":{\"input_token\":\"PartNumberMarker\",\"limit_key\":\"MaxParts\",\"more_results\":\"IsTruncated\",\"output_token\":\"NextPartNumberMarker\",\"result_key\":\"Parts\"}}}");
+module.exports = JSON.parse('{"o":{"ListBuckets":{"result_key":"Buckets"},"ListMultipartUploads":{"input_token":["KeyMarker","UploadIdMarker"],"limit_key":"MaxUploads","more_results":"IsTruncated","output_token":["NextKeyMarker","NextUploadIdMarker"],"result_key":["Uploads","CommonPrefixes"]},"ListObjectVersions":{"input_token":["KeyMarker","VersionIdMarker"],"limit_key":"MaxKeys","more_results":"IsTruncated","output_token":["NextKeyMarker","NextVersionIdMarker"],"result_key":["Versions","DeleteMarkers","CommonPrefixes"]},"ListObjects":{"input_token":"Marker","limit_key":"MaxKeys","more_results":"IsTruncated","output_token":"NextMarker || Contents[-1].Key","result_key":["Contents","CommonPrefixes"]},"ListObjectsV2":{"input_token":"ContinuationToken","limit_key":"MaxKeys","output_token":"NextContinuationToken","result_key":["Contents","CommonPrefixes"]},"ListParts":{"input_token":"PartNumberMarker","limit_key":"MaxParts","more_results":"IsTruncated","output_token":"NextPartNumberMarker","result_key":"Parts"}}}');
 
 /***/ }),
 
@@ -23037,7 +22948,7 @@ module.exports = JSON.parse("{\"o\":{\"ListBuckets\":{\"result_key\":\"Buckets\"
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"V\":{\"BucketExists\":{\"delay\":5,\"operation\":\"HeadBucket\",\"maxAttempts\":20,\"acceptors\":[{\"expected\":200,\"matcher\":\"status\",\"state\":\"success\"},{\"expected\":301,\"matcher\":\"status\",\"state\":\"success\"},{\"expected\":403,\"matcher\":\"status\",\"state\":\"success\"},{\"expected\":404,\"matcher\":\"status\",\"state\":\"retry\"}]},\"BucketNotExists\":{\"delay\":5,\"operation\":\"HeadBucket\",\"maxAttempts\":20,\"acceptors\":[{\"expected\":404,\"matcher\":\"status\",\"state\":\"success\"}]},\"ObjectExists\":{\"delay\":5,\"operation\":\"HeadObject\",\"maxAttempts\":20,\"acceptors\":[{\"expected\":200,\"matcher\":\"status\",\"state\":\"success\"},{\"expected\":404,\"matcher\":\"status\",\"state\":\"retry\"}]},\"ObjectNotExists\":{\"delay\":5,\"operation\":\"HeadObject\",\"maxAttempts\":20,\"acceptors\":[{\"expected\":404,\"matcher\":\"status\",\"state\":\"success\"}]}}}");
+module.exports = JSON.parse('{"V":{"BucketExists":{"delay":5,"operation":"HeadBucket","maxAttempts":20,"acceptors":[{"expected":200,"matcher":"status","state":"success"},{"expected":301,"matcher":"status","state":"success"},{"expected":403,"matcher":"status","state":"success"},{"expected":404,"matcher":"status","state":"retry"}]},"BucketNotExists":{"delay":5,"operation":"HeadBucket","maxAttempts":20,"acceptors":[{"expected":404,"matcher":"status","state":"success"}]},"ObjectExists":{"delay":5,"operation":"HeadObject","maxAttempts":20,"acceptors":[{"expected":200,"matcher":"status","state":"success"},{"expected":404,"matcher":"status","state":"retry"}]},"ObjectNotExists":{"delay":5,"operation":"HeadObject","maxAttempts":20,"acceptors":[{"expected":404,"matcher":"status","state":"success"}]}}}');
 
 /***/ }),
 
@@ -23045,7 +22956,7 @@ module.exports = JSON.parse("{\"V\":{\"BucketExists\":{\"delay\":5,\"operation\"
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"version\":\"2.0\",\"metadata\":{\"apiVersion\":\"2011-06-15\",\"endpointPrefix\":\"sts\",\"globalEndpoint\":\"sts.amazonaws.com\",\"protocol\":\"query\",\"serviceAbbreviation\":\"AWS STS\",\"serviceFullName\":\"AWS Security Token Service\",\"serviceId\":\"STS\",\"signatureVersion\":\"v4\",\"uid\":\"sts-2011-06-15\",\"xmlNamespace\":\"https://sts.amazonaws.com/doc/2011-06-15/\"},\"operations\":{\"AssumeRole\":{\"input\":{\"type\":\"structure\",\"required\":[\"RoleArn\",\"RoleSessionName\"],\"members\":{\"RoleArn\":{},\"RoleSessionName\":{},\"PolicyArns\":{\"shape\":\"S4\"},\"Policy\":{},\"DurationSeconds\":{\"type\":\"integer\"},\"Tags\":{\"shape\":\"S8\"},\"TransitiveTagKeys\":{\"type\":\"list\",\"member\":{}},\"ExternalId\":{},\"SerialNumber\":{},\"TokenCode\":{}}},\"output\":{\"resultWrapper\":\"AssumeRoleResult\",\"type\":\"structure\",\"members\":{\"Credentials\":{\"shape\":\"Sh\"},\"AssumedRoleUser\":{\"shape\":\"Sm\"},\"PackedPolicySize\":{\"type\":\"integer\"}}}},\"AssumeRoleWithSAML\":{\"input\":{\"type\":\"structure\",\"required\":[\"RoleArn\",\"PrincipalArn\",\"SAMLAssertion\"],\"members\":{\"RoleArn\":{},\"PrincipalArn\":{},\"SAMLAssertion\":{},\"PolicyArns\":{\"shape\":\"S4\"},\"Policy\":{},\"DurationSeconds\":{\"type\":\"integer\"}}},\"output\":{\"resultWrapper\":\"AssumeRoleWithSAMLResult\",\"type\":\"structure\",\"members\":{\"Credentials\":{\"shape\":\"Sh\"},\"AssumedRoleUser\":{\"shape\":\"Sm\"},\"PackedPolicySize\":{\"type\":\"integer\"},\"Subject\":{},\"SubjectType\":{},\"Issuer\":{},\"Audience\":{},\"NameQualifier\":{}}}},\"AssumeRoleWithWebIdentity\":{\"input\":{\"type\":\"structure\",\"required\":[\"RoleArn\",\"RoleSessionName\",\"WebIdentityToken\"],\"members\":{\"RoleArn\":{},\"RoleSessionName\":{},\"WebIdentityToken\":{},\"ProviderId\":{},\"PolicyArns\":{\"shape\":\"S4\"},\"Policy\":{},\"DurationSeconds\":{\"type\":\"integer\"}}},\"output\":{\"resultWrapper\":\"AssumeRoleWithWebIdentityResult\",\"type\":\"structure\",\"members\":{\"Credentials\":{\"shape\":\"Sh\"},\"SubjectFromWebIdentityToken\":{},\"AssumedRoleUser\":{\"shape\":\"Sm\"},\"PackedPolicySize\":{\"type\":\"integer\"},\"Provider\":{},\"Audience\":{}}}},\"DecodeAuthorizationMessage\":{\"input\":{\"type\":\"structure\",\"required\":[\"EncodedMessage\"],\"members\":{\"EncodedMessage\":{}}},\"output\":{\"resultWrapper\":\"DecodeAuthorizationMessageResult\",\"type\":\"structure\",\"members\":{\"DecodedMessage\":{}}}},\"GetAccessKeyInfo\":{\"input\":{\"type\":\"structure\",\"required\":[\"AccessKeyId\"],\"members\":{\"AccessKeyId\":{}}},\"output\":{\"resultWrapper\":\"GetAccessKeyInfoResult\",\"type\":\"structure\",\"members\":{\"Account\":{}}}},\"GetCallerIdentity\":{\"input\":{\"type\":\"structure\",\"members\":{}},\"output\":{\"resultWrapper\":\"GetCallerIdentityResult\",\"type\":\"structure\",\"members\":{\"UserId\":{},\"Account\":{},\"Arn\":{}}}},\"GetFederationToken\":{\"input\":{\"type\":\"structure\",\"required\":[\"Name\"],\"members\":{\"Name\":{},\"Policy\":{},\"PolicyArns\":{\"shape\":\"S4\"},\"DurationSeconds\":{\"type\":\"integer\"},\"Tags\":{\"shape\":\"S8\"}}},\"output\":{\"resultWrapper\":\"GetFederationTokenResult\",\"type\":\"structure\",\"members\":{\"Credentials\":{\"shape\":\"Sh\"},\"FederatedUser\":{\"type\":\"structure\",\"required\":[\"FederatedUserId\",\"Arn\"],\"members\":{\"FederatedUserId\":{},\"Arn\":{}}},\"PackedPolicySize\":{\"type\":\"integer\"}}}},\"GetSessionToken\":{\"input\":{\"type\":\"structure\",\"members\":{\"DurationSeconds\":{\"type\":\"integer\"},\"SerialNumber\":{},\"TokenCode\":{}}},\"output\":{\"resultWrapper\":\"GetSessionTokenResult\",\"type\":\"structure\",\"members\":{\"Credentials\":{\"shape\":\"Sh\"}}}}},\"shapes\":{\"S4\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"members\":{\"arn\":{}}}},\"S8\":{\"type\":\"list\",\"member\":{\"type\":\"structure\",\"required\":[\"Key\",\"Value\"],\"members\":{\"Key\":{},\"Value\":{}}}},\"Sh\":{\"type\":\"structure\",\"required\":[\"AccessKeyId\",\"SecretAccessKey\",\"SessionToken\",\"Expiration\"],\"members\":{\"AccessKeyId\":{},\"SecretAccessKey\":{},\"SessionToken\":{},\"Expiration\":{\"type\":\"timestamp\"}}},\"Sm\":{\"type\":\"structure\",\"required\":[\"AssumedRoleId\",\"Arn\"],\"members\":{\"AssumedRoleId\":{},\"Arn\":{}}}}}");
+module.exports = JSON.parse('{"version":"2.0","metadata":{"apiVersion":"2011-06-15","endpointPrefix":"sts","globalEndpoint":"sts.amazonaws.com","protocol":"query","serviceAbbreviation":"AWS STS","serviceFullName":"AWS Security Token Service","serviceId":"STS","signatureVersion":"v4","uid":"sts-2011-06-15","xmlNamespace":"https://sts.amazonaws.com/doc/2011-06-15/"},"operations":{"AssumeRole":{"input":{"type":"structure","required":["RoleArn","RoleSessionName"],"members":{"RoleArn":{},"RoleSessionName":{},"PolicyArns":{"shape":"S4"},"Policy":{},"DurationSeconds":{"type":"integer"},"Tags":{"shape":"S8"},"TransitiveTagKeys":{"type":"list","member":{}},"ExternalId":{},"SerialNumber":{},"TokenCode":{}}},"output":{"resultWrapper":"AssumeRoleResult","type":"structure","members":{"Credentials":{"shape":"Sh"},"AssumedRoleUser":{"shape":"Sm"},"PackedPolicySize":{"type":"integer"}}}},"AssumeRoleWithSAML":{"input":{"type":"structure","required":["RoleArn","PrincipalArn","SAMLAssertion"],"members":{"RoleArn":{},"PrincipalArn":{},"SAMLAssertion":{},"PolicyArns":{"shape":"S4"},"Policy":{},"DurationSeconds":{"type":"integer"}}},"output":{"resultWrapper":"AssumeRoleWithSAMLResult","type":"structure","members":{"Credentials":{"shape":"Sh"},"AssumedRoleUser":{"shape":"Sm"},"PackedPolicySize":{"type":"integer"},"Subject":{},"SubjectType":{},"Issuer":{},"Audience":{},"NameQualifier":{}}}},"AssumeRoleWithWebIdentity":{"input":{"type":"structure","required":["RoleArn","RoleSessionName","WebIdentityToken"],"members":{"RoleArn":{},"RoleSessionName":{},"WebIdentityToken":{},"ProviderId":{},"PolicyArns":{"shape":"S4"},"Policy":{},"DurationSeconds":{"type":"integer"}}},"output":{"resultWrapper":"AssumeRoleWithWebIdentityResult","type":"structure","members":{"Credentials":{"shape":"Sh"},"SubjectFromWebIdentityToken":{},"AssumedRoleUser":{"shape":"Sm"},"PackedPolicySize":{"type":"integer"},"Provider":{},"Audience":{}}}},"DecodeAuthorizationMessage":{"input":{"type":"structure","required":["EncodedMessage"],"members":{"EncodedMessage":{}}},"output":{"resultWrapper":"DecodeAuthorizationMessageResult","type":"structure","members":{"DecodedMessage":{}}}},"GetAccessKeyInfo":{"input":{"type":"structure","required":["AccessKeyId"],"members":{"AccessKeyId":{}}},"output":{"resultWrapper":"GetAccessKeyInfoResult","type":"structure","members":{"Account":{}}}},"GetCallerIdentity":{"input":{"type":"structure","members":{}},"output":{"resultWrapper":"GetCallerIdentityResult","type":"structure","members":{"UserId":{},"Account":{},"Arn":{}}}},"GetFederationToken":{"input":{"type":"structure","required":["Name"],"members":{"Name":{},"Policy":{},"PolicyArns":{"shape":"S4"},"DurationSeconds":{"type":"integer"},"Tags":{"shape":"S8"}}},"output":{"resultWrapper":"GetFederationTokenResult","type":"structure","members":{"Credentials":{"shape":"Sh"},"FederatedUser":{"type":"structure","required":["FederatedUserId","Arn"],"members":{"FederatedUserId":{},"Arn":{}}},"PackedPolicySize":{"type":"integer"}}}},"GetSessionToken":{"input":{"type":"structure","members":{"DurationSeconds":{"type":"integer"},"SerialNumber":{},"TokenCode":{}}},"output":{"resultWrapper":"GetSessionTokenResult","type":"structure","members":{"Credentials":{"shape":"Sh"}}}}},"shapes":{"S4":{"type":"list","member":{"type":"structure","members":{"arn":{}}}},"S8":{"type":"list","member":{"type":"structure","required":["Key","Value"],"members":{"Key":{},"Value":{}}}},"Sh":{"type":"structure","required":["AccessKeyId","SecretAccessKey","SessionToken","Expiration"],"members":{"AccessKeyId":{},"SecretAccessKey":{},"SessionToken":{},"Expiration":{"type":"timestamp"}}},"Sm":{"type":"structure","required":["AssumedRoleId","Arn"],"members":{"AssumedRoleId":{},"Arn":{}}}}}');
 
 /***/ }),
 
@@ -23061,7 +22972,7 @@ module.exports = {"o":{}};
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"rules\":{\"*/*\":{\"endpoint\":\"{service}.{region}.amazonaws.com\"},\"cn-*/*\":{\"endpoint\":\"{service}.{region}.amazonaws.com.cn\"},\"us-iso-*/*\":{\"endpoint\":\"{service}.{region}.c2s.ic.gov\"},\"us-isob-*/*\":{\"endpoint\":\"{service}.{region}.sc2s.sgov.gov\"},\"*/budgets\":\"globalSSL\",\"*/cloudfront\":\"globalSSL\",\"*/sts\":\"globalSSL\",\"*/importexport\":{\"endpoint\":\"{service}.amazonaws.com\",\"signatureVersion\":\"v2\",\"globalEndpoint\":true},\"*/route53\":\"globalSSL\",\"cn-*/route53\":{\"endpoint\":\"{service}.amazonaws.com.cn\",\"globalEndpoint\":true,\"signingRegion\":\"cn-northwest-1\"},\"us-gov-*/route53\":\"globalGovCloud\",\"*/waf\":\"globalSSL\",\"*/iam\":\"globalSSL\",\"cn-*/iam\":{\"endpoint\":\"{service}.cn-north-1.amazonaws.com.cn\",\"globalEndpoint\":true,\"signingRegion\":\"cn-north-1\"},\"us-gov-*/iam\":\"globalGovCloud\",\"us-gov-*/sts\":{\"endpoint\":\"{service}.{region}.amazonaws.com\"},\"us-gov-west-1/s3\":\"s3signature\",\"us-west-1/s3\":\"s3signature\",\"us-west-2/s3\":\"s3signature\",\"eu-west-1/s3\":\"s3signature\",\"ap-southeast-1/s3\":\"s3signature\",\"ap-southeast-2/s3\":\"s3signature\",\"ap-northeast-1/s3\":\"s3signature\",\"sa-east-1/s3\":\"s3signature\",\"us-east-1/s3\":{\"endpoint\":\"{service}.amazonaws.com\",\"signatureVersion\":\"s3\"},\"us-east-1/sdb\":{\"endpoint\":\"{service}.amazonaws.com\",\"signatureVersion\":\"v2\"},\"*/sdb\":{\"endpoint\":\"{service}.{region}.amazonaws.com\",\"signatureVersion\":\"v2\"}},\"patterns\":{\"globalSSL\":{\"endpoint\":\"https://{service}.amazonaws.com\",\"globalEndpoint\":true,\"signingRegion\":\"us-east-1\"},\"globalGovCloud\":{\"endpoint\":\"{service}.us-gov.amazonaws.com\",\"globalEndpoint\":true,\"signingRegion\":\"us-gov-west-1\"},\"s3signature\":{\"endpoint\":\"{service}.{region}.amazonaws.com\",\"signatureVersion\":\"s3\"}}}");
+module.exports = JSON.parse('{"rules":{"*/*":{"endpoint":"{service}.{region}.amazonaws.com"},"cn-*/*":{"endpoint":"{service}.{region}.amazonaws.com.cn"},"us-iso-*/*":{"endpoint":"{service}.{region}.c2s.ic.gov"},"us-isob-*/*":{"endpoint":"{service}.{region}.sc2s.sgov.gov"},"*/budgets":"globalSSL","*/cloudfront":"globalSSL","*/sts":"globalSSL","*/importexport":{"endpoint":"{service}.amazonaws.com","signatureVersion":"v2","globalEndpoint":true},"*/route53":"globalSSL","cn-*/route53":{"endpoint":"{service}.amazonaws.com.cn","globalEndpoint":true,"signingRegion":"cn-northwest-1"},"us-gov-*/route53":"globalGovCloud","*/waf":"globalSSL","*/iam":"globalSSL","cn-*/iam":{"endpoint":"{service}.cn-north-1.amazonaws.com.cn","globalEndpoint":true,"signingRegion":"cn-north-1"},"us-gov-*/iam":"globalGovCloud","us-gov-*/sts":{"endpoint":"{service}.{region}.amazonaws.com"},"us-gov-west-1/s3":"s3signature","us-west-1/s3":"s3signature","us-west-2/s3":"s3signature","eu-west-1/s3":"s3signature","ap-southeast-1/s3":"s3signature","ap-southeast-2/s3":"s3signature","ap-northeast-1/s3":"s3signature","sa-east-1/s3":"s3signature","us-east-1/s3":{"endpoint":"{service}.amazonaws.com","signatureVersion":"s3"},"us-east-1/sdb":{"endpoint":"{service}.amazonaws.com","signatureVersion":"v2"},"*/sdb":{"endpoint":"{service}.{region}.amazonaws.com","signatureVersion":"v2"}},"patterns":{"globalSSL":{"endpoint":"https://{service}.amazonaws.com","globalEndpoint":true,"signingRegion":"us-east-1"},"globalGovCloud":{"endpoint":"{service}.us-gov.amazonaws.com","globalEndpoint":true,"signingRegion":"us-gov-west-1"},"s3signature":{"endpoint":"{service}.{region}.amazonaws.com","signatureVersion":"s3"}}}');
 
 /***/ }),
 
@@ -23215,10 +23126,11 @@ module.exports = require("util");
 /******/ 	var __webpack_module_cache__ = {};
 /******/ 	
 /******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
+/******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -23230,7 +23142,7 @@ module.exports = require("util");
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
-/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __nccwpck_require__);
 /******/ 			threw = false;
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
@@ -23243,10 +23155,97 @@ module.exports = require("util");
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
-/******/ 	__webpack_require__.ab = __dirname + "/";/************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(6583);
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+const core = __nccwpck_require__(754);
+const S3 = __nccwpck_require__(3137);
+const fs = __nccwpck_require__(5747);
+const { waitForDebugger } = __nccwpck_require__(7012);
+const path = __nccwpck_require__(5622);
+const slash = __nccwpck_require__(4498);
+
+try {
+
+    const accessKey = core.getInput('ACCESS_KEY');
+    const secereteKey = core.getInput('SECRET_KEY');
+    const bucket = core.getInput('BUCKET');
+    const source = core.getInput('SOURCE');
+    const prefix = core.getInput('KEY_PREFIX');
+    const acl = core.getInput('ACL');
+
+    const s3 = new S3({
+        accessKeyId: accessKey,
+        secretAccessKey: secereteKey
+    });
+
+    const uploadFile = (fileName) => {
+        if (fs.lstatSync(fileName).isDirectory()) {
+          fs.readdirSync(fileName).forEach((file) => {
+            uploadFile(`${fileName}/${file}`);
+          });
+        } else {
+          const file = fs.createReadStream(fileName);
+          const key = slash(path.normalize(path.join(prefix, path.relative( path.join(process.cwd(), source), fileName)))) 
+          console.log(key)
+          // Setting up S3 upload parameters
+          const uparams = {
+            Bucket: bucket,
+            Key:  key,
+            Body: file,
+            ACL: acl
+          };
+      
+          // Uploading files to the bucket
+          s3.upload(uparams, function (err, data) {
+            if (err) {
+              throw err;
+            }
+            console.log(`File uploaded successful. ${data.Location}`);
+          });
+        }
+      };
+
+      var dparams = {
+        Bucket: bucket,
+        Prefix: prefix
+      };
+    
+      console.log(`listing files. ${prefix}`);
+      s3.listObjects(dparams, function(err, data) {
+        if (err){
+          console.log(err.message);
+            throw err;
+        }
+        console.log(`listed files successful.`);
+    
+        dparams = {Bucket: bucket};
+        dparams.Delete = {Objects:[]};
+    
+        data.Contents.forEach(function(content) {
+          console.log(`deleting file. ${content.Key}`);
+          dparams.Delete.Objects.push({Key: content.Key});
+        });
+    
+        s3.deleteObjects(dparams, function(err, data) {
+          if (err){
+            console.log(err.message);
+              throw err;
+          }
+          console.log(`delete files successful.`);
+          
+          uploadFile(source);
+        });
+      });
+} 
+catch (error) {
+    core.setFailed(error.message);
+}
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;

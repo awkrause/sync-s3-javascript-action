@@ -26,11 +26,12 @@ try {
           });
         } else {
           const file = fs.createReadStream(fileName);
-      
+          const key = slash(path.normalize(path.join(prefix, path.relative( path.join(process.cwd(), source), fileName)))) 
+          console.log(key)
           // Setting up S3 upload parameters
           const uparams = {
             Bucket: bucket,
-            Key:  slash(path.normalize(path.join(prefix, path.relative( path.join(process.cwd(), source), fileName)))),
+            Key:  key,
             Body: file,
             ACL: acl
           };
