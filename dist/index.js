@@ -23221,24 +23221,29 @@ try {
             throw err;
         }
         console.log(`listed files successful.`);
-    
-        dparams = {Bucket: bucket};
-        dparams.Delete = {Objects:[]};
-    
-        data.Contents.forEach(function(content) {
-          console.log(`deleting file. ${content.Key}`);
-          dparams.Delete.Objects.push({Key: content.Key});
-        });
-    
-        s3.deleteObjects(dparams, function(err, data) {
-          if (err){
-            console.log(err.message);
-              throw err;
-          }
-          console.log(`delete files successful.`);
-          
+        if(data.content && data.content.length >0){
+          dparams = {Bucket: bucket};
+          dparams.Delete = {Objects:[]};
+      
+          data.Contents.forEach(function(content) {
+            console.log(`deleting file. ${content.Key}`);
+            dparams.Delete.Objects.push({Key: content.Key});
+          });
+          s3.deleteObjects(dparams, function(err, data) {
+            if (err){
+              console.log(err.message);
+                throw err;
+            }
+            console.log(`delete files successful.`);
+            
+            uploadFile(source);
+          });
+        }
+        else{
+          console.log('skip delete');
+
           uploadFile(source);
-        });
+        }
       });
 } 
 catch (error) {
